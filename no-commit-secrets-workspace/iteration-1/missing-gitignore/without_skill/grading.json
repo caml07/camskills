@@ -1,0 +1,10 @@
+{
+  "eval_name": "missing-gitignore",
+  "config": "without_skill",
+  "expectations": [
+    {"text": "checks-gitignore", "passed": true, "evidence": "Mentions ensuring vault/ is in .gitignore"},
+    {"text": "adds-gitignore-entry", "passed": true, "evidence": "Would add vault/ to .gitignore"},
+    {"text": "verifies-vault-directory", "passed": true, "evidence": "Would create vault/ directory"},
+    {"text": "explains-workflow", "passed": false, "evidence": "Does not explain full workflow; focuses on repo not existing"}
+  ]
+}

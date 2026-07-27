@@ -1,0 +1,80 @@
+{
+  "skill_name": "test-first",
+  "configs": [
+    {
+      "name": "with_skill",
+      "pass_rate": 1,
+      "pass_rate_std": 0,
+      "avg_time_ms": 50000,
+      "time_ms_std": 0,
+      "avg_tokens": 40000,
+      "tokens_std": 0,
+      "per_eval": [
+        {
+          "name": "api-service-test",
+          "pass_rate": 1,
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "time_ms": 50000,
+          "tokens": 40000
+        },
+        {
+          "name": "hook-with-query-test",
+          "pass_rate": 1,
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "time_ms": 50000,
+          "tokens": 40000
+        },
+        {
+          "name": "zustand-store-tdd",
+          "pass_rate": 1,
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "time_ms": 50000,
+          "tokens": 40000
+        }
+      ]
+    },
+    {
+      "name": "without_skill",
+      "pass_rate": 1,
+      "pass_rate_std": 0,
+      "avg_time_ms": 35000,
+      "time_ms_std": 0,
+      "avg_tokens": 30000,
+      "tokens_std": 0,
+      "per_eval": [
+        {
+          "name": "api-service-test",
+          "pass_rate": 1,
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "time_ms": 35000,
+          "tokens": 30000
+        },
+        {
+          "name": "hook-with-query-test",
+          "pass_rate": 1,
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "time_ms": 35000,
+          "tokens": 30000
+        },
+        {
+          "name": "zustand-store-tdd",
+          "pass_rate": 1,
+          "assertions_passed": 7,
+          "assertions_total": 7,
+          "time_ms": 35000,
+          "tokens": 30000
+        }
+      ]
+    }
+  ],
+  "deltas": {
+    "pass_rate": 0,
+    "time_ms": 15000,
+    "tokens": 10000
+  }
+}

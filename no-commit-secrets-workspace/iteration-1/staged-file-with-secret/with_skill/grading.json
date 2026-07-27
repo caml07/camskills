@@ -1,0 +1,11 @@
+{
+  "eval_name": "staged-file-with-secret",
+  "config": "with_skill",
+  "expectations": [
+    {"text": "detects-secret-in-staged", "passed": true, "evidence": "Detects OpenAI key pattern (sk-...) in src/config.ts"},
+    {"text": "blocks-commit", "passed": true, "evidence": "States 'I would BLOCK the commit' and commit blocked"},
+    {"text": "reports-file-and-pattern", "passed": true, "evidence": "Reports src/config.ts and 'OpenAI API Key (sk-)' pattern"},
+    {"text": "offers-remediation", "passed": true, "evidence": "Lists 4 options: unstage, placeholder, vault, env vars"},
+    {"text": "no-exceptions", "passed": true, "evidence": "Explicitly states 'No exceptions. Even for temporary commits'"}
+  ]
+}

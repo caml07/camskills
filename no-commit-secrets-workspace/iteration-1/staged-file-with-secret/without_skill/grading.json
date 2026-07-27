@@ -1,0 +1,11 @@
+{
+  "eval_name": "staged-file-with-secret",
+  "config": "without_skill",
+  "expectations": [
+    {"text": "detects-secret-in-staged", "passed": true, "evidence": "References catching OpenAI key pattern in src/config.ts"},
+    {"text": "blocks-commit", "passed": true, "evidence": "States 'BLOCKED: Your OpenAI key was detected'"},
+    {"text": "reports-file-and-pattern", "passed": true, "evidence": "Reports src/config.ts and OpenAI key pattern"},
+    {"text": "offers-remediation", "passed": true, "evidence": "Lists 4 remediation steps with code examples"},
+    {"text": "no-exceptions", "passed": false, "evidence": "Does not explicitly state 'no exceptions' policy"}
+  ]
+}

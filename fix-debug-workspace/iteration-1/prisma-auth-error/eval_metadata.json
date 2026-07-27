@@ -1,0 +1,12 @@
+{
+  "eval_name": "prisma-auth-error",
+  "assertions": [
+    {"name": "identifies-correct-cause", "description": "Identifies the root cause of a Prisma auth connection failure"},
+    {"name": "provides-fix-command", "description": "Provides concrete fix command or config change"},
+    {"name": "mentions-connection-pool", "description": "Mentions connection pool / PgBouncer incompatibility"},
+    {"name": "includes-ssl-consideration", "description": "Checks SSL/TLS requirements for the database URL"},
+    {"name": "suggests-verification", "description": "Suggests how to verify the fix worked"},
+    {"name": "follows-debug-workflow", "description": "Follows a systematic debug process (reproduce, isolate, fix, verify)"}
+  ],
+  "prompt": "Debug this: A Next.js app with Prisma works locally but in production (Railway) it randomly throws 'Can't reach database server' every few minutes. The database is Neon Postgres with PgBouncer connection pooling. Trace the root cause."
+}

@@ -1,0 +1,12 @@
+{
+  "eval_name": "create-atomic-note",
+  "assertions": [
+    {"name": "creates-atomic-note", "description": "Creates a new atomic markdown note with frontmatter"},
+    {"name": "has-wikilinks", "description": "Creates bidirectional wiki-links to related concepts"},
+    {"name": "preserves-voice", "description": "Preserves the user's tone and voice in the note"},
+    {"name": "fills-technical-gaps", "description": "Corrects or fills in any technical gaps"},
+    {"name": "has-tags", "description": "Includes relevant tags in frontmatter"},
+    {"name": "follows-atomic-note-template", "description": "Follows atomic note structure (one concept per note)"}
+  ],
+  "prompt": "Create an atomic note about this concept: 'React Server Components let you run components on the server. They can be async and fetch data directly. Client Components are the default in Next.js App Router. You use 'use client' to mark them. They can still be server-rendered.' Save as vault/concepts/react-server-components.md"
+}

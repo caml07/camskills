@@ -1,0 +1,12 @@
+{
+  "eval_name": "patient-list",
+  "assertions": [
+    {"name": "uses-tanstack-query", "description": "Uses useQuery from @tanstack/react-query"},
+    {"name": "has-skeleton-loading", "description": "Shows skeleton cards during loading, not a plain spinner"},
+    {"name": "has-empty-state", "description": "Shows EmptyState when data array is empty"},
+    {"name": "has-error-with-retry", "description": "Shows error message with refetch/retry button"},
+    {"name": "uses-flash-list", "description": "Uses FlashList instead of FlatList or map()"},
+    {"name": "feature-based-structure", "description": "Follows feature-based folder structure"}
+  ],
+  "prompt": "Design a patient list screen that fetches from an API. Handle all states: loading (skeleton), empty, error (with retry), success. Use TanStack Query and FlashList."
+}

@@ -1,0 +1,11 @@
+{
+  "eval_name": "save-api-key",
+  "config": "with_skill",
+  "expectations": [
+    {"text": "saves-to-vault", "passed": true, "evidence": "Saved to vault/Config/API Keys.md with OpenRouter key entry"},
+    {"text": "uses-placeholder-in-code", "passed": true, "evidence": "Suggests using <OPENROUTER_API_KEY> placeholder"},
+    {"text": "verifies-gitignore", "passed": true, "evidence": "Checked .gitignore for vault/Config/ and added .env, .env.local, *.pem, *.key"},
+    {"text": "never-in-source", "passed": true, "evidence": "Explicitly states key not written to source code, .env, config, or git-tracked file"},
+    {"text": "mentions-vault-path", "passed": true, "evidence": "References vault/Config/API Keys.md path"}
+  ]
+}

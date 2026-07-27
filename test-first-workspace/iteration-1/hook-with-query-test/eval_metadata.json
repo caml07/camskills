@@ -1,0 +1,13 @@
+{
+  "eval_name": "hook-with-query-test",
+  "assertions": [
+    {"name": "uses-render-hook", "description": "Uses renderHook from @testing-library/react-native"},
+    {"name": "has-query-wrapper", "description": "Wraps hook in QueryClientProvider with retry: false"},
+    {"name": "tests-loading-state", "description": "Checks isLoading is true initially"},
+    {"name": "tests-success-state", "description": "Waits for data and asserts patient is returned"},
+    {"name": "tests-error-state", "description": "Mocks rejection and asserts error is set"},
+    {"name": "mocks-api-module", "description": "Mocks API module with vi.mock"},
+    {"name": "uses-wait-for", "description": "Uses waitFor for async assertions"}
+  ],
+  "prompt": "Write tests for a custom hook called usePatientDetail that takes a patient ID, calls fetchPatientDetail via TanStack Query, returns { patient, isLoading, error }. Test loading, success, error states. Mock the API module."
+}

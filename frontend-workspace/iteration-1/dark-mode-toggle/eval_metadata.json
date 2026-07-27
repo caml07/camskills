@@ -1,0 +1,11 @@
+{
+  "eval_name": "dark-mode-toggle",
+  "assertions": [
+    {"name": "dark-tokens-no-pure-black", "description": "Dark surface uses dark navy/gray, not #000000"},
+    {"name": "has-theme-provider", "description": "Wraps app in ThemeProvider context"},
+    {"name": "has-use-theme-hook", "description": "Exports useTheme hook for consuming components"},
+    {"name": "animated-toggle-transition", "description": "Toggle uses Reanimated for animation"},
+    {"name": "uses-system-default", "description": "Initial theme respects system color scheme from useColorScheme()"}
+  ],
+  "prompt": "Add dark mode to an Expo app. ThemeProvider context, dark color tokens (no pure black), toggle button with Reanimated transition. Initial theme from system preference."
+}

@@ -1,0 +1,82 @@
+{
+  "craft": {
+    "description": "Full build flow for React Native features: shape, build with Expo, verify on device. Use when building a new screen or feature end-to-end.",
+    "argumentHint": "[feature description]"
+  },
+  "init": {
+    "description": "Sets up a project for impeccable-rn. Runs discovery interview and writes PRODUCT.md. Use once per project.",
+    "argumentHint": ""
+  },
+  "document": {
+    "description": "Generate DESIGN.md that captures the current RN visual design system. Auto-extracts colors, typography, spacing, and component patterns from the codebase.",
+    "argumentHint": ""
+  },
+  "extract": {
+    "description": "Pull reusable patterns, components, and design tokens into the RN design system. Consolidates repeated patterns across the codebase.",
+    "argumentHint": "[target]"
+  },
+  "animate": {
+    "description": "Review a feature and enhance with purposeful Reanimated animations, micro-interactions, and motion that improve usability.",
+    "argumentHint": "[target]"
+  },
+  "bolder": {
+    "description": "Amplify safe or boring RN designs to make them more visually interesting while maintaining usability.",
+    "argumentHint": "[target]"
+  },
+  "clarify": {
+    "description": "Improve unclear UX copy, error messages, labels, and instructions in the RN app.",
+    "argumentHint": "[target]"
+  },
+  "colorize": {
+    "description": "Add strategic color to monochromatic RN UIs, turning flat palettes into intentional systems.",
+    "argumentHint": "[target]"
+  },
+  "critique": {
+    "description": "UX design review with heuristic scoring (Nielsen), cognitive load assessment, persona testing, and RN-specific component audit.",
+    "argumentHint": "[area (feature, screen, component)]"
+  },
+  "delight": {
+    "description": "Add moments of joy, personality, and unexpected touches that make the RN app memorable.",
+    "argumentHint": "[target]"
+  },
+  "distill": {
+    "description": "Strip RN designs to their essence by removing unnecessary complexity.",
+    "argumentHint": "[target]"
+  },
+  "harden": {
+    "description": "Make RN interfaces production-ready: offline, errors, i18n, text overflow, edge cases.",
+    "argumentHint": "[target]"
+  },
+  "onboard": {
+    "description": "Design onboarding, first-run experiences, and empty states for the RN app.",
+    "argumentHint": "[target]"
+  },
+  "layout": {
+    "description": "Fix RN Flexbox layout, spacing, safe areas, and visual rhythm.",
+    "argumentHint": "[target]"
+  },
+  "optimize": {
+    "description": "Diagnose and fix RN performance: FlashList, expo-image, MMKV, Reanimated, memoization.",
+    "argumentHint": "[target]"
+  },
+  "overdrive": {
+    "description": "Push past conventional limits with Skia, Lottie, and advanced Reanimated in RN.",
+    "argumentHint": "[target]"
+  },
+  "polish": {
+    "description": "Final quality pass for RN: check all states, tokens, interactions, accessibility.",
+    "argumentHint": "[target]"
+  },
+  "quieter": {
+    "description": "Tone down visually aggressive or overstimulating RN designs.",
+    "argumentHint": "[target]"
+  },
+  "shape": {
+    "description": "Plan RN UX/UI before code. Produces a confirmed design brief for implementation.",
+    "argumentHint": "[feature to shape]"
+  },
+  "typeset": {
+    "description": "Improve RN typography: expo-font loading, hierarchy, sizing, platform fonts.",
+    "argumentHint": "[target]"
+  }
+}

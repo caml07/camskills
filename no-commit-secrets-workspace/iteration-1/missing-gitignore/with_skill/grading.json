@@ -1,0 +1,10 @@
+{
+  "eval_name": "missing-gitignore",
+  "config": "with_skill",
+  "expectations": [
+    {"text": "checks-gitignore", "passed": true, "evidence": "Checks .gitignore for vault/Config/, .env, .env.local, *.pem, *.key patterns"},
+    {"text": "adds-gitignore-entry", "passed": true, "evidence": "Would add missing patterns if absent or create .gitignore if missing"},
+    {"text": "verifies-vault-directory", "passed": true, "evidence": "Creates vault/Config/ directory structure"},
+    {"text": "explains-workflow", "passed": true, "evidence": "Explains placeholder rule, pre-commit scan, and vault note system"}
+  ]
+}

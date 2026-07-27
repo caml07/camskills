@@ -1,0 +1,10 @@
+{
+  "eval_name": "missing-gitignore",
+  "prompt": "I need to store my API keys for the project. Can you help me set up the vault?",
+  "assertions": [
+    {"name": "checks-gitignore", "description": "Reads .gitignore to check for vault/Config/ pattern"},
+    {"name": "adds-gitignore-entry", "description": "Adds vault/Config/ to .gitignore if not present"},
+    {"name": "verifies-vault-directory", "description": "Checks that vault/Config/ directory exists or creates it"},
+    {"name": "explains-workflow", "description": "Explains how keys will be stored and referenced"}
+  ]
+}

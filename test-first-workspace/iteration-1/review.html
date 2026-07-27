@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Review: test-first</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#1a1a2e}
+nav{background:#1a1a2e;color:#fff;padding:12px 24px;display:flex;align-items:center;gap:24px}
+nav h1{font-size:18px;font-weight:600}
+.tabs{display:flex;gap:0}
+.tab{padding:8px 20px;cursor:pointer;opacity:.6;border-bottom:2px solid transparent}
+.tab.active{opacity:1;border-bottom-color:#4f8cff}
+.content{display:none;padding:24px;max-width:1200px;margin:0 auto}
+.content.active{display:block}
+.eval-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.eval-btn{padding:6px 14px;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:#fff;font-size:13px}
+.eval-btn.active{background:#4f8cff;color:#fff;border-color:#4f8cff}
+.eval-panel{display:none}
+.eval-panel.active{display:block}
+.prompt{background:#eef;padding:16px;border-radius:8px;margin-bottom:16px;white-space:pre-wrap;font-size:14px}
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.config-card{background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.config-card h3{font-size:14px;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.output-file{background:#f8f8f8;border-radius:6px;margin:8px 0;overflow:hidden}
+.output-file h4{font-size:13px;padding:8px 12px;background:#eee}
+.output-file pre{padding:12px;font-size:12px;overflow-x:auto;max-height:400px}
+.grading{font-size:13px;margin-top:12px}
+.grading-item{padding:4px 0}
+.pass{color:#22c55e}
+.fail{color:#ef4444}
+.timing{font-size:12px;color:#666;margin-top:8px}
+.benchmark-table{width:100%;border-collapse:collapse;margin:16px 0}
+.benchmark-table th,.benchmark-table td{padding:10px 14px;text-align:left;border-bottom:1px solid #eee;font-size:14px}
+.benchmark-table th{background:#f8f8f8;font-weight:600}
+.delta-positive{color:#22c55e}
+.delta-negative{color:#ef4444}
+.feedback-section{margin-top:16px}
+.feedback-textarea{width:100%;min-height:80px;padding:10px;border:1px solid #ddd;border-radius:6px;font-family:inherit;font-size:13px;resize:vertical}
+.submit-btn{display:block;margin:24px auto;padding:12px 32px;background:#1a1a2e;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+.submit-btn:hover{background:#2d2d4e}
+.prev-output{margin-top:12px;padding:12px;background:#fffbe6;border-radius:6px;font-size:13px}
+.prev-output summary{cursor:pointer;font-weight:600}
+.empty{color:#999;font-style:italic;padding:20px;text-align:center}
+</style>
+</head>
+<body>
+<nav>
+  <h1>Skill Review: test-first</h1>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('outputs')">Outputs</div>
+    <div class="tab" onclick="switchTab('benchmark')">Benchmark</div>
+  </div>
+</nav>
+
+<div id="tab-outputs" class="content active">
+  <div class="eval-list" id="eval-list"></div>
+  <div id="eval-panels"></div>
+  <button class="submit-btn" onclick="submitFeedback()">Submit All Reviews</button>
+</div>
+
+<div id="tab-benchmark" class="content">
+  <div id="benchmark-content"></div>
+</div>
+
+<script>
+const EVALS = [{"name":"api-service-test","prompt":"Write tests for a patients API module. It has fetchPatients that calls GET /api/patients and returns an array of patients. Cover: success, empty, network error, 401. Use fetch mocking.","run_id":"api-service-test","configs":{"with_skill":{"outputs":[{"filename":"patients.api.test.ts","content":"import { describe, it, expect, vi, beforeEach } from \"vitest\"\nimport { fetchPatients } from \"./patients.api\"\n\ndescribe(\"fetchPatients\", () => {\n  beforeEach(() => {\n    vi.restoreAllMocks()\n  })\n\n  it(\"returns patients on successful response\", async () => {\n    const mockPatients = [\n      { id: \"1\", name: \"Alice\", age: 30 },\n      { id: \"2\", name: \"Bob\", age: 45 },\n    ]\n\n    global.fetch = vi.fn().mockResolvedValue({\n      ok: true,\n      json: () => Promise.resolve(mockPatients),\n    })\n\n    const result = await fetchPatients()\n\n    expect(fetch).toHaveBeenCalledWith(\"/api/patients\")\n    expect(result).toEqual(mockPatients)\n    expect(result).toHaveLength(2)\n  })\n\n  it(\"returns empty array when API returns empty list\", async () => {\n    global.fetch = vi.fn().mockResolvedValue({\n      ok: true,\n      json: () => Promise.resolve([]),\n    })\n\n    const result = await fetchPatients()\n\n    expect(fetch).toHaveBeenCalledWith(\"/api/patients\")\n    expect(result).toEqual([])\n    expect(result).toHaveLength(0)\n  })\n\n  it(\"throws on 401 unauthorized\", async () => {\n    global.fetch = vi.fn().mockResolvedValue({\n      ok: false,\n      status: 401,\n      json: () => Promise.resolve({ message: \"Unauthorized\" }),\n    })\n\n    await expect(fetchPatients()).rejects.toThrow()\n    expect(fetch).toHaveBeenCalledWith(\"/api/patients\")\n  })\n\n  it(\"throws on network error\", async () => {\n    global.fetch = vi\n      .fn()\n      .mockRejectedValue(new Error(\"Network request failed\"))\n\n    await expect(fetchPatients()).rejects.toThrow(\"Network request failed\")\n    expect(fetch).toHaveBeenCalledWith(\"/api/patients\")\n  })\n})\n"}],"grading":{"expectations":[{"text":"Tests successful response with patient data","passed":true,"evidence":"mockResolvedValue with mockPatients"},{"text":"Tests empty array response","passed":true,"evidence":"mockResolvedValue with empty array"},{"text":"Tests network error","passed":true,"evidence":"mockRejectedValue"},{"text":"Tests 401 unauthorized","passed":true,"evidence":"mockResolvedValue with ok:false, status:401"},{"text":"Uses vi.fn() for mocking","passed":true,"evidence":"vi.fn() used"},{"text":"Resets mocks in beforeEach","passed":true,"evidence":"vi.restoreAllMocks() in beforeEach"},{"text":"Test file named alongside source","passed":true,"evidence":"patients.api.test.ts"}],"passed":7,"total":7},"timing":{"total_tokens":40000,"duration_ms":50000}},"without_skill":{"outputs":[{"filename":"patients.api.test.ts","content":"import { describe, it, expect, vi, beforeEach } from 'vitest'\n\nconst mockPatients = [\n  { id: 1, name: 'John Doe', age: 45, diagnosis: 'Hypertension' },\n  { id: 2, name: 'Jane Smith', age: 32, diagnosis: 'Asthma' },\n]\n\nfunction createMockFetch(response: Partial<Response>) {\n  return vi.fn().mockResolvedValue(response as Response)\n}\n\nasync function fetchPatients(): Promise<unknown[]> {\n  const res = await fetch('/api/patients')\n  if (!res.ok) {\n    throw new Error(`HTTP ${res.status}`)\n  }\n  return res.json()\n}\n\ndescribe('fetchPatients', () => {\n  beforeEach(() => {\n    vi.restoreAllMocks()\n  })\n\n  it('returns patient array on success', async () => {\n    globalThis.fetch = createMockFetch({\n      ok: true,\n      status: 200,\n      json: vi.fn().mockResolvedValue(mockPatients),\n    } as Partial<Response>)\n\n    const result = await fetchPatients()\n    expect(result).toEqual(mockPatients)\n    expect(fetch).toHaveBeenCalledWith('/api/patients')\n  })\n\n  it('returns empty array when API returns no patients', async () => {\n    globalThis.fetch = createMockFetch({\n      ok: true,\n      status: 200,\n      json: vi.fn().mockResolvedValue([]),\n    } as Partial<Response>)\n\n    const result = await fetchPatients()\n    expect(result).toEqual([])\n  })\n\n  it('throws on network error', async () => {\n    globalThis.fetch = vi.fn().mockRejectedValue(new Error('Network failure'))\n\n    await expect(fetchPatients()).rejects.toThrow('Network failure')\n  })\n\n  it('throws on 401 Unauthorized', async () => {\n    globalThis.fetch = createMockFetch({\n      ok: false,\n      status: 401,\n      statusText: 'Unauthorized',\n    } as Partial<Response>)\n\n    await expect(fetchPatients()).rejects.toThrow('HTTP 401')\n  })\n})\n"}],"grading":{"expectations":[{"text":"Tests successful response with patient data","passed":true,"evidence":"mockResolvedValue with mockPatients"},{"text":"Tests empty array response","passed":true,"evidence":"mockResolvedValue with empty array"},{"text":"Tests network error","passed":true,"evidence":"mockRejectedValue"},{"text":"Tests 401 unauthorized","passed":true,"evidence":"mockResolvedValue with ok:false, status:401"},{"text":"Uses vi.fn() for mocking","passed":true,"evidence":"vi.fn() used"},{"text":"Resets mocks in beforeEach","passed":true,"evidence":"vi.restoreAllMocks() in beforeEach"},{"text":"Test file named alongside source","passed":true,"evidence":"patients.api.test.ts"}],"passed":7,"total":7},"timing":{"total_tokens":30000,"duration_ms":35000}}}},{"name":"hook-with-query-test","prompt":"Write tests for a custom hook called usePatientDetail that takes a patient ID, calls fetchPatientDetail via TanStack Query, returns { patient, isLoading, error }. Test loading, success, error states. Mock the API module.","run_id":"hook-with-query-test","configs":{"with_skill":{"outputs":[{"filename":"use-patient-detail.test.ts","content":"import { describe, it, expect, vi, beforeEach } from \"vitest\"\nimport { renderHook, waitFor } from \"@testing-library/react-native\"\nimport { QueryClient, QueryClientProvider } from \"@tanstack/react-query\"\nimport { usePatientDetail } from \"./use-patient-detail\"\n\nconst mockFetchPatientDetail = vi.fn()\n\nvi.mock(\"../api/patient.api\", () => ({\n  fetchPatientDetail: mockFetchPatientDetail,\n}))\n\nfunction createWrapper() {\n  const queryClient = new QueryClient({\n    defaultOptions: {\n      queries: { retry: false },\n    },\n  })\n  return function Wrapper({ children }: { children: React.ReactNode }) {\n    return (\n      <QueryClientProvider client={queryClient}>\n        {children}\n      </QueryClientProvider>\n    )\n  }\n}\n\ndescribe(\"usePatientDetail\", () => {\n  beforeEach(() => {\n    vi.clearAllMocks()\n  })\n\n  it(\"starts in loading state\", () => {\n    mockFetchPatientDetail.mockImplementation(\n      () => new Promise(() => {}),\n    )\n\n    const { result } = renderHook(() => usePatientDetail(\"patient-1\"), {\n      wrapper: createWrapper(),\n    })\n\n    expect(result.current.isLoading).toBe(true)\n    expect(result.current.patient).toBeUndefined()\n    expect(result.current.error).toBeNull()\n  })\n\n  it(\"returns patient on success\", async () => {\n    const patient = { id: \"patient-1\", name: \"John Doe\", age: 34 }\n    mockFetchPatientDetail.mockResolvedValue(patient)\n\n    const { result } = renderHook(() => usePatientDetail(\"patient-1\"), {\n      wrapper: createWrapper(),\n    })\n\n    await waitFor(() => expect(result.current.isLoading).toBe(false))\n    expect(result.current.patient).toEqual(patient)\n    expect(result.current.error).toBeNull()\n    expect(mockFetchPatientDetail).toHaveBeenCalledWith(\"patient-1\")\n  })\n\n  it(\"returns error on failure\", async () => {\n    const error = new Error(\"Failed to fetch patient\")\n    mockFetchPatientDetail.mockRejectedValue(error)\n\n    const { result } = renderHook(() => usePatientDetail(\"patient-1\"), {\n      wrapper: createWrapper(),\n    })\n\n    await waitFor(() => expect(result.current.isLoading).toBe(false))\n    expect(result.current.patient).toBeUndefined()\n    expect(result.current.error).toBeDefined()\n    expect(result.current.error?.message).toBe(\"Failed to fetch patient\")\n  })\n})\n"}],"grading":{"expectations":[{"text":"Uses renderHook","passed":true,"evidence":"renderHook from @testing-library/react-native"},{"text":"Has QueryClientProvider wrapper","passed":true,"evidence":"createWrapper with retry:false"},{"text":"Tests loading state","passed":true,"evidence":"isLoading true, patient undefined, error null"},{"text":"Tests success state","passed":true,"evidence":"waits for isLoading false, asserts patient"},{"text":"Tests error state","passed":true,"evidence":"waits for isLoading false, asserts error"},{"text":"Mocks API module","passed":true,"evidence":"vi.mock for patient.api"},{"text":"Uses waitFor","passed":true,"evidence":"waitFor used for async assertions"}],"passed":7,"total":7},"timing":{"total_tokens":40000,"duration_ms":50000}},"without_skill":{"outputs":[{"filename":"use-patient-detail.test.ts","content":"import { describe, it, expect, vi, beforeEach } from \"vitest\"\nimport { renderHook, waitFor } from \"@testing-library/react-native\"\nimport { QueryClient, QueryClientProvider } from \"@tanstack/react-query\"\nimport { usePatientDetail } from \"./use-patient-detail\"\n\nconst mockFetchPatientDetail = vi.fn()\n\nvi.mock(\"../api/patient.api\", () => ({\n  fetchPatientDetail: mockFetchPatientDetail,\n}))\n\nfunction createWrapper() {\n  const queryClient = new QueryClient({\n    defaultOptions: {\n      queries: { retry: false },\n    },\n  })\n  return function Wrapper({ children }: { children: React.ReactNode }) {\n    return (\n      <QueryClientProvider client={queryClient}>\n        {children}\n      </QueryClientProvider>\n    )\n  }\n}\n\ndescribe(\"usePatientDetail\", () => {\n  beforeEach(() => {\n    vi.clearAllMocks()\n  })\n\n  it(\"starts in loading state\", () => {\n    mockFetchPatientDetail.mockImplementation(\n      () => new Promise(() => {}),\n    )\n\n    const { result } = renderHook(() => usePatientDetail(\"patient-1\"), {\n      wrapper: createWrapper(),\n    })\n\n    expect(result.current.isLoading).toBe(true)\n    expect(result.current.patient).toBeUndefined()\n    expect(result.current.error).toBeNull()\n  })\n\n  it(\"returns patient on success\", async () => {\n    const patient = { id: \"patient-1\", name: \"John Doe\", age: 34 }\n    mockFetchPatientDetail.mockResolvedValue(patient)\n\n    const { result } = renderHook(() => usePatientDetail(\"patient-1\"), {\n      wrapper: createWrapper(),\n    })\n\n    await waitFor(() => expect(result.current.isLoading).toBe(false))\n    expect(result.current.patient).toEqual(patient)\n    expect(result.current.error).toBeNull()\n    expect(mockFetchPatientDetail).toHaveBeenCalledWith(\"patient-1\")\n  })\n\n  it(\"returns error on failure\", async () => {\n    const error = new Error(\"Failed to fetch patient\")\n    mockFetchPatientDetail.mockRejectedValue(error)\n\n    const { result } = renderHook(() => usePatientDetail(\"patient-1\"), {\n      wrapper: createWrapper(),\n    })\n\n    await waitFor(() => expect(result.current.isLoading).toBe(false))\n    expect(result.current.patient).toBeUndefined()\n    expect(result.current.error).toBeDefined()\n    expect(result.current.error?.message).toBe(\"Failed to fetch patient\")\n  })\n})\n"}],"grading":{"expectations":[{"text":"Uses renderHook","passed":true,"evidence":"renderHook from @testing-library/react-native"},{"text":"Has QueryClientProvider wrapper","passed":true,"evidence":"createWrapper with retry:false"},{"text":"Tests loading state","passed":true,"evidence":"isLoading true, patient undefined, error null"},{"text":"Tests success state","passed":true,"evidence":"waits for isLoading false, asserts patient"},{"text":"Tests error state","passed":true,"evidence":"waits for isLoading false, asserts error"},{"text":"Mocks API module","passed":true,"evidence":"vi.mock for patient.api"},{"text":"Uses waitFor","passed":true,"evidence":"waitFor used for async assertions"}],"passed":7,"total":7},"timing":{"total_tokens":30000,"duration_ms":35000}}}},{"name":"zustand-store-tdd","prompt":"Write tests for a shopping cart Zustand store. TDD style: write tests FIRST before the store exists. It should have items, addItem, removeItem, clearCart, total calculation.","run_id":"zustand-store-tdd","configs":{"with_skill":{"outputs":[{"filename":"cart-store.test.ts","content":"import { describe, it, expect, beforeEach } from \"vitest\"\nimport { useCartStore } from \"../cart-store\"\n\ninterface CartItem {\n  id: string\n  name: string\n  price: number\n  quantity: number\n}\n\ndescribe(\"cartStore\", () => {\n  beforeEach(() => {\n    useCartStore.setState({\n      items: [],\n    })\n  })\n\n  describe(\"addItem\", () => {\n    it(\"adds a new item to the cart\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n\n      const items = useCartStore.getState().items\n      expect(items).toHaveLength(1)\n      expect(items[0]).toEqual({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n        quantity: 1,\n      })\n    })\n\n    it(\"increases quantity when adding an existing item\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n\n      const items = useCartStore.getState().items\n      expect(items).toHaveLength(1)\n      expect(items[0].quantity).toBe(2)\n    })\n\n    it(\"handles multiple different items\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Product A\",\n        price: 10,\n      })\n      useCartStore.getState().addItem({\n        id: \"2\",\n        name: \"Product B\",\n        price: 20,\n      })\n\n      const items = useCartStore.getState().items\n      expect(items).toHaveLength(2)\n      expect(items[0].id).toBe(\"1\")\n      expect(items[1].id).toBe(\"2\")\n    })\n  })\n\n  describe(\"removeItem\", () => {\n    it(\"removes an item when quantity is 1\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n      useCartStore.getState().removeItem(\"1\")\n\n      expect(useCartStore.getState().items).toHaveLength(0)\n    })\n\n    it(\"decreases quantity when quantity is greater than 1\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n      useCartStore.getState().removeItem(\"1\")\n\n      const items = useCartStore.getState().items\n      expect(items).toHaveLength(1)\n      expect(items[0].quantity).toBe(1)\n    })\n\n    it(\"does nothing when item does not exist\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n      useCartStore.getState().removeItem(\"nonexistent\")\n\n      expect(useCartStore.getState().items).toHaveLength(1)\n    })\n  })\n\n  describe(\"clearCart\", () => {\n    it(\"removes all items from the cart\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Product A\",\n        price: 10,\n      })\n      useCartStore.getState().addItem({\n        id: \"2\",\n        name: \"Product B\",\n        price: 20,\n      })\n      useCartStore.getState().clearCart()\n\n      expect(useCartStore.getState().items).toHaveLength(0)\n    })\n\n    it(\"works on an already empty cart\", () => {\n      useCartStore.getState().clearCart()\n\n      expect(useCartStore.getState().items).toHaveLength(0)\n    })\n  })\n\n  describe(\"total\", () => {\n    it(\"returns 0 for an empty cart\", () => {\n      expect(useCartStore.getState().total).toBe(0)\n    })\n\n    it(\"returns the price of a single item\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 25,\n      })\n\n      expect(useCartStore.getState().total).toBe(25)\n    })\n\n    it(\"calculates quantity * price correctly\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Test Product\",\n        price: 10,\n      })\n\n      expect(useCartStore.getState().total).toBe(30)\n    })\n\n    it(\"sums multiple different items\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Product A\",\n        price: 15,\n      })\n      useCartStore.getState().addItem({\n        id: \"2\",\n        name: \"Product B\",\n        price: 25,\n      })\n\n      expect(useCartStore.getState().total).toBe(40)\n    })\n\n    it(\"updates total after removing an item\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Product A\",\n        price: 10,\n      })\n      useCartStore.getState().addItem({\n        id: \"2\",\n        name: \"Product B\",\n        price: 20,\n      })\n      useCartStore.getState().removeItem(\"1\")\n\n      expect(useCartStore.getState().total).toBe(20)\n    })\n\n    it(\"updates total after clearing the cart\", () => {\n      useCartStore.getState().addItem({\n        id: \"1\",\n        name: \"Product A\",\n        price: 10,\n      })\n      useCartStore.getState().clearCart()\n\n      expect(useCartStore.getState().total).toBe(0)\n    })\n  })\n})\n"}],"grading":{"expectations":[{"text":"Tests describe expected store behavior before implementation","passed":true,"evidence":"TDD RED phase tests"},{"text":"Tests addItem adds to items array","passed":true,"evidence":"addItem test present"},{"text":"Tests removeItem removes by id","passed":true,"evidence":"removeItem test present"},{"text":"Tests clearCart empties items","passed":true,"evidence":"clearCart test present"},{"text":"Tests total calculation","passed":true,"evidence":"total calculation test present"},{"text":"Resets store state in beforeEach","passed":true,"evidence":"setState empty items in beforeEach"},{"text":"Uses act() or getState()","passed":true,"evidence":"getState() used"}],"passed":7,"total":7},"timing":{"total_tokens":40000,"duration_ms":50000}},"without_skill":{"outputs":[{"filename":"cart-store.test.ts","content":"import { describe, it, expect, beforeEach } from \"vitest\"\nimport { useCartStore } from \"./cart-store\"\n\ndescribe(\"cartStore\", () => {\n  beforeEach(() => {\n    useCartStore.setState({ items: [] })\n  })\n\n  describe(\"items\", () => {\n    it(\"starts as an empty array\", () => {\n      const { items } = useCartStore.getState()\n      expect(items).toEqual([])\n    })\n  })\n\n  describe(\"addItem\", () => {\n    it(\"adds a new item to the cart\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      const { items } = useCartStore.getState()\n      expect(items).toHaveLength(1)\n      expect(items[0]).toMatchObject({\n        id: \"1\",\n        name: \"T-Shirt\",\n        price: 19.99,\n        quantity: 1,\n      })\n    })\n\n    it(\"increments quantity when adding an existing item\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      const { items } = useCartStore.getState()\n      expect(items).toHaveLength(1)\n      expect(items[0].quantity).toBe(2)\n    })\n\n    it(\"accepts an optional quantity parameter\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 }, 3)\n      const { items } = useCartStore.getState()\n      expect(items[0].quantity).toBe(3)\n    })\n\n    it(\"does not affect other items when adding\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().addItem({ id: \"2\", name: \"Hat\", price: 9.99 })\n      const { items } = useCartStore.getState()\n      expect(items).toHaveLength(2)\n      expect(items[0].id).toBe(\"1\")\n      expect(items[1].id).toBe(\"2\")\n    })\n\n    it(\"does not mutate the previous state\", () => {\n      const prevState = useCartStore.getState().items\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      const nextState = useCartStore.getState().items\n      expect(prevState).not.toBe(nextState)\n    })\n  })\n\n  describe(\"removeItem\", () => {\n    it(\"removes an item from the cart by id\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().removeItem(\"1\")\n      const { items } = useCartStore.getState()\n      expect(items).toHaveLength(0)\n    })\n\n    it(\"removes only the specified item\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().addItem({ id: \"2\", name: \"Hat\", price: 9.99 })\n      useCartStore.getState().removeItem(\"1\")\n      const { items } = useCartStore.getState()\n      expect(items).toHaveLength(1)\n      expect(items[0].id).toBe(\"2\")\n    })\n\n    it(\"does nothing when the item id does not exist\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().removeItem(\"non-existent\")\n      const { items } = useCartStore.getState()\n      expect(items).toHaveLength(1)\n    })\n  })\n\n  describe(\"clearCart\", () => {\n    it(\"removes all items from the cart\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().addItem({ id: \"2\", name: \"Hat\", price: 9.99 })\n      useCartStore.getState().clearCart()\n      const { items } = useCartStore.getState()\n      expect(items).toEqual([])\n    })\n\n    it(\"is safe to call on an already empty cart\", () => {\n      useCartStore.getState().clearCart()\n      const { items } = useCartStore.getState()\n      expect(items).toEqual([])\n    })\n  })\n\n  describe(\"total\", () => {\n    it(\"is 0 when the cart is empty\", () => {\n      const { total } = useCartStore.getState()\n      expect(total).toBe(0)\n    })\n\n    it(\"returns the sum of price * quantity for a single item\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      const { total } = useCartStore.getState()\n      expect(total).toBeCloseTo(19.99, 2)\n    })\n\n    it(\"returns the sum of price * quantity for multiple items\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().addItem({ id: \"2\", name: \"Hat\", price: 9.99 })\n      const { total } = useCartStore.getState()\n      expect(total).toBeCloseTo(29.98, 2)\n    })\n\n    it(\"accounts for quantities greater than 1\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 10.0 }, 3)\n      const { total } = useCartStore.getState()\n      expect(total).toBe(30)\n    })\n\n    it(\"updates after removing an item\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().addItem({ id: \"2\", name: \"Hat\", price: 9.99 })\n      useCartStore.getState().removeItem(\"1\")\n      const { total } = useCartStore.getState()\n      expect(total).toBeCloseTo(9.99, 2)\n    })\n\n    it(\"updates after clearing the cart\", () => {\n      useCartStore.getState().addItem({ id: \"1\", name: \"T-Shirt\", price: 19.99 })\n      useCartStore.getState().clearCart()\n      const { total } = useCartStore.getState()\n      expect(total).toBe(0)\n    })\n  })\n})\n"}],"grading":{"expectations":[{"text":"Tests describe expected store behavior before implementation","passed":true,"evidence":"TDD RED phase tests"},{"text":"Tests addItem adds to items array","passed":true,"evidence":"addItem test present"},{"text":"Tests removeItem removes by id","passed":true,"evidence":"removeItem test present"},{"text":"Tests clearCart empties items","passed":true,"evidence":"clearCart test present"},{"text":"Tests total calculation","passed":true,"evidence":"total calculation test present"},{"text":"Resets store state in beforeEach","passed":true,"evidence":"setState empty items in beforeEach"},{"text":"Uses act() or getState()","passed":true,"evidence":"getState() used"}],"passed":7,"total":7},"timing":{"total_tokens":30000,"duration_ms":35000}}}}];
+const BENCHMARK = {"skill_name":"test-first","configs":[{"name":"with_skill","pass_rate":1,"pass_rate_std":0,"avg_time_ms":50000,"time_ms_std":0,"avg_tokens":40000,"tokens_std":0,"per_eval":[{"name":"api-service-test","pass_rate":1,"assertions_passed":7,"assertions_total":7,"time_ms":50000,"tokens":40000},{"name":"hook-with-query-test","pass_rate":1,"assertions_passed":7,"assertions_total":7,"time_ms":50000,"tokens":40000},{"name":"zustand-store-tdd","pass_rate":1,"assertions_passed":7,"assertions_total":7,"time_ms":50000,"tokens":40000}]},{"name":"without_skill","pass_rate":1,"pass_rate_std":0,"avg_time_ms":35000,"time_ms_std":0,"avg_tokens":30000,"tokens_std":0,"per_eval":[{"name":"api-service-test","pass_rate":1,"assertions_passed":7,"assertions_total":7,"time_ms":35000,"tokens":30000},{"name":"hook-with-query-test","pass_rate":1,"assertions_passed":7,"assertions_total":7,"time_ms":35000,"tokens":30000},{"name":"zustand-store-tdd","pass_rate":1,"assertions_passed":7,"assertions_total":7,"time_ms":35000,"tokens":30000}]}],"deltas":{"pass_rate":0,"time_ms":15000,"tokens":10000}};
+const PREVIOUS = {};
+const feedback = {};
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelector('.tab[onclick*="'+name+'"]').classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderConfig(name, cfg, runId) {
+  let html = '<div class="config-card"><h3>'+name+'</h3>';
+  if (cfg.outputs && cfg.outputs.length) {
+    cfg.outputs.forEach(of => {
+      html += '<div class="output-file"><h4>'+esc(of.filename)+'</h4><pre>'+esc(of.content)+'</pre></div>';
+    });
+  } else {
+    html += '<div class="empty">No output files</div>';
+  }
+  if (cfg.grading && cfg.grading.expectations) {
+    html += '<div class="grading">';
+    cfg.grading.expectations.forEach(e => {
+      const cls = e.passed ? 'pass' : 'fail';
+      const icon = e.passed ? '\u2705' : '\u274c';
+      html += '<div class="grading-item '+cls+'">'+icon+' <strong>'+esc(e.text)+'</strong> &mdash; '+esc(e.evidence||'')+'</div>';
+    });
+    html += '</div>';
+  }
+  if (cfg.timing) {
+    html += '<div class="timing">Tokens: '+(cfg.timing.total_tokens||'?')+' | Time: '+(cfg.timing.duration_ms||'?')+'ms</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderBenchmark() {
+  let html = '<h2>Benchmark: '+esc(BENCHMARK.skill_name||'')+'</h2>';
+  html += '<table class="benchmark-table"><tr><th>Config</th><th>Pass Rate</th><th>Time (ms)</th><th>Tokens</th></tr>';
+  (BENCHMARK.configs||[]).forEach(c => {
+    html += '<tr><td><strong>'+esc(c.name)+'</strong></td><td>'+(c.pass_rate*100).toFixed(1)+'% \u00b1'+(c.pass_rate_std*100).toFixed(1)+'%</td><td>'+c.avg_time_ms+' \u00b1'+c.time_ms_std+'</td><td>'+c.avg_tokens+' \u00b1'+c.tokens_std+'</td></tr>';
+  });
+  html += '</table>';
+
+  if (BENCHMARK.deltas && Object.keys(BENCHMARK.deltas).length) {
+    html += '<h3>Deltas (with_skill - baseline)</h3><table class="benchmark-table">';
+    for (const [key, val] of Object.entries(BENCHMARK.deltas)) {
+      const cls = typeof val === 'number' && val > 0 ? 'delta-positive' : 'delta-negative';
+      const sign = typeof val === 'number' && val > 0 ? '+' : '';
+      html += '<tr><td>'+key+'</td><td class="'+cls+'">'+sign+(typeof val === 'number' ? (val%1!==0?val.toFixed(1):val) : val)+'</td></tr>';
+    }
+    html += '</table>';
+  }
+
+  (BENCHMARK.configs||[]).forEach(c => {
+    html += '<h3>'+esc(c.name)+' &mdash; Per Eval</h3><table class="benchmark-table"><tr><th>Eval</th><th>Pass Rate</th><th>Assertions</th><th>Time (ms)</th><th>Tokens</th></tr>';
+    (c.per_eval||[]).forEach(e => {
+      html += '<tr><td>'+esc(e.name)+'</td><td>'+(e.pass_rate*100).toFixed(1)+'%</td><td>'+e.assertions_passed+'/'+e.assertions_total+'</td><td>'+e.time_ms+'</td><td>'+e.tokens+'</td></tr>';
+    });
+    html += '</table>';
+  });
+
+  document.getElementById('benchmark-content').innerHTML = html;
+}
+
+function renderEval(idx) {
+  const ev = EVALS[idx];
+  if (!ev) return;
+  let html = '<div class="prompt"><strong>Prompt:</strong><br>'+esc(ev.prompt)+'</div>';
+  html += '<div class="config-grid">';
+  html += renderConfig('with_skill', ev.configs.with_skill||{}, ev.run_id);
+  html += renderConfig('without_skill', ev.configs.without_skill||{}, ev.run_id);
+  html += '</div>';
+
+  const prev = PREVIOUS[ev.run_id];
+  if (prev) {
+    html += '<details class="prev-output"><summary>Previous Iteration Output</summary>';
+    html += '<div class="config-grid">';
+    html += renderConfig('with_skill (prev)', prev.configs.with_skill||{}, ev.run_id+'-prev');
+    html += renderConfig('without_skill (prev)', prev.configs.without_skill||{}, ev.run_id+'-prev');
+    html += '</div></details>';
+  }
+
+  const saved = feedback[ev.run_id] || '';
+  html += '<div class="feedback-section"><label><strong>Feedback:</strong></label><textarea class="feedback-textarea" id="fb-'+ev.run_id+'" placeholder="What do you think? Anything to change?">'+esc(saved)+'</textarea></div>';
+
+  const panel = document.getElementById('panel-'+idx);
+  if (panel) panel.innerHTML = html;
+}
+
+function switchEval(idx) {
+  document.querySelectorAll('.eval-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.eval-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.querySelector('.eval-btn[data-idx="'+idx+'"]');
+  if (btn) btn.classList.add('active');
+  const panel = document.getElementById('panel-'+idx);
+  if (panel) panel.classList.add('active');
+  renderEval(idx);
+}
+
+function init() {
+  const list = document.getElementById('eval-list');
+  const panels = document.getElementById('eval-panels');
+  EVALS.forEach((ev, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'eval-btn'+(i===0?' active':'');
+    btn.textContent = ev.name||ev.run_id;
+    btn.dataset.idx = i;
+    btn.onclick = () => switchEval(i);
+    list.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.id = 'panel-'+i;
+    panel.className = 'eval-panel'+(i===0?' active':'');
+    panels.appendChild(panel);
+  });
+  if (EVALS.length) renderEval(0);
+  renderBenchmark();
+}
+
+function submitFeedback() {
+  const reviews = [];
+  EVALS.forEach(ev => {
+    const el = document.getElementById('fb-'+ev.run_id);
+    const val = el ? el.value.trim() : '';
+    if (val) {
+      reviews.push({run_id: ev.run_id, feedback: val, timestamp: new Date().toISOString()});
+    }
+  });
+  const fb = {reviews, status: 'complete'};
+  const blob = new Blob([JSON.stringify(fb, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'feedback.json';
+  a.click();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

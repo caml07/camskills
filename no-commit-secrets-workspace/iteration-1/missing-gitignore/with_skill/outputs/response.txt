@@ -1,0 +1,104 @@
+Following the no-commit-secrets skill, here is exactly what I would do step by step:
+
+---
+
+## Step-by-step plan
+
+### 1. Create the vault directory structure
+
+The skill says to save secrets to `vault/Config/` (relative to the repo root). The vault path in metadata is `C:/Users/psistema/Documents/internship/vault`, and the repo path is `C:/Users/psistema/Documents/internship`. So the vault's `Config/` subfolder maps to:
+
+```
+C:/Users/psistema/Documents/internship/vault/Config/
+```
+
+I would create this directory (even in a hypothetical scenario, the skill assumes this path).
+
+### 2. Check `.gitignore` at the repo root
+
+Per **Section 2 (.gitignore Verification)** of the skill:
+
+> - Check that `vault/Config/` is in `.gitignore` at `C:/Users/psistema/Documents/internship/.gitignore`
+> - If missing, add it immediately
+> - Also verify common patterns: `.env`, `.env.local`, `*.pem`, `*.key`
+
+I would read `C:/Users/psistema/Documents/internship/.gitignore` (if it exists) and check for:
+- `vault/Config/`
+- `vault/`
+- `.env`
+- `.env.local`
+- `*.pem`
+- `*.key`
+
+If any are missing, I would add them. If `.gitignore` does not exist, I would create it with these entries. This is the **critical check** — if `vault/Config/` is not gitignored, secrets saved there would be tracked by git, defeating the purpose.
+
+### 3. Inform the user about the setup
+
+I would tell the user:
+
+> "I have set up the vault at `vault/Config/` relative to your repo root. Secrets stored there will be saved as Obsidian notes in `vault/Config/`. I've verified that `vault/Config/` is in `.gitignore` so the secrets will never be committed to git. Never put literal API keys in source code, `.env` files tracked by git, or any config files — always use placeholders like `"<API_KEY>"` and reference the vault note."
+
+If `.gitignore` was missing or incomplete, I would explain what I added and why.
+
+### 4. Save each API key the user provides as a vault note
+
+Per **Section 1 (When You Receive a Secret)**:
+
+> - Save it to `vault/Config/` as an Obsidian note
+> - The note should contain only enough context to identify usage (not the full conversation)
+> - NEVER put the literal secret in source code
+
+For example, if the user gives me an OpenAI key, I would create:
+- `vault/Config/openai-api-key.md`
+- `vault/Config/openrouter-api-key.md`
+
+Each note would contain the key value and a brief usage context.
+
+### 5. If the user asks to put the key in a config file (e.g., `.env`)
+
+Per **Section 4 (Editing Config Files)**:
+
+> - Never write literal secrets
+> - Use placeholders: `"<OPENROUTER_API_KEY>"`
+> - Reference the vault note path if the user needs to find the actual value
+
+I would write the file with a placeholder and add a comment pointing to the vault note:
+
+```
+# See vault/Config/openrouter-api-key.md for the actual value
+OPENROUTER_API_KEY="<OPENROUTER_API_KEY>"
+```
+
+### 6. Before any future commit, remind about the scan
+
+Per **Section 3 (Before Every Commit)**:
+
+> - Run `scripts/scan-staged.js` to check all staged files for secret patterns
+> - If secrets are found: block the commit, list the offending files and patterns, and suggest remediation
+
+I would remind the user that the pre-commit scanner (`scripts/scan-staged.js`) must be run before every commit to catch any accidental exposure.
+
+### Files I would check
+
+| File | Why |
+|---|---|
+| `C:/Users/psistema/Documents/internship/.gitignore` | Verify `vault/Config/` is ignored |
+| `C:/Users/psistema/Documents/internship/vault/Config/` | Create if missing — this is where secrets go |
+| `C:/Users/psistema/Documents/internship/.env` | Check it isn't tracked / contains placeholders only |
+| `C:/Users/psistema/Documents/internship/opencode.json` | If present, check for literal secrets |
+| `C:/Users/psistema/Documents/internship/AGENTS.md` | If present, check for literal secrets |
+| `C:/Users/psistema/Documents/internship/scripts/scan-staged.js` | Reference for the pre-commit scanning script |
+
+### What I would tell the user (exact response)
+
+"Here's how I'll set this up:
+
+1. **Vault location**: `vault/Config/` inside your repo at `C:/Users/psistema/Documents/internship/vault/Config/`. Each API key gets its own Obsidian note with just enough context to identify usage.
+
+2. **Safety check**: I'll verify `vault/Config/` is in `.gitignore` at `C:/Users/psistema/Documents/internship/.gitignore`. If it's missing, I'll add it immediately — this is mandatory so secrets are never tracked by git.
+
+3. **Placeholder rule**: When you need a key in a config file (`.env`, `opencode.json`, etc.), I'll write a placeholder like `"<OPENAI_API_KEY>"` and reference the vault note. The literal key lives only in the vault.
+
+4. **Pre-commit scan**: Before every commit, you should run `scripts/scan-staged.js` to catch any accidental exposure.
+
+Go ahead and share your API keys — I'll save them to the vault and never put them in source code."

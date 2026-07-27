@@ -1,0 +1,12 @@
+{
+  "eval_name": "react-native-crash",
+  "assertions": [
+    {"name": "identifies-correct-cause", "description": "Identifies the root cause of the crash"},
+    {"name": "identifies-platform", "description": "Checks if crash is platform-specific"},
+    {"name": "suggests-debug-tool", "description": "Suggests using specific debug tool (Flipper, Metro, etc)"},
+    {"name": "provides-repro-steps", "description": "Provides steps to reproduce the issue"},
+    {"name": "suggests-fix", "description": "Suggests a concrete fix or workaround"},
+    {"name": "follows-systematic-process", "description": "Uses a systematic debug process"}
+  ],
+  "prompt": "Debug a React Native crash: The app crashes on Android when opening a modal with a FlatList inside. It works on iOS. The crash log shows 'java.lang.IllegalStateException: The specified child already has a parent'. Find the root cause and fix."
+}

@@ -1,0 +1,80 @@
+{
+  "skill_name": "fix-debug",
+  "evals": [
+    {
+      "id": 1,
+      "name": "debug-react-use-effect-loop",
+      "prompt": "fix: my React component has an infinite loop with useEffect. The dependency array includes a function that changes every render. How do I fix this?",
+      "files": [],
+      "expected_output": "A response identifying the stale closure / unstable reference issue, suggesting useCallback for the function or useRef for stable references.",
+      "assertions": [
+        {
+          "name": "identifies-stale-reference",
+          "description": "Identifies that the function in the dependency array changes every render"
+        },
+        {
+          "name": "suggests-use-callback",
+          "description": "Suggests useCallback to stabilize the function reference"
+        },
+        {
+          "name": "uses-context7",
+          "description": "Uses Context7 to fetch React docs (not just general knowledge)"
+        },
+        {
+          "name": "includes-code-example",
+          "description": "Provides a code example showing the fix"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "debug-prisma-connection",
+      "prompt": "debug: my Prisma connection keeps failing with 'Can't reach database server'. I'm using PostgreSQL on Railway. The connection was working yesterday.",
+      "files": [],
+      "expected_output": "A response that checks connection string format, SSL requirements, IP whitelisting, and suggests using prisma db push to test connectivity.",
+      "assertions": [
+        {
+          "name": "checks-connection-string",
+          "description": "Checks DATABASE_URL format and common issues"
+        },
+        {
+          "name": "mentions-ssl",
+          "description": "Mentions SSL/TLS requirement for cloud databases"
+        },
+        {
+          "name": "suggests-db-push-test",
+          "description": "Suggests npx prisma db push to test connectivity"
+        },
+        {
+          "name": "references-prisma-debug",
+          "description": "References the Prisma debugging reference file"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "fix-python-import-error",
+      "prompt": "fix: when I run my Python script it says 'ModuleNotFoundError: No module named requests'. I installed it with pip but it still doesn't work.",
+      "files": [],
+      "expected_output": "A response that checks venv activation, pip list, Python interpreter mismatch, and suggests which python/pip check.",
+      "assertions": [
+        {
+          "name": "checks-venv-activation",
+          "description": "Checks if the virtual environment is activated"
+        },
+        {
+          "name": "checks-pip-list",
+          "description": "Suggests running pip list to verify installation"
+        },
+        {
+          "name": "checks-interpreter-mismatch",
+          "description": "Checks for Python interpreter mismatch (terminal vs system)"
+        },
+        {
+          "name": "references-python-debug",
+          "description": "References the Python debugging reference file"
+        }
+      ]
+    }
+  ]
+}

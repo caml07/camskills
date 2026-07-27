@@ -1,0 +1,11 @@
+{
+  "eval_name": "save-api-key",
+  "prompt": "I just got an OpenRouter API key from the website: sk-or-v1-abc123def456ghi789jkl012mno345pqr678stu901vwx234yz. I need to use it in my app. What should I do with it?",
+  "assertions": [
+    {"name": "saves-to-vault", "description": "Saves the key to vault/Config/ as an Obsidian note"},
+    {"name": "uses-placeholder-in-code", "description": "Uses <OPENROUTER_API_KEY> placeholder instead of literal key in source/config files"},
+    {"name": "verifies-gitignore", "description": "Checks that vault/Config/ is in .gitignore"},
+    {"name": "never-in-source", "description": "Does not put the literal key in any .ts, .js, .json, or .md file tracked by git"},
+    {"name": "mentions-vault-path", "description": "References the specific vault note path so user can find it later"}
+  ]
+}

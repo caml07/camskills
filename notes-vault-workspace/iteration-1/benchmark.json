@@ -1,0 +1,64 @@
+{
+  "skill_name": "notes-vault",
+  "configs": [
+    {
+      "name": "with_skill",
+      "pass_rate": 1,
+      "pass_rate_std": 0,
+      "avg_time_ms": 42500,
+      "time_ms_std": 3536,
+      "avg_tokens": 32500,
+      "tokens_std": 3536,
+      "per_eval": [
+        {
+          "name": "create-atomic-note",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 45000,
+          "tokens": 35000
+        },
+        {
+          "name": "update-moc",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 40000,
+          "tokens": 30000
+        }
+      ]
+    },
+    {
+      "name": "without_skill",
+      "pass_rate": 0.9167,
+      "pass_rate_std": 0.1179,
+      "avg_time_ms": 33500,
+      "time_ms_std": 2121,
+      "avg_tokens": 26500,
+      "tokens_std": 2121,
+      "per_eval": [
+        {
+          "name": "create-atomic-note",
+          "pass_rate": 0.8333,
+          "assertions_passed": 5,
+          "assertions_total": 6,
+          "time_ms": 35000,
+          "tokens": 28000
+        },
+        {
+          "name": "update-moc",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 32000,
+          "tokens": 25000
+        }
+      ]
+    }
+  ],
+  "deltas": {
+    "pass_rate": 0.0833,
+    "time_ms": 9000,
+    "tokens": 6000
+  }
+}

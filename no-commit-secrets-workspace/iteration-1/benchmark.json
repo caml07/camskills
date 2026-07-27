@@ -1,0 +1,80 @@
+{
+  "skill_name": "no-commit-secrets",
+  "configs": [
+    {
+      "name": "with_skill",
+      "pass_rate": 1,
+      "pass_rate_std": 0,
+      "avg_time_ms": 45000,
+      "time_ms_std": 5000,
+      "avg_tokens": 36000,
+      "tokens_std": 1732,
+      "per_eval": [
+        {
+          "name": "missing-gitignore",
+          "pass_rate": 1,
+          "assertions_passed": 4,
+          "assertions_total": 4,
+          "time_ms": 50000,
+          "tokens": 38000
+        },
+        {
+          "name": "save-api-key",
+          "pass_rate": 1,
+          "assertions_passed": 5,
+          "assertions_total": 5,
+          "time_ms": 45000,
+          "tokens": 35000
+        },
+        {
+          "name": "staged-file-with-secret",
+          "pass_rate": 1,
+          "assertions_passed": 5,
+          "assertions_total": 5,
+          "time_ms": 40000,
+          "tokens": 35000
+        }
+      ]
+    },
+    {
+      "name": "without_skill",
+      "pass_rate": 0.85,
+      "pass_rate_std": 0.1323,
+      "avg_time_ms": 28333,
+      "time_ms_std": 6506,
+      "avg_tokens": 22667,
+      "tokens_std": 5033,
+      "per_eval": [
+        {
+          "name": "missing-gitignore",
+          "pass_rate": 0.75,
+          "assertions_passed": 3,
+          "assertions_total": 4,
+          "time_ms": 22000,
+          "tokens": 18000
+        },
+        {
+          "name": "save-api-key",
+          "pass_rate": 1,
+          "assertions_passed": 5,
+          "assertions_total": 5,
+          "time_ms": 35000,
+          "tokens": 28000
+        },
+        {
+          "name": "staged-file-with-secret",
+          "pass_rate": 0.8,
+          "assertions_passed": 4,
+          "assertions_total": 5,
+          "time_ms": 28000,
+          "tokens": 22000
+        }
+      ]
+    }
+  ],
+  "deltas": {
+    "pass_rate": 0.15,
+    "time_ms": 16667,
+    "tokens": 13333
+  }
+}

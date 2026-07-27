@@ -1,0 +1,116 @@
+{
+  "skill_name": "test-first",
+  "evals": [
+    {
+      "id": 1,
+      "name": "api-service-test",
+      "prompt": "I need to write tests for a patients API module. It has a function called fetchPatients that calls GET /api/patients and returns an array of patients. I want tests that cover: successful response with data, empty response, network error, and an unauthorized (401) response. Use fetch mocking.",
+      "files": [],
+      "expected_output": "A test file with describe/fetchPatients, it blocks for success/empty/error/401, using vi.fn() mock of global.fetch, with beforeEach reset.",
+      "assertions": [
+        {
+          "name": "has-success-test",
+          "description": "Tests the successful response path with patient data"
+        },
+        {
+          "name": "has-empty-test",
+          "description": "Tests that empty array is handled (not an error)"
+        },
+        {
+          "name": "has-network-error-test",
+          "description": "Tests that fetch rejection (network error) throws or returns error"
+        },
+        {
+          "name": "has-401-test",
+          "description": "Tests that 401 response is handled (throws or returns error)"
+        },
+        {
+          "name": "uses-vi-fn",
+          "description": "Uses vi.fn() for mocking fetch"
+        },
+        {
+          "name": "has-beforeEach-reset",
+          "description": "Resets mocks in beforeEach"
+        },
+        {
+          "name": "collocation-path",
+          "description": "Test file is named patients.api.test.ts alongside the source"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "zustand-store-tdd",
+      "prompt": "I want to build a shopping cart store with Zustand. It should have: items array, addItem action, removeItem action, clearCart action, and a computed total. Write the tests FIRST (TDD: RED phase), then I'll implement the store.",
+      "files": [],
+      "expected_output": "A test file with describe blocks for addItem, removeItem, clearCart, and total. Tests written before the store exists, describing the expected behavior.",
+      "assertions": [
+        {
+          "name": "tdd-test-before-implementation",
+          "description": "Tests reference expected store shape even though it doesn't exist yet"
+        },
+        {
+          "name": "has-add-item-test",
+          "description": "Tests that addItem adds to the items array"
+        },
+        {
+          "name": "has-remove-item-test",
+          "description": "Tests that removeItem removes by id"
+        },
+        {
+          "name": "has-clear-cart-test",
+          "description": "Tests that clearCart empties items and resets total"
+        },
+        {
+          "name": "has-total-calculation",
+          "description": "Tests that total = sum of (item.price * item.quantity)"
+        },
+        {
+          "name": "has-beforeEach-reset",
+          "description": "Resets store state in beforeEach"
+        },
+        {
+          "name": "uses-act",
+          "description": "Wraps store mutations in act() for hook-based test or uses getState() for direct store test"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "hook-with-query-test",
+      "prompt": "I have a custom hook called usePatientDetail that takes a patient ID, calls fetchPatientDetail via TanStack Query, and returns { patient, isLoading, error }. Write tests for: loading state, successful response, error response, and the hook using the correct queryKey. The API module should be mocked.",
+      "files": [],
+      "expected_output": "A test file using renderHook with a QueryClientProvider wrapper, testing loading/success/error states with waitFor.",
+      "assertions": [
+        {
+          "name": "uses-render-hook",
+          "description": "Uses renderHook from @testing-library/react-native"
+        },
+        {
+          "name": "has-query-wrapper",
+          "description": "Wraps hook in QueryClientProvider with retry: false"
+        },
+        {
+          "name": "tests-loading-state",
+          "description": "Checks that isLoading is true initially"
+        },
+        {
+          "name": "tests-success-state",
+          "description": "Waits for data and asserts patient is returned"
+        },
+        {
+          "name": "tests-error-state",
+          "description": "Mocks rejection and asserts error is set"
+        },
+        {
+          "name": "mocks-api-module",
+          "description": "Mocks the API module with vi.mock, not global.fetch"
+        },
+        {
+          "name": "uses-wait-for",
+          "description": "Uses waitFor for async assertions instead of arbitrary timeouts"
+        }
+      ]
+    }
+  ]
+}

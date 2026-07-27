@@ -1,0 +1,13 @@
+{
+  "eval_name": "api-service-test",
+  "assertions": [
+    {"name": "has-success-test", "description": "Tests the successful response path with patient data"},
+    {"name": "has-empty-test", "description": "Tests that empty array is handled"},
+    {"name": "has-network-error-test", "description": "Tests that fetch rejection throws or returns error"},
+    {"name": "has-401-test", "description": "Tests that 401 response is handled"},
+    {"name": "uses-vi-fn", "description": "Uses vi.fn() for mocking fetch"},
+    {"name": "has-beforeEach-reset", "description": "Resets mocks in beforeEach"},
+    {"name": "collocation-path", "description": "Test file is named patients.api.test.ts alongside source"}
+  ],
+  "prompt": "Write tests for a patients API module. It has fetchPatients that calls GET /api/patients and returns an array of patients. Cover: success, empty, network error, 401. Use fetch mocking."
+}

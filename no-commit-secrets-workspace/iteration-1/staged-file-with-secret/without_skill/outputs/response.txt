@@ -1,0 +1,31 @@
+## What I would do
+
+1. **Check if the repo exists** — since it doesn't, I'd stop and say the path is invalid. But assuming it did:
+
+2. **Load the no-commit-secrets skill** — it has the exact workflow: scan staged files for secret patterns, block the commit if found, and instruct the user to move the key to `vault/Config/` (which must be in `.gitignore`).
+
+3. **Run the secret scan** — the skill uses a deterministic script (`scan-staged-for-secrets`) that checks staged files against regex patterns for OpenAI keys, AWS keys, JWTs, etc. If `src/config.ts` is staged, the scanner would catch the OpenAI key pattern (`sk-...`).
+
+4. **Block the commit** — the scanner returns a non-zero exit code, the commit is rejected, and I'd tell the user exactly which file and line contains the secret.
+
+## What I'd tell the user
+
+> **BLOCKED**: Your OpenAI key was detected in `src/config.ts`.
+>
+> Do NOT commit API keys to the repository. Here's what to do:
+>
+> 1. Move the key to `vault/Config/config.toml` (in TOML format):
+>    ```toml
+>    [openai]
+>    api_key = "sk-..."
+>    ```
+> 2. Verify `vault/Config/` is listed in `.gitignore` (it should already be).
+> 3. In `src/config.ts`, load the key from the vault instead:
+>    ```ts
+>    import config from '../vault/Config/config.toml'
+>    const openaiKey = config.openai.api_key
+>    ```
+> 4. Run `scan-staged-for-secrets` again to confirm the file is clean.
+> 5. Now commit safely.
+>
+> Never hardcode secrets in source files — they will be exposed on push.

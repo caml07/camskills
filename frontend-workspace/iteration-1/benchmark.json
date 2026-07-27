@@ -1,0 +1,80 @@
+{
+  "skill_name": "frontend",
+  "configs": [
+    {
+      "name": "with_skill",
+      "pass_rate": 1,
+      "pass_rate_std": 0,
+      "avg_time_ms": 56667,
+      "time_ms_std": 7638,
+      "avg_tokens": 46667,
+      "tokens_std": 7638,
+      "per_eval": [
+        {
+          "name": "dark-mode-toggle",
+          "pass_rate": 1,
+          "assertions_passed": 5,
+          "assertions_total": 5,
+          "time_ms": 50000,
+          "tokens": 40000
+        },
+        {
+          "name": "login-screen",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 55000,
+          "tokens": 45000
+        },
+        {
+          "name": "patient-list",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 65000,
+          "tokens": 55000
+        }
+      ]
+    },
+    {
+      "name": "without_skill",
+      "pass_rate": 0.7778,
+      "pass_rate_std": 0.1925,
+      "avg_time_ms": 39333,
+      "time_ms_std": 5132,
+      "avg_tokens": 33333,
+      "tokens_std": 4163,
+      "per_eval": [
+        {
+          "name": "dark-mode-toggle",
+          "pass_rate": 1,
+          "assertions_passed": 5,
+          "assertions_total": 5,
+          "time_ms": 45000,
+          "tokens": 38000
+        },
+        {
+          "name": "login-screen",
+          "pass_rate": 0.6667,
+          "assertions_passed": 4,
+          "assertions_total": 6,
+          "time_ms": 35000,
+          "tokens": 30000
+        },
+        {
+          "name": "patient-list",
+          "pass_rate": 0.6667,
+          "assertions_passed": 4,
+          "assertions_total": 6,
+          "time_ms": 38000,
+          "tokens": 32000
+        }
+      ]
+    }
+  ],
+  "deltas": {
+    "pass_rate": 0.2222,
+    "time_ms": 17334,
+    "tokens": 13334
+  }
+}

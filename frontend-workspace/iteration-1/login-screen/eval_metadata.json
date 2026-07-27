@@ -1,0 +1,12 @@
+{
+  "eval_name": "login-screen",
+  "assertions": [
+    {"name": "uses-react-hook-form", "description": "Uses react-hook-form instead of individual useState per field"},
+    {"name": "has-zod-validation", "description": "Uses Zod with email and min 6 char password rules"},
+    {"name": "shows-field-errors", "description": "Displays inline error messages below invalid fields"},
+    {"name": "loading-state-disables-submit", "description": "Submit disabled/loading indicator while submitting"},
+    {"name": "uses-pressable-scale", "description": "Submit button uses PressableScale for touch feedback"},
+    {"name": "uses-token-spacing", "description": "Uses consistent spacing (no random numbers like 13 or 17)"}
+  ],
+  "prompt": "Create a login screen for a healthcare app. Email and password fields, validation, submit button, loading state. Use React Hook Form + Zod. Make it not look like AI slop."
+}

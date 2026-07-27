@@ -1,0 +1,12 @@
+{
+  "eval_name": "update-moc",
+  "assertions": [
+    {"name": "creates-or-updates-moc", "description": "Creates or updates a Map of Content (MOC)"},
+    {"name": "adds-new-wikilink", "description": "Adds the new concept as a wiki-link in the MOC"},
+    {"name": "organizes-hierarchically", "description": "Organizes entries hierarchically or categorically"},
+    {"name": "preserves-existing", "description": "Preserves existing entries when updating"},
+    {"name": "has-tags", "description": "Includes relevant tags in frontmatter"},
+    {"name": "follows-moc-template", "description": "Follows MOC template structure"}
+  ],
+  "prompt": "I have a vault at vault/ about React ecosystem. I already have notes on: React, JSX, Hooks. I'm adding a note on React Server Components. Update the MOC at vault/mocs/react-ecosystem-moc.md to include a link to react-server-components. Include frontmatter with tags and organize by category."
+}

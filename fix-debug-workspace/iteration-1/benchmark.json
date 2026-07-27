@@ -1,0 +1,80 @@
+{
+  "skill_name": "fix-debug",
+  "configs": [
+    {
+      "name": "with_skill",
+      "pass_rate": 1,
+      "pass_rate_std": 0,
+      "avg_time_ms": 60000,
+      "time_ms_std": 5000,
+      "avg_tokens": 47667,
+      "tokens_std": 2517,
+      "per_eval": [
+        {
+          "name": "prisma-auth-error",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 55000,
+          "tokens": 45000
+        },
+        {
+          "name": "react-native-crash",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 60000,
+          "tokens": 48000
+        },
+        {
+          "name": "react-native-perf",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 65000,
+          "tokens": 50000
+        }
+      ]
+    },
+    {
+      "name": "without_skill",
+      "pass_rate": 0.9444,
+      "pass_rate_std": 0.0962,
+      "avg_time_ms": 42333,
+      "time_ms_std": 2517,
+      "avg_tokens": 37667,
+      "tokens_std": 2517,
+      "per_eval": [
+        {
+          "name": "prisma-auth-error",
+          "pass_rate": 0.8333,
+          "assertions_passed": 5,
+          "assertions_total": 6,
+          "time_ms": 40000,
+          "tokens": 35000
+        },
+        {
+          "name": "react-native-crash",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 42000,
+          "tokens": 38000
+        },
+        {
+          "name": "react-native-perf",
+          "pass_rate": 1,
+          "assertions_passed": 6,
+          "assertions_total": 6,
+          "time_ms": 45000,
+          "tokens": 40000
+        }
+      ]
+    }
+  ],
+  "deltas": {
+    "pass_rate": 0.0556,
+    "time_ms": 17667,
+    "tokens": 10000
+  }
+}

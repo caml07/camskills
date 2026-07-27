@@ -1,0 +1,13 @@
+Tu OpenRouter API key (`sk-or-v1-abc123def456ghi789jkl012mno345pqr678stu901vwx234yz`) ya está guardada en `vault/Config/API Keys.md` — fuera del repo y en `.gitignore`, así que no hay riesgo de commitearla.
+
+Puedes usarla en `opencode.json` como modelo LLM o en apps que soporten OpenRouter (ChatGPT UI alternativos, CLI tools, etc.). La sintaxis es:
+
+```json
+{
+  "provider": "openrouter",
+  "apiKey": "<OPENROUTER_API_KEY>",
+  "model": "openai/gpt-4o"
+}
+```
+
+Nunca pongas el key literal en ningún archivo del repo — usa el placeholder y referencia la nota en `vault/Config/API Keys.md`. Cuando quieras asignarla a un uso específico, actualiza esa nota y te ayudo a configurarlo.

@@ -1,0 +1,15 @@
+The repo path `C:/Users/psistema/Documents/internship` does not exist, so there's nothing to protect yet. Here's what I'd tell the user:
+
+---
+
+**What I would tell the user:**
+
+Your repository at `C:/Users/psistema/Documents/internship` doesn't exist yet. Before setting up the vault, we need the repo to exist so I can:
+
+1. **Create the vault directory** — I'd make `C:/Users/psistema/Documents/internship/vault/` (typically `vault/Config/` for secrets).
+2. **Add a `.gitignore`** — Ensure `vault/` is in `.gitignore` so secrets never get tracked by git.
+3. **Save your API keys** — Store them in `vault/Config/api-keys.json` (or similar), outside source code.
+
+**However**, since the repo doesn't exist, there's no `.git/` directory and no risk of accidental commits. The more important concern is: once you initialize the repo, **I'd verify `.gitignore` covers `vault/` before your first commit**.
+
+Would you like to create the repo first so I can walk through the full setup — including scanning for secrets, setting up `.gitignore`, and saving your keys to the vault?

@@ -1,0 +1,11 @@
+{
+  "eval_name": "save-api-key",
+  "config": "without_skill",
+  "expectations": [
+    {"text": "saves-to-vault", "passed": true, "evidence": "Mentions key is saved to vault/Config/API Keys.md"},
+    {"text": "uses-placeholder-in-code", "passed": true, "evidence": "Shows <OPENROUTER_API_KEY> placeholder in example config"},
+    {"text": "verifies-gitignore", "passed": true, "evidence": "Mentions .gitignore covers vault/Config/"},
+    {"text": "never-in-source", "passed": true, "evidence": "Says never put literal key in repo files"},
+    {"text": "mentions-vault-path", "passed": true, "evidence": "References vault/Config/API Keys.md path"}
+  ]
+}

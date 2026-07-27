@@ -1,0 +1,12 @@
+{
+  "eval_name": "react-native-perf",
+  "assertions": [
+    {"name": "identifies-perf-bottleneck", "description": "Identifies the main performance bottleneck"},
+    {"name": "suggests-profiling", "description": "Suggests using a profiler or measurement tool"},
+    {"name": "provides-concrete-optimization", "description": "Provides a concrete optimization strategy"},
+    {"name": "mentions-flashlist", "description": "Mentions FlashList or virtualization"},
+    {"name": "mentions-reanimated", "description": "Mentions Reanimated or worklet for animations"},
+    {"name": "has-measure-verify-loop", "description": "Follows measure-optimize-verify cycle"}
+  ],
+  "prompt": "A React Native Expo app has a patient list screen that renders 500+ cards with images. Scrolling is janky (45fps) on Android mid-range devices. The app uses NativeWind, FlatList, and expo-image. Identify the bottleneck and optimize it."
+}

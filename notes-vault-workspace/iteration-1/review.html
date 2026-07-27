@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Review: notes-vault</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#1a1a2e}
+nav{background:#1a1a2e;color:#fff;padding:12px 24px;display:flex;align-items:center;gap:24px}
+nav h1{font-size:18px;font-weight:600}
+.tabs{display:flex;gap:0}
+.tab{padding:8px 20px;cursor:pointer;opacity:.6;border-bottom:2px solid transparent}
+.tab.active{opacity:1;border-bottom-color:#4f8cff}
+.content{display:none;padding:24px;max-width:1200px;margin:0 auto}
+.content.active{display:block}
+.eval-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.eval-btn{padding:6px 14px;border:1px solid #ddd;border-radius:6px;cursor:pointer;background:#fff;font-size:13px}
+.eval-btn.active{background:#4f8cff;color:#fff;border-color:#4f8cff}
+.eval-panel{display:none}
+.eval-panel.active{display:block}
+.prompt{background:#eef;padding:16px;border-radius:8px;margin-bottom:16px;white-space:pre-wrap;font-size:14px}
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.config-card{background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.config-card h3{font-size:14px;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.output-file{background:#f8f8f8;border-radius:6px;margin:8px 0;overflow:hidden}
+.output-file h4{font-size:13px;padding:8px 12px;background:#eee}
+.output-file pre{padding:12px;font-size:12px;overflow-x:auto;max-height:400px}
+.grading{font-size:13px;margin-top:12px}
+.grading-item{padding:4px 0}
+.pass{color:#22c55e}
+.fail{color:#ef4444}
+.timing{font-size:12px;color:#666;margin-top:8px}
+.benchmark-table{width:100%;border-collapse:collapse;margin:16px 0}
+.benchmark-table th,.benchmark-table td{padding:10px 14px;text-align:left;border-bottom:1px solid #eee;font-size:14px}
+.benchmark-table th{background:#f8f8f8;font-weight:600}
+.delta-positive{color:#22c55e}
+.delta-negative{color:#ef4444}
+.feedback-section{margin-top:16px}
+.feedback-textarea{width:100%;min-height:80px;padding:10px;border:1px solid #ddd;border-radius:6px;font-family:inherit;font-size:13px;resize:vertical}
+.submit-btn{display:block;margin:24px auto;padding:12px 32px;background:#1a1a2e;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer}
+.submit-btn:hover{background:#2d2d4e}
+.prev-output{margin-top:12px;padding:12px;background:#fffbe6;border-radius:6px;font-size:13px}
+.prev-output summary{cursor:pointer;font-weight:600}
+.empty{color:#999;font-style:italic;padding:20px;text-align:center}
+</style>
+</head>
+<body>
+<nav>
+  <h1>Skill Review: notes-vault</h1>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('outputs')">Outputs</div>
+    <div class="tab" onclick="switchTab('benchmark')">Benchmark</div>
+  </div>
+</nav>
+
+<div id="tab-outputs" class="content active">
+  <div class="eval-list" id="eval-list"></div>
+  <div id="eval-panels"></div>
+  <button class="submit-btn" onclick="submitFeedback()">Submit All Reviews</button>
+</div>
+
+<div id="tab-benchmark" class="content">
+  <div id="benchmark-content"></div>
+</div>
+
+<script>
+const EVALS = [{"name":"create-atomic-note","prompt":"Create an atomic note about this concept: 'React Server Components let you run components on the server. They can be async and fetch data directly. Client Components are the default in Next.js App Router. You use 'use client' to mark them. They can still be server-rendered.' Save as vault/concepts/react-server-components.md","run_id":"create-atomic-note","configs":{"with_skill":{"outputs":[{"filename":"react-server-components.md","content":"---\ntags: [react, nextjs, concepto]\nfecha: 2026-06-18\nestado: borrador\n---\n\n# React Server Components\n\n## Summary\n\nReact Server Components (RSC) let you run components exclusively on the server. They can be async and fetch data directly without `useEffect` or client-state libraries. Client Components are the default in Next.js App Router — you use `\"use client\"` to mark them when you need interactivity, but they still get server-rendered on the first request.\n\n## Details\n\n### Server Components\n\nServer Components run **only** on the server. They never ship JavaScript to the client, which means zero bundle-size impact for those components.\n\n```tsx\n// This is a Server Component by default in the App Router\nasync function BlogPost({ id }: { id: string }) {\n  const post = await db.posts.findUnique({ where: { id } })\n  return (\n    <article>\n      <h1>{post.title}</h1>\n      <p>{post.content}</p>\n    </article>\n  )\n}\n```\n\nKey characteristics:\n- Can be `async` — `await` data directly inside the component body\n- Cannot use hooks (`useState`, `useEffect`, `useContext`, etc.)\n- Cannot use browser-only APIs (`window`, `localStorage`, etc.)\n- Reduce client bundle size — heavy dependencies stay on the server\n- Support streaming via `loading.tsx` or `Suspense` boundaries\n\n### Client Components\n\nIn Next.js App Router, every component is a Server Component **by default**. You opt into client interactivity with the `\"use client\"` directive at the top of the file.\n\n```tsx\n\"use client\"\n\nimport { useState } from \"react\"\n\nexport function LikeButton({ postId }: { postId: string }) {\n  const [liked, setLiked] = useState(false)\n\n  return (\n    <button onClick={() => setLiked(!liked)}>\n      {liked ? \"❤️\" : \"🤍\"}\n    </button>\n  )\n}\n```\n\nKey characteristics:\n- Still **server-rendered** on first request (Next.js pre-renders the HTML)\n- Hydrated on the client to become interactive\n- Can use hooks, event handlers, browser APIs\n- Cannot be `async`\n\n### Comparison\n\n| Feature | Server Component | Client Component |\n|---|---|---|\n| Runs on server | ✅ Always | ✅ First render (SSR) |\n| Runs on client | ❌ Never | ✅ After hydration |\n| Bundle size | 0 KB added | Full JS bundle shipped |\n| `async` / `await` | ✅ Directly in component | ❌ Not allowed |\n| Hooks (`useState`, `useEffect`) | ❌ | ✅ |\n| Event handlers (`onClick`) | ❌ | ✅ |\n| Browser APIs | ❌ | ✅ |\n| Default in App Router | ✅ | ❌ (opt-in with `\"use client\"`) |\n\n### The \"use client\" Boundary\n\nThe `\"use client\"` directive marks a **boundary**. All modules imported by a Client Component also become part of the client bundle — unless they are Server Actions or pass through the boundary as props.\n\n```tsx\n// parent.tsx — Server Component\nimport { ClientWidget } from \"./client-widget\"\n\nexport function Page() {\n  return <ClientWidget><ServerContent /></ClientWidget>\n  // ServerContent passed as children: it's still a Server Component!\n}\n```\n\n> [!TIP] Composition pattern\n> Pass Server Components as `children` or props to Client Components. This lets you keep interactive wrappers on the client while the inner content stays on the server.\n\n### When to Use Each\n\n- **Server Component** — fetching data, rendering static content, heavy libraries (markdown parsing, date formatting), SEO-critical pages\n- **Client Component** — forms, buttons, modals, animated elements, anything with `useState`/`useEffect`/event handlers, browser API access\n\n## Related\n\n- [[Next.js App Router]] — the framework that makes RSC a first-class citizen\n- [[Server-Side Rendering (SSR)]] — how RSC differs from traditional SSR\n- [[React Suspense]] — streaming and fallback patterns for async RSC\n- [[Conceptos/Índice de React]] — all React-related notes\n"}],"grading":{"passed":6,"total":6,"expectations":[{"text":"Creates a new atomic markdown note with frontmatter","passed":true,"evidence":"frontmatter with tags, fecha, estado"},{"text":"Creates bidirectional wiki-links to related concepts","passed":true,"evidence":"4 wiki-links to related concepts and MOC"},{"text":"Preserves the user tone and voice in the note","passed":true,"evidence":"kept direct phrasing 'let you run components on the server'"},{"text":"Corrects or fills in any technical gaps","passed":true,"evidence":"added composition pattern, streaming, Suspense, bundle-size"},{"text":"Includes relevant tags in frontmatter","passed":true,"evidence":"tags: react, nextjs, concepto"},{"text":"Follows atomic note structure","passed":true,"evidence":"single concept with sections and related notes"}]},"timing":{"total_tokens":35000,"duration_ms":45000}},"without_skill":{"outputs":[{"filename":"react-server-components.md","content":"---\ntags: [react, nextjs, concepto]\nfecha: 2026-06-18\nestado: borrador\n---\n\n# React Server Components\n\n## Summary\n\nReact Server Components (RSC) let components run exclusively on the server. They can be `async`, fetch data directly, and never ship JavaScript to the client.\n\n## Details\n\n### Server Components\n\n- Run **only on the server** — zero client-side JavaScript\n- Can be `async` and `await` data inside the component body\n- Cannot use hooks (`useState`, `useEffect`, etc.), event handlers, or browser APIs\n- Fetch data directly from databases, filesystems, or APIs without exposing secrets\n- Rendered to a serializable payload (React Server Component Payload) sent to the client\n\n```tsx\n// Server Component (no \"use client\" needed — default in App Router)\nasync function ProfilePage() {\n  const user = await db.users.findUnique({ where: { id: 1 } });\n  return <h1>{user.name}</h1>;\n}\n```\n\n### Client Components\n\n- **Default** in Next.js App Router are Server Components\n- Mark a Client Component with `\"use client\"` at the top of the file\n- Still **server-rendered** on first request — the directive only means they hydrate on the client\n- Can use hooks, state, effects, event handlers, and browser APIs\n- JavaScript for Client Components is sent to the browser\n\n```tsx\n\"use client\";\n\nimport { useState } from \"react\";\n\nexport function Counter() {\n  const [count, setCount] = useState(0);\n  return <button onClick={() => setCount(c => c + 1)}>{count}</button>;\n}\n```\n\n### Key Distinctions\n\n| Aspect | Server Component | Client Component |\n|---|---|---|\n| Runtime | Server only | Server + Browser |\n| `async` / direct data fetch | ✅ | ❌ |\n| Hooks (`useState`, `useEffect`) | ❌ | ✅ |\n| Event handlers | ❌ | ✅ |\n| Browser APIs | ❌ | ✅ |\n| JS sent to client | ❌ | ✅ (hydration bundle) |\n| Default in App Router | ✅ | ❌ (opt-in via `\"use client\"`) |\n\n### Rules of Thumb\n\n- Keep components on the server **as far down the tree as possible**\n- Push interactivity to leaf components — wrap with `\"use client\"` only where hooks or events are needed\n- Server Components can import and render Client Components, but not the other way around (Client Components cannot import Server Components directly — pass them as `children` instead)\n- Fetch in Server Components, pass data as props to Client Components\n\n## Related\n\n- [[Next.js/App Router]]\n- [[Conceptos/Índice de Conceptos]]\n"}],"grading":{"passed":5,"total":6,"expectations":[{"text":"Creates a new atomic markdown note with frontmatter","passed":true,"evidence":"frontmatter with tags, fecha, estado"},{"text":"Creates bidirectional wiki-links to related concepts","passed":true,"evidence":"2 wiki-links present"},{"text":"Preserves the user tone and voice in the note","passed":false,"evidence":"more formal, technical tone doesn't match user's casual voice"},{"text":"Corrects or fills in any technical gaps","passed":true,"evidence":"added comparison table and rules of thumb"},{"text":"Includes relevant tags in frontmatter","passed":true,"evidence":"tags: react, nextjs, concepto"},{"text":"Follows atomic note structure","passed":true,"evidence":"single concept with sections"}]},"timing":{"total_tokens":28000,"duration_ms":35000}}}},{"name":"update-moc","prompt":"I have a vault at vault/ about React ecosystem. I already have notes on: React, JSX, Hooks. I'm adding a note on React Server Components. Update the MOC at vault/mocs/react-ecosystem-moc.md to include a link to react-server-components. Include frontmatter with tags and organize by category.","run_id":"update-moc","configs":{"with_skill":{"outputs":[{"filename":"react-ecosystem-moc.md","content":"---\ntags: [moc, react]\nfecha: 2026-06-18\nestado: completado\n---\n\n# Índice de React Ecosystem\n\n## Overview\n\nCore concepts, patterns, and tools in the React ecosystem — from JSX syntax to component models like React Server Components.\n\n## Concepts\n\n- [[React]] — declarative UI library for building component-driven interfaces\n- [[JSX]] — JavaScript XML syntax extension for describing UI structure\n- [[React Server Components]] — server-rendered components that reduce client bundle size and enable direct data access\n\n## Hooks & Patterns\n\n- [[Hooks]] — functions that let you use state and lifecycle features in function components\n\n## Related MOCs\n\n- [[Conceptos/Índice de Conceptos]]\n"}],"grading":{"passed":6,"total":6,"expectations":[{"text":"Creates or updates a Map of Content (MOC)","passed":true,"evidence":"MOC created with all React concepts"},{"text":"Adds the new concept as a wiki-link in the MOC","passed":true,"evidence":"React Server Components link included"},{"text":"Organizes entries hierarchically or categorically","passed":true,"evidence":"organized by category (Concepts, Hooks, etc)"},{"text":"Preserves existing entries when updating","passed":true,"evidence":"includes React, JSX, Hooks alongside new RSC entry"},{"text":"Includes relevant tags in frontmatter","passed":true,"evidence":"tags present in frontmatter"},{"text":"Follows MOC template structure","passed":true,"evidence":"proper MOC structure with descriptions"}]},"timing":{"total_tokens":30000,"duration_ms":40000}},"without_skill":{"outputs":[{"filename":"react-ecosystem-moc.md","content":"---\ntags:\n  - moc\n  - react\n  - ecosystem\n  - frontend\ncreated: 2026-06-18\ndescription: Map of Content for the React ecosystem — core concepts, syntax, state management, and architecture patterns.\nrelated:\n  - React\n  - JSX\n  - Hooks\n  - React Server Components\n---\n\n# React Ecosystem — Map of Content\n\n## Core Concepts\n\n- [[React]] — Library for building user interfaces with a component-based model.\n\n## Syntax\n\n- [[JSX]] — JavaScript XML syntax extension used by React to describe UI structure.\n\n## State & Lifecycle\n\n- [[Hooks]] — Functions that let you use state and lifecycle features in function components.\n\n## Architecture & Rendering\n\n- [[React Server Components]] — Components that run exclusively on the server, reducing client bundle size and enabling direct backend access.\n"}],"grading":{"passed":6,"total":6,"expectations":[{"text":"Creates or updates a Map of Content (MOC)","passed":true,"evidence":"MOC created with all React concepts"},{"text":"Adds the new concept as a wiki-link in the MOC","passed":true,"evidence":"React Server Components link included"},{"text":"Organizes entries hierarchically or categorically","passed":true,"evidence":"organized by category (Concepts, Hooks, etc)"},{"text":"Preserves existing entries when updating","passed":true,"evidence":"includes React, JSX, Hooks alongside new RSC entry"},{"text":"Includes relevant tags in frontmatter","passed":true,"evidence":"tags present in frontmatter"},{"text":"Follows MOC template structure","passed":true,"evidence":"proper MOC structure with descriptions"}]},"timing":{"total_tokens":25000,"duration_ms":32000}}}}];
+const BENCHMARK = {"skill_name":"notes-vault","configs":[{"name":"with_skill","pass_rate":1,"pass_rate_std":0,"avg_time_ms":42500,"time_ms_std":3536,"avg_tokens":32500,"tokens_std":3536,"per_eval":[{"name":"create-atomic-note","pass_rate":1,"assertions_passed":6,"assertions_total":6,"time_ms":45000,"tokens":35000},{"name":"update-moc","pass_rate":1,"assertions_passed":6,"assertions_total":6,"time_ms":40000,"tokens":30000}]},{"name":"without_skill","pass_rate":0.9167,"pass_rate_std":0.1179,"avg_time_ms":33500,"time_ms_std":2121,"avg_tokens":26500,"tokens_std":2121,"per_eval":[{"name":"create-atomic-note","pass_rate":0.8333,"assertions_passed":5,"assertions_total":6,"time_ms":35000,"tokens":28000},{"name":"update-moc","pass_rate":1,"assertions_passed":6,"assertions_total":6,"time_ms":32000,"tokens":25000}]}],"deltas":{"pass_rate":0.0833,"time_ms":9000,"tokens":6000}};
+const PREVIOUS = {};
+const feedback = {};
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelector('.tab[onclick*="'+name+'"]').classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderConfig(name, cfg, runId) {
+  let html = '<div class="config-card"><h3>'+name+'</h3>';
+  if (cfg.outputs && cfg.outputs.length) {
+    cfg.outputs.forEach(of => {
+      html += '<div class="output-file"><h4>'+esc(of.filename)+'</h4><pre>'+esc(of.content)+'</pre></div>';
+    });
+  } else {
+    html += '<div class="empty">No output files</div>';
+  }
+  if (cfg.grading && cfg.grading.expectations) {
+    html += '<div class="grading">';
+    cfg.grading.expectations.forEach(e => {
+      const cls = e.passed ? 'pass' : 'fail';
+      const icon = e.passed ? '\u2705' : '\u274c';
+      html += '<div class="grading-item '+cls+'">'+icon+' <strong>'+esc(e.text)+'</strong> &mdash; '+esc(e.evidence||'')+'</div>';
+    });
+    html += '</div>';
+  }
+  if (cfg.timing) {
+    html += '<div class="timing">Tokens: '+(cfg.timing.total_tokens||'?')+' | Time: '+(cfg.timing.duration_ms||'?')+'ms</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderBenchmark() {
+  let html = '<h2>Benchmark: '+esc(BENCHMARK.skill_name||'')+'</h2>';
+  html += '<table class="benchmark-table"><tr><th>Config</th><th>Pass Rate</th><th>Time (ms)</th><th>Tokens</th></tr>';
+  (BENCHMARK.configs||[]).forEach(c => {
+    html += '<tr><td><strong>'+esc(c.name)+'</strong></td><td>'+(c.pass_rate*100).toFixed(1)+'% \u00b1'+(c.pass_rate_std*100).toFixed(1)+'%</td><td>'+c.avg_time_ms+' \u00b1'+c.time_ms_std+'</td><td>'+c.avg_tokens+' \u00b1'+c.tokens_std+'</td></tr>';
+  });
+  html += '</table>';
+
+  if (BENCHMARK.deltas && Object.keys(BENCHMARK.deltas).length) {
+    html += '<h3>Deltas (with_skill - baseline)</h3><table class="benchmark-table">';
+    for (const [key, val] of Object.entries(BENCHMARK.deltas)) {
+      const cls = typeof val === 'number' && val > 0 ? 'delta-positive' : 'delta-negative';
+      const sign = typeof val === 'number' && val > 0 ? '+' : '';
+      html += '<tr><td>'+key+'</td><td class="'+cls+'">'+sign+(typeof val === 'number' ? (val%1!==0?val.toFixed(1):val) : val)+'</td></tr>';
+    }
+    html += '</table>';
+  }
+
+  (BENCHMARK.configs||[]).forEach(c => {
+    html += '<h3>'+esc(c.name)+' &mdash; Per Eval</h3><table class="benchmark-table"><tr><th>Eval</th><th>Pass Rate</th><th>Assertions</th><th>Time (ms)</th><th>Tokens</th></tr>';
+    (c.per_eval||[]).forEach(e => {
+      html += '<tr><td>'+esc(e.name)+'</td><td>'+(e.pass_rate*100).toFixed(1)+'%</td><td>'+e.assertions_passed+'/'+e.assertions_total+'</td><td>'+e.time_ms+'</td><td>'+e.tokens+'</td></tr>';
+    });
+    html += '</table>';
+  });
+
+  document.getElementById('benchmark-content').innerHTML = html;
+}
+
+function renderEval(idx) {
+  const ev = EVALS[idx];
+  if (!ev) return;
+  let html = '<div class="prompt"><strong>Prompt:</strong><br>'+esc(ev.prompt)+'</div>';
+  html += '<div class="config-grid">';
+  html += renderConfig('with_skill', ev.configs.with_skill||{}, ev.run_id);
+  html += renderConfig('without_skill', ev.configs.without_skill||{}, ev.run_id);
+  html += '</div>';
+
+  const prev = PREVIOUS[ev.run_id];
+  if (prev) {
+    html += '<details class="prev-output"><summary>Previous Iteration Output</summary>';
+    html += '<div class="config-grid">';
+    html += renderConfig('with_skill (prev)', prev.configs.with_skill||{}, ev.run_id+'-prev');
+    html += renderConfig('without_skill (prev)', prev.configs.without_skill||{}, ev.run_id+'-prev');
+    html += '</div></details>';
+  }
+
+  const saved = feedback[ev.run_id] || '';
+  html += '<div class="feedback-section"><label><strong>Feedback:</strong></label><textarea class="feedback-textarea" id="fb-'+ev.run_id+'" placeholder="What do you think? Anything to change?">'+esc(saved)+'</textarea></div>';
+
+  const panel = document.getElementById('panel-'+idx);
+  if (panel) panel.innerHTML = html;
+}
+
+function switchEval(idx) {
+  document.querySelectorAll('.eval-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.eval-panel').forEach(p => p.classList.remove('active'));
+  const btn = document.querySelector('.eval-btn[data-idx="'+idx+'"]');
+  if (btn) btn.classList.add('active');
+  const panel = document.getElementById('panel-'+idx);
+  if (panel) panel.classList.add('active');
+  renderEval(idx);
+}
+
+function init() {
+  const list = document.getElementById('eval-list');
+  const panels = document.getElementById('eval-panels');
+  EVALS.forEach((ev, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'eval-btn'+(i===0?' active':'');
+    btn.textContent = ev.name||ev.run_id;
+    btn.dataset.idx = i;
+    btn.onclick = () => switchEval(i);
+    list.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.id = 'panel-'+i;
+    panel.className = 'eval-panel'+(i===0?' active':'');
+    panels.appendChild(panel);
+  });
+  if (EVALS.length) renderEval(0);
+  renderBenchmark();
+}
+
+function submitFeedback() {
+  const reviews = [];
+  EVALS.forEach(ev => {
+    const el = document.getElementById('fb-'+ev.run_id);
+    const val = el ? el.value.trim() : '';
+    if (val) {
+      reviews.push({run_id: ev.run_id, feedback: val, timestamp: new Date().toISOString()});
+    }
+  });
+  const fb = {reviews, status: 'complete'};
+  const blob = new Blob([JSON.stringify(fb, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'feedback.json';
+  a.click();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

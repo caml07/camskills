@@ -1,0 +1,21 @@
+Following the no-commit-secrets skill instructions for a staged file containing a secret:
+
+Step 1: I would check the staged file src/config.ts for secret patterns using the scan-staged.js script:
+  node scripts/scan-staged.js --path C:/Users/psistema/Documents/internship
+
+Step 2: The scanner would detect the OpenAI key pattern (sk-...) in src/config.ts.
+
+Step 3: I would BLOCK the commit and tell the user:
+  ⚠️ SECRET FOUND in staged file: src/config.ts
+     Pattern: OpenAI API Key (sk-)
+  
+  Action taken:
+  - Commit blocked. This file contains a hardcoded API key that would be permanently exposed in git history.
+  
+  Remediation options:
+  1. Unstage the file: git restore --staged src/config.ts
+  2. Replace the literal key with a placeholder: const OPENAI_KEY = "<OPENAI_API_KEY>"
+  3. Save the actual key to vault/Config/ as an Obsidian note for safekeeping
+  4. Use the placeholder in your code and load the key from environment variables at runtime
+
+Step 4: No exceptions. Even for "temporary" commits or personal branches.

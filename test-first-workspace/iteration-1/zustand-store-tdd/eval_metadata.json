@@ -1,0 +1,13 @@
+{
+  "eval_name": "zustand-store-tdd",
+  "assertions": [
+    {"name": "tdd-test-before-implementation", "description": "Tests describe expected store behavior"},
+    {"name": "has-add-item-test", "description": "Tests addItem adds to items array"},
+    {"name": "has-remove-item-test", "description": "Tests removeItem removes by id"},
+    {"name": "has-clear-cart-test", "description": "Tests clearCart empties items and resets total"},
+    {"name": "has-total-calculation", "description": "Tests total = sum of (item.price * item.quantity)"},
+    {"name": "has-beforeEach-reset", "description": "Resets store state in beforeEach"},
+    {"name": "uses-act-or-getState", "description": "Uses act() or getState() for store mutations"}
+  ],
+  "prompt": "Write tests for a shopping cart Zustand store. TDD style: write tests FIRST before the store exists. It should have items, addItem, removeItem, clearCart, total calculation."
+}

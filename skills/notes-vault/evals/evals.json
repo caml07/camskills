@@ -1,0 +1,75 @@
+{
+  "skill_name": "notes-vault",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-atomic-note",
+      "prompt": "Guarda esto: En React Native, para evitar que el teclado tape los inputs, usas KeyboardAvoidingView. Envolves todo el contenido con <KeyboardAvoidingView behavior='padding' style={flex:1}>. En Android funciona con 'height' y en iOS con 'padding'. Necesitas importarlo de react-native.",
+      "files": [],
+      "expected_output": "An atomic note in vault/React Native/KeyboardAvoidingView.md with frontmatter, wiki-links to related concepts, real code examples for both platforms, and comparison table for behavior values.",
+      "assertions": [
+        {
+          "name": "has-frontmatter",
+          "description": "Note has frontmatter with tags, fecha, and estado"
+        },
+        {
+          "name": "has-wiki-links",
+          "description": "Note contains [[wiki-links]] to related concepts or MOCs"
+        },
+        {
+          "name": "real-code-not-pseudocode",
+          "description": "Code example uses real RN syntax, not pseudocode"
+        },
+        {
+          "name": "platform-comparison",
+          "description": "Mentions or compares behavior on iOS vs Android"
+        },
+        {
+          "name": "uses-users-voice",
+          "description": "Preserves user's casual tone and terminology"
+        },
+        {
+          "name": "updates-moc",
+          "description": "Updates or references the React Native MOC/index"
+        },
+        {
+          "name": "kebab-tags",
+          "description": "Tags are in kebab-case format"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "code-correction",
+      "prompt": "toma nota: asi hago un fetch en React native: \n\nasync function getData() {\n  var response = await fetch('https://api.example.com/patients');\n  var data = response.json();\n  return data;\n}",
+      "files": [],
+      "expected_output": "A note that corrects var to const/let, adds error handling, shows loading/error patterns, and links to related hooks/fetch patterns.",
+      "assertions": [
+        {
+          "name": "corrects-var-to-const",
+          "description": "Changes var to const or let"
+        },
+        {
+          "name": "adds-error-handling",
+          "description": "Adds try/catch or error handling to the fetch call"
+        },
+        {
+          "name": "has-frontmatter",
+          "description": "Has frontmatter with tags and estado"
+        },
+        {
+          "name": "preserves-user-intent",
+          "description": "Keeps the data-fetching concept the user described"
+        },
+        {
+          "name": "adds-wiki-links",
+          "description": "Links to related concepts (hooks, API patterns)"
+        },
+        {
+          "name": "uses-real-code",
+          "description": "Output is working code, not pseudocode"
+        }
+      ]
+    }
+  ]
+}
