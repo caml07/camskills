@@ -7,8 +7,9 @@ Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máqui
 | Skill | Descripción |
 |-------|-------------|
 | `doc-system` | Documentación técnica estructurada DOC-NNN-TYPE |
+| `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
 | `fix-debug` | Debug asistido con Context7 |
-| `impeccable` | Diseño frontend web |
+| `junior-to-senior` | Senior review adversarial de planes y arquitectura |
 | `impeccable-rn` | Diseño frontend React Native / Expo |
 | `no-commit-secrets` | Previene commits de secrets a git |
 | `no-use-effect` | Prohíbe useEffect directo en React |
@@ -16,6 +17,8 @@ Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máqui
 | `skill-creator` | Creación y evaluación de skills |
 | `tanstack-query` | TanStack Query patterns y best practices |
 | `test-first` | TDD con Vitest + testing-library/react-native |
+
+Skills de terceros (instalar aparte): `impeccable`, `mobile-app-ui-design`, `context7-mcp`. Ver `UPSTREAM.md`.
 
 ## Instalación
 
