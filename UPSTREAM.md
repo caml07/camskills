@@ -5,6 +5,7 @@
 | context7-mcp | Context7 (Upstash) | third-party | `@upstash/context7-mcp` (npm) | `npx ctx7 setup --opencode` |
 | doc-system | psistema | own | — | edición directa |
 | emil-design-eng | psistema (basado en Emil Kowalski) | own | — | edición directa |
+| find-skills | vercel-labs | third-party | `vercel-labs/skills` | `npx skills use https://github.com/vercel-labs/skills --skill find-skills` |
 | fix-debug | psistema | own | — | edición directa |
 | impeccable | pbakaus | third-party | `pbakaus/impeccable` | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` |
 | impeccable-rn | Fork de impeccable por psistema | fork | `pbakaus/impeccable` (upstream) | `./scripts/sync-upstream.sh --check` |

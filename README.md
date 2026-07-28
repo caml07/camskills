@@ -8,6 +8,7 @@ Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máqui
 |-------|-------------|
 | `doc-system` | Documentación técnica estructurada DOC-NNN-TYPE |
 | `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
+| `find-skills` | Descubrimiento e instalación de skills desde la CLI |
 | `fix-debug` | Debug asistido con Context7 |
 | `junior-to-senior` | Senior review adversarial de planes y arquitectura |
 | `impeccable-rn` | Diseño frontend React Native / Expo |
