@@ -2,14 +2,14 @@
 
 | Skill | Origin | Type | Upstream | Update |
 |-------|--------|------|----------|--------|
-| context7-mcp | Context7 ecosistema | third-party | MCP server | copia manual |
+| context7-mcp | Context7 (Upstash) | third-party | `@upstash/context7-mcp` (npm) | `npx ctx7 setup --opencode` |
 | doc-system | psistema | own | — | edición directa |
 | emil-design-eng | psistema (basado en Emil Kowalski) | own | — | edición directa |
 | fix-debug | psistema | own | — | edición directa |
-| impeccable | ecosistema opencode | third-party | `npx` / skill registry | `./scripts/sync-upstream.sh --check` |
-| impeccable-rn | Fork de impeccable | fork | mismo que impeccable | `./scripts/sync-upstream.sh --check` |
-| junior-to-senior | `juliusbrussee/skills` | third-party | `juliusbrussee/skills` | `npx skills use juliusbrussee/skills --skill junior-to-senior` |
-| mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add ceorkm/mobile-app-ui-design` |
+| impeccable | pbakaus | third-party | `pbakaus/impeccable` | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` |
+| impeccable-rn | Fork de impeccable por psistema | fork | `pbakaus/impeccable` (upstream) | `./scripts/sync-upstream.sh --check` |
+| junior-to-senior | juliusbrussee | third-party | `juliusbrussee/skills` | `npx skills use https://github.com/juliusbrussee/skills --skill junior-to-senior` |
+| mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
 | no-commit-secrets | psistema | own | — | edición directa |
 | no-use-effect | psistema | own | — | edición directa |
 | notes-vault | psistema | own | — | edición directa |
