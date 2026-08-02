@@ -3,7 +3,7 @@ name: impeccable-rn
 description: Use when the user wants to design, redesign, shape, critique, polish, clarify, distill, harden, optimize, animate, colorize, typeset, layout, extract, or otherwise improve a React Native or Expo frontend interface. Covers mobile app UI, screens, components, forms, settings, onboarding, empty states, navigation, and bottom sheets. Handles UX review, visual hierarchy, information architecture, cognitive load, accessibility (VoiceOver/TalkBack), performance (FlashList, expo-image), responsive behavior (tablet/mobile), theming, anti-patterns, typography (expo-font), fonts, spacing, layout (Flexbox), alignment, color, motion (Reanimated), micro-interactions, UX copy, error states, edge cases, i18n (expo-localization), safe areas, platform-specific code, and reusable design systems or tokens. Also for bland designs that need to become bolder or more delightful, loud designs that should become quieter, or ambitious visual effects with Reanimated/Skia. Not for web-only or backend-only tasks.
 version: 1.0.0-rn
 user-invocable: true
-argument-hint: "[craft|shape · critique|polish · animate|bolder|colorize|delight|layout|overdrive|quieter|typeset · clarify|distill · harden|onboard|optimize · init|document|extract] [target]"
+argument-hint: "[craft|shape · critique|audit|polish · adapt|doctor] [target]"
 license: Apache 2.0
 allowed-tools:
   - Bash(node ~/.config/opencode/skills/impeccable-rn/scripts/*)
@@ -19,7 +19,9 @@ Do these steps before proceeding:
 2. If the user invoked a sub-command (`craft`, `shape`, `audit`, `polish`, ...), read `reference/<command>.md` next. The reference defines the command's flow; without it you will skip steps the user expects.
 3. Familiarize yourself with the existing project. Read `package.json`, existing components, tokens/theme files, and navigation structure. Don't reinvent the wheel; use what's there when it works.
 4. Read the matching register reference. If the project is marketing or brand-led (design IS the product), read `reference/brand.md`. If it is app UI, admin, dashboard, or tool (design SERVES the product), read `reference/product.md`. Pick by: (1) task cue; (2) surface in focus; (3) `register` field in PRODUCT.md.
-5. **If the project is brand-new (no existing tokens/theme/colors found in step 3)**, run `node ~/.config/opencode/skills/impeccable-rn/scripts/palette.mjs` to receive a brand seed color and composition guidance. Compose the palette (bg, surface, ink, accent, muted) around it. Convert to hex for RN styles. **Skip if step 3 found committed brand colors in existing tokens.**
+5. For iOS, Android, or adaptive work, read `reference/ios.md`, `reference/android.md`, or both before changing navigation, controls, or layout.
+6. Before editing UI, read `reference/craft-floor.md` and apply it to the platform and the existing design system.
+7. **If the project is brand-new (no existing tokens/theme/colors found in step 3)**, run `node ~/.config/opencode/skills/impeccable-rn/scripts/palette.mjs` to receive a brand seed color and composition guidance. Compose the palette (bg, surface, ink, accent, muted) around it. Convert to hex for RN styles. **Skip if step 3 found committed brand colors in existing tokens.**
 
 ## Design guidance
 
@@ -126,6 +128,7 @@ If someone could look at this interface and say "AI made that" without doubt, it
 | `document` | Build | Generate DESIGN.md from existing RN code | [reference/document.md](reference/document.md) |
 | `extract [target]` | Build | Pull reusable tokens and components into design system | [reference/extract.md](reference/extract.md) |
 | `critique [target]` | Evaluate | UX design review with heuristic scoring | [reference/critique.md](reference/critique.md) |
+| `audit [target]` | Evaluate | Technical native quality audit | [reference/audit.native.md](reference/audit.native.md) |
 | `polish [target]` | Refine | Final quality pass before shipping | [reference/polish.md](reference/polish.md) |
 | `bolder [target]` | Refine | Amplify safe or bland designs | [reference/bolder.md](reference/bolder.md) |
 | `quieter [target]` | Refine | Tone down aggressive designs | [reference/quieter.md](reference/quieter.md) |
@@ -140,6 +143,8 @@ If someone could look at this interface and say "AI made that" without doubt, it
 | `overdrive [target]` | Enhance | Push past conventional limits (Skia, Lottie) | [reference/overdrive.md](reference/overdrive.md) |
 | `clarify [target]` | Fix | Improve UX copy, labels, and error messages | [reference/clarify.md](reference/clarify.md) |
 | `optimize [target]` | Fix | Diagnose and fix RN performance | [reference/optimize.md](reference/optimize.md) |
+| `adapt [target]` | Fix | Adapt an existing screen for another device, orientation, or platform | [reference/adapt.native.md](reference/adapt.native.md) |
+| `doctor` | Maintain | Check whether PRODUCT.md and DESIGN.md are present | [reference/doctor.md](reference/doctor.md) |
 
 Plus three management commands: `pin <command>`, `unpin <command>`, detailed below.
 

@@ -1,13 +1,11 @@
 ---
 name: skill-creator
 description: >-
-  Guides the complete skill development lifecycle: capture intent, research,
-  write SKILL.md, create test cases, run parallel subagent evaluations
-  (with-skill vs baseline), grade assertions, aggregate flat benchmarks,
-  iterate based on feedback, optimize descriptions, and package final .skill
-  files. Trigger when the user says "create a skill", "make a skill", "new
-  skill", "skill for X", "write a skill", "develop a skill", "skill-creator",
-  or wants to improve/iterate an existing skill.
+  Runs the repository-local, script-based skill workflow using run_loop.js,
+  aggregate_benchmark.js, and package_skill.js. Use only when the user asks for
+  that legacy/manual workflow or explicitly mentions these scripts. For normal
+  OpenCode skill creation, editing SKILL.md, or plugin-powered evaluations, use
+  opencode-skill-creator instead.
 license: MIT
 compatibility: opencode
 ---

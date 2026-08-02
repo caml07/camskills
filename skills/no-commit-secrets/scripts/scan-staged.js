@@ -21,7 +21,7 @@ const SECRET_PATTERNS = [
 
   // AWS
   { pattern: /AKIA[0-9A-Z]{16}/, name: "AWS Access Key ID" },
-  { pattern: /(?i)aws_secret_access_key\s*[:=]\s*["'][A-Za-z0-9\/+=]{40}["']/, name: "AWS Secret Access Key" },
+  { pattern: /aws_secret_access_key\s*[:=]\s*["'][A-Za-z0-9\/+=]{40}["']/i, name: "AWS Secret Access Key" },
 
   // GitHub
   { pattern: /ghp_[A-Za-z0-9]{36}/, name: "GitHub Personal Access Token" },
@@ -35,7 +35,7 @@ const SECRET_PATTERNS = [
   { pattern: /eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/, name: "JWT Token" },
 
   // Generic
-  { pattern: /(?i)(api_key|apikey|secret|password|token|credential)\s*[:=]\s*["'][A-Za-z0-9_\-\.\/+=]{8,}["']/i, name: "Generic Credential" },
+  { pattern: /(api_key|apikey|secret|password|token|credential)\s*[:=]\s*["'][A-Za-z0-9_\-\.\/+=]{8,}["']/i, name: "Generic Credential" },
 ]
 
 function getStagedFiles(repoPath) {
