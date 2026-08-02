@@ -4,9 +4,9 @@ import { dirname, resolve } from "path"
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const EVENTS = {
-  "permission.asked": { message: "Se necesita tu aprobación", urgency: "critical" },
-  "session.idle": { message: "Tarea completada", urgency: "normal" },
-  "session.error": { message: "Ocurrió un error", urgency: "critical" },
+  "permission.asked": { message: "Se necesita tu aprobación", urgency: "critical", app: "opencode-permission" },
+  "session.idle": { message: "Tarea completada", urgency: "normal", app: "opencode-idle" },
+  "session.error": { message: "Ocurrió un error", urgency: "critical", app: "opencode-error" },
 }
 
 const COOLDOWN_MS = 30_000
@@ -44,11 +44,11 @@ export const NotificationPlugin = async ({ $ }) => {
     await $`paplay "${resolve(SOUNDS_DIR, sound)}"`.quiet()
   }
 
-  const notify = async (message, urgency) => {
+  const notify = async (message, urgency, app) => {
     if (process.platform === "win32") {
       await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "opencode" -Message "${message}"`.quiet()
     } else {
-      await $`notify-send -u ${urgency} -a opencode "${message}"`.quiet()
+      await $`notify-send -u ${urgency} -a ${app} "${message}"`.quiet()
     }
   }
 
@@ -62,7 +62,7 @@ export const NotificationPlugin = async ({ $ }) => {
       try {
         if (await isFocused()) return
         await play(SOUNDS[event.type])
-        await notify(cfg.message, cfg.urgency)
+        await notify(cfg.message, cfg.urgency, cfg.app)
       } catch {
         // nunca romper la sesión por una notificación
       }
