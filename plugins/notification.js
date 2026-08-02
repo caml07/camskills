@@ -4,9 +4,11 @@ import { dirname, resolve } from "path"
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const EVENTS = {
-  "permission.asked": { message: "Se necesita tu aprobación", urgency: "critical", app: "opencode-permission" },
-  "session.idle": { message: "Tarea completada", urgency: "normal", app: "opencode-idle" },
-  "session.error": { message: "Ocurrió un error", urgency: "critical", app: "opencode-error" },
+  "permission.asked": { urgency: "critical", app: "opencode-permission" },
+  "question.asked": { urgency: "critical", app: "opencode-question" },
+  "session.idle": { urgency: "normal", app: "opencode-idle" },
+  "session.error": { urgency: "critical", app: "opencode-error" },
+  "tui.prompt.append": { urgency: "normal", app: "opencode-prompt" },
 }
 
 const COOLDOWN_MS = 30_000
@@ -15,9 +17,11 @@ const FOCUS_MATCH = process.env.OPENCODE_NOTIFY_MATCH ?? "opencode|^oc \\|"
 
 const SOUNDS_DIR = process.env.OPENCODE_SOUNDS_DIR ?? "/home/caml/Documents/sounds"
 const SOUNDS = {
-  "permission.asked": process.env.OPENCODE_SOUND_PERMISSION ?? "Note_block_pling.ogg",
-  "session.idle": process.env.OPENCODE_SOUND_IDLE ?? "Note_block_harp.ogg",
-  "session.error": process.env.OPENCODE_SOUND_ERROR ?? "Drawer_open.wav.ogg",
+  "permission.asked": process.env.OPENCODE_SOUND_PERMISSION ?? "Firework_launch.ogg",
+  "question.asked": process.env.OPENCODE_SOUND_QUESTION ?? "Drawer_open.wav.ogg",
+  "session.idle": process.env.OPENCODE_SOUND_IDLE ?? "Note_block_pling.ogg",
+  "session.error": process.env.OPENCODE_SOUND_ERROR ?? "Note_block_harp.ogg",
+  "tui.prompt.append": process.env.OPENCODE_SOUND_PROMPT ?? "Note_block_pling.ogg",
 }
 
 export const parseFocusedTitle = (output) => {
@@ -26,7 +30,22 @@ export const parseFocusedTitle = (output) => {
   return m?.[1] ?? ""
 }
 
-export const NotificationPlugin = async ({ $ }) => {
+const render = (type, props) => {
+  switch (type) {
+    case "permission.asked":
+      return `Se necesita tu aprobación${props?.permission ? `: ${props.permission}` : ""}`
+    case "question.asked":
+      return `Pregunta: ${props?.questions?.[0]?.header ?? props?.questions?.[0]?.question ?? ""}`
+    case "session.idle":
+      return "Tarea completada"
+    case "session.error":
+      return `${props?.error?.name ?? "Error"}${props?.error?.data?.message ? `: ${props.error.data.message}` : ""}`
+    case "tui.prompt.append":
+      return "Esperando tu input"
+  }
+}
+
+export const NotificationPlugin = async ({ $, client }) => {
   const last = new Map()
   const match = new RegExp(FOCUS_MATCH, "i")
 
@@ -39,16 +58,26 @@ export const NotificationPlugin = async ({ $ }) => {
     }
   }
 
+  const sessionTitle = async (sessionID) => {
+    if (!sessionID) return null
+    try {
+      const { data } = await client.session.get({ sessionID })
+      return data?.title ?? null
+    } catch {
+      return null // fallback: título genérico
+    }
+  }
+
   const play = async (sound) => {
     if (!sound) return
     await $`paplay "${resolve(SOUNDS_DIR, sound)}"`.quiet()
   }
 
-  const notify = async (message, urgency, app) => {
+  const notify = async (title, message, urgency, app) => {
     if (process.platform === "win32") {
-      await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "opencode" -Message "${message}"`.quiet()
+      await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "${title}" -Message "${message}"`.quiet()
     } else {
-      await $`notify-send -u ${urgency} -a ${app} "${message}"`.quiet()
+      await $`notify-send -u ${urgency} -a ${app} "${title}" "${message}"`.quiet()
     }
   }
 
@@ -61,8 +90,9 @@ export const NotificationPlugin = async ({ $ }) => {
       last.set(event.type, now)
       try {
         if (await isFocused()) return
+        const title = (await sessionTitle(event.properties?.sessionID)) ?? null
         await play(SOUNDS[event.type])
-        await notify(cfg.message, cfg.urgency, cfg.app)
+        await notify(title ? `OC | ${title}` : "opencode", render(event.type, event.properties), cfg.urgency, cfg.app)
       } catch {
         // nunca romper la sesión por una notificación
       }
