@@ -15,7 +15,8 @@ const COOLDOWN_MS = 30_000
 // opencode TUI pone el título del terminal como "OC | ..."; sobrescribible con OPENCODE_NOTIFY_MATCH
 const FOCUS_MATCH = process.env.OPENCODE_NOTIFY_MATCH ?? "opencode|^oc \\|"
 
-const SOUNDS_DIR = process.env.OPENCODE_SOUNDS_DIR ?? "/home/caml/Documents/sounds"
+const SOUNDS_DIR = process.env.OPENCODE_SOUNDS_DIR ?? resolve(__dirname, "sounds")
+const NOTIFY_DEVICE = process.env.OPENCODE_NOTIFY_DEVICE ?? ""
 const SOUNDS = {
   "permission.asked": process.env.OPENCODE_SOUND_PERMISSION ?? "Firework_launch.ogg",
   "question.asked": process.env.OPENCODE_SOUND_QUESTION ?? "Drawer_open.wav.ogg",
@@ -69,13 +70,16 @@ export const NotificationPlugin = async ({ $, client }) => {
   }
 
   const play = async (sound) => {
-    if (!sound) return
-    await $`paplay "${resolve(SOUNDS_DIR, sound)}"`.quiet()
+    if (!sound || process.platform === "win32") return
+    const file = resolve(SOUNDS_DIR, sound)
+    if (NOTIFY_DEVICE) await $`paplay --device=${NOTIFY_DEVICE} "${file}"`.quiet()
+    else await $`paplay "${file}"`.quiet()
   }
 
   const notify = async (title, message, urgency, app) => {
     if (process.platform === "win32") {
-      await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "${title}" -Message "${message}"`.quiet()
+      const winSound = urgency === "critical" ? "Notification.Looping.Alarm" : "Notification.Default"
+      await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "${title}" -Message "${message}" -Sound "${winSound}"`.quiet()
     } else {
       await $`notify-send -u ${urgency} -a ${app} "${title}" "${message}"`.quiet()
     }

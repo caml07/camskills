@@ -1,4 +1,4 @@
-param($Title, $Message)
+param($Title, $Message, $Sound = "Notification.Default")
 
 Add-Type -AssemblyName System.Runtime.WindowsRuntime
 $null = [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime]
@@ -6,5 +6,10 @@ $null = [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, Con
 $template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02)
 $template.SelectSingleNode('//text[@id="1"]').InnerText = $Title
 $template.SelectSingleNode('//text[@id="2"]').InnerText = $Message
+if ($Sound) {
+  $audio = $template.CreateElement('audio')
+  $audio.SetAttribute('src', "ms-winsoundevent:$Sound")
+  $null = $template.SelectSingleNode('/toast').AppendChild($audio)
+}
 $toast = [Windows.UI.Notifications.ToastNotification]::new($template)
 [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('opencode').Show($toast)

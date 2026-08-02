@@ -40,7 +40,7 @@ Nota: si ya tenés `context7-mcp` instalado en otra ruta, no lo symlinkees.
 ## Plugins
 
 - `@dietrichgebert/ponytail` — modo lazy (externo, vía `opencode plugin --global`).
-- `plugins/notification.js` (+ `toast.ps1`) — notificaciones cuando opencode necesita atención, solo si el terminal no está enfocado (vía `niri msg windows`, falla abierto), con título `OC | <sesión>` y sonido por evento vía `paplay`. Eventos: `permission.asked` (critical), `question.asked` (critical), `session.idle`, `session.error` (critical), `tui.prompt.append`. Config: `OPENCODE_SOUNDS_DIR`, `OPENCODE_SOUND_{PERMISSION,QUESTION,IDLE,ERROR,PROMPT}`, `OPENCODE_NOTIFY_MATCH`. Linux con `notify-send`, Windows con `toast.ps1`. Copiar/symlink a `~/.config/opencode/plugins/`.
+- `plugins/notification.js` (+ `toast.ps1`, `sounds/`) — notificaciones cuando opencode necesita atención, solo si el terminal no está enfocado (vía `niri msg windows`, falla abierto), con título `OC | <sesión>` y sonido por evento (Linux: `paplay`, sonidos en `plugins/sounds/`; Windows: `ms-winsoundevent` según urgencia). Eventos: `permission.asked` (critical), `question.asked` (critical), `session.idle`, `session.error` (critical), `tui.prompt.append`. Config: `OPENCODE_SOUNDS_DIR`, `OPENCODE_SOUND_{PERMISSION,QUESTION,IDLE,ERROR,PROMPT}`, `OPENCODE_NOTIFY_MATCH`, `OPENCODE_NOTIFY_DEVICE`. Copiar/symlink a `~/.config/opencode/plugins/`.
 
 ## Config
 
