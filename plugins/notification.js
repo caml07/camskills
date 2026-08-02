@@ -25,8 +25,8 @@ export const NotificationPlugin = async ({ $ }) => {
 
   const isFocused = async () => {
     try {
-      const out = await $`niri msg windows`
-      return match.test(parseFocusedTitle(out.stdout))
+      const output = await $`niri msg windows`.text()
+      return match.test(parseFocusedTitle(output))
     } catch {
       return false // fail-open: si no podemos chequear, notificamos igual
     }
@@ -34,9 +34,9 @@ export const NotificationPlugin = async ({ $ }) => {
 
   const notify = async (message, urgency) => {
     if (process.platform === "win32") {
-      await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "opencode" -Message "${message}"`
+      await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "opencode" -Message "${message}"`.quiet()
     } else {
-      await $`notify-send -u ${urgency} -a opencode "${message}"`
+      await $`notify-send -u ${urgency} -a opencode "${message}"`.quiet()
     }
   }
 
