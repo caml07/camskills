@@ -40,7 +40,7 @@ Nota: si ya tenés `context7-mcp` instalado en otra ruta, no lo symlinkees.
 ## Plugins
 
 - `@dietrichgebert/ponytail` — modo lazy (externo, vía `opencode plugin --global`).
-- `plugins/notification.js` (+ `toast.ps1`) — notificaciones cuando opencode necesita atención (permisos/errores = critical, completado = normal), solo si el terminal no está enfocado (vía `niri msg windows`, falla abierto). Linux con `notify-send`, Windows con `toast.ps1`. Copiar/symlink a `~/.config/opencode/plugins/`.
+- `plugins/notification.js` (+ `toast.ps1`) — notificaciones cuando opencode necesita atención (permisos/errores = critical, completado = normal), solo si el terminal no está enfocado (vía `niri msg windows`, falla abierto), con sonidos por evento vía `paplay` (config: `OPENCODE_SOUNDS_DIR`, `OPENCODE_SOUND_{PERMISSION,IDLE,ERROR}`, `OPENCODE_NOTIFY_MATCH`). Linux con `notify-send`, Windows con `toast.ps1`. Copiar/symlink a `~/.config/opencode/plugins/`.
 
 ## Config
 

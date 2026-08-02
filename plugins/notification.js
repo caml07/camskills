@@ -13,6 +13,13 @@ const COOLDOWN_MS = 30_000
 // opencode TUI pone el título del terminal como "OC | ..."; sobrescribible con OPENCODE_NOTIFY_MATCH
 const FOCUS_MATCH = process.env.OPENCODE_NOTIFY_MATCH ?? "opencode|^oc \\|"
 
+const SOUNDS_DIR = process.env.OPENCODE_SOUNDS_DIR ?? "/home/caml/Documents/sounds"
+const SOUNDS = {
+  "permission.asked": process.env.OPENCODE_SOUND_PERMISSION ?? "Note_block_pling.ogg",
+  "session.idle": process.env.OPENCODE_SOUND_IDLE ?? "Note_block_harp.ogg",
+  "session.error": process.env.OPENCODE_SOUND_ERROR ?? "Drawer_open.wav.ogg",
+}
+
 export const parseFocusedTitle = (output) => {
   const block = output.split(/\n\s*\n/).find((b) => b.includes("(focused)"))
   const m = block?.match(/Title: "([^"]*)"/)
@@ -32,6 +39,11 @@ export const NotificationPlugin = async ({ $ }) => {
     }
   }
 
+  const play = async (sound) => {
+    if (!sound) return
+    await $`paplay "${resolve(SOUNDS_DIR, sound)}"`.quiet()
+  }
+
   const notify = async (message, urgency) => {
     if (process.platform === "win32") {
       await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "opencode" -Message "${message}"`.quiet()
@@ -49,6 +61,7 @@ export const NotificationPlugin = async ({ $ }) => {
       last.set(event.type, now)
       try {
         if (await isFocused()) return
+        await play(SOUNDS[event.type])
         await notify(cfg.message, cfg.urgency)
       } catch {
         // nunca romper la sesión por una notificación
