@@ -13,6 +13,7 @@
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
 | no-commit-secrets | psistema | own | — | edición directa |
 | no-use-effect | psistema | own | — | edición directa |
+| notification | psistema | own | — | edición directa |
 | notes-vault | psistema | own | — | edición directa |
 | ponytail | @dietrichgebert | plugin | npm | `npm update @dietrichgebert/ponytail` |
 | skill-creator | psistema | own | — | edición directa |
