@@ -11,8 +11,8 @@ Would a fluent Android user trust this app, or trip on off-spec components? The 
 ## Layout & structure
 
 - **Material navigation, matched to size.** Navigation bar (bottom, 3–5 destinations) on compact width; navigation rail or drawer on expanded width. Never ship a phone bottom-bar untouched on a tablet. <!-- rule:android-layout-adaptive-nav -->
-- **System Back always works.** Honor the predictive Back gesture and Back button; never trap the user or hijack the gesture. <!-- rule:android-layout-system-back -->
-- **Edge-to-edge with window insets.** Apply the status bar, navigation bar, display cutout, and IME insets so content never hides behind system bars or the keyboard. <!-- rule:android-layout-window-insets -->
+- **Edge-to-edge is mandatory, not optional.** Android 15 (targetSdk 35) forces it; Android 16 (API 36) has no opt-out. Content must render under the system bars and respect window insets. `StatusBar.setBackgroundColor()` is deprecated on API 35+ and no-ops. In RN/Expo, `react-native-safe-area-context` handles insets automatically — never try to hand-patch the status bar. <!-- rule:android-layout-window-insets -->
+- **Predictive Back is default on Android 16 (API 36).** Honor the predictive Back gesture and Back button; never trap the user or hijack the gesture. <!-- rule:android-layout-system-back -->
 - **Top app bar for screen context**; pair with a FAB when the screen has a single primary action. <!-- rule:android-layout-top-app-bar -->
 
 ## Touch targets

@@ -47,11 +47,12 @@ Produce ready-to-ship, production-grade code. Take no shortcuts unless asked. Ev
 #### Layout
 
 - RN Flexbox defaults: `flexDirection: 'column'`, `flexShrink: 0`. CSS-trained developers often miss these differences.
-- Use `SafeAreaView` (from `react-native-safe-area-context`) for screen-level containers. Never hardcode status bar or notch padding.
+- Use `SafeAreaView` from `react-native-safe-area-context` for screen-level containers. Never hardcode status bar or notch padding. The core RN `SafeAreaView` is deprecated since RN 0.81 — never import it from `react-native`.
 - `flex: 1` is the standard way to fill available space. Combine with `gap` for consistent spacing.
 - Cards: use consistent `borderRadius` (card: 16, button: 12, input: 10, chip: 999). Build a semantic z-index scale if using `position: 'absolute'`.
 - No `overflow: 'hidden'` on containers with `position: 'absolute'` children — they clip.
 - For lists, use `FlashList` (v2, no `estimatedItemSize` needed). Never `ScrollView.map()` for more than ~5 items.
+- **RN ≥0.85**: `StyleSheet.absoluteFillObject` removed — use `StyleSheet.absoluteFill` instead.
 
 #### Motion (Reanimated 4)
 
@@ -68,7 +69,9 @@ Produce ready-to-ship, production-grade code. Take no shortcuts unless asked. Ev
 - Tab bars account for bottom inset (home indicator).
 - Use `Platform.OS` / `Platform.select` for platform-specific code.
 - `KeyboardAvoidingView` for forms: `behavior={Platform.OS === 'ios' ? 'padding' : 'height'}`.
-- **RN ≥0.85**: `StyleSheet.absoluteFillObject` removed — use `StyleSheet.absoluteFill` instead.
+- **New Architecture is the only config since RN 0.82** — `newArchEnabled` is ignored/always-on; assume Fabric + TurboModules. Migrate anything that assumes the legacy architecture.
+- **Android 15 (SDK 35) forces edge-to-edge; Android 16 (API 36) makes it mandatory with no opt-out.** Content must respect insets — `StatusBar.setBackgroundColor()` is deprecated on API 35+ and does nothing. Rely on `react-native-safe-area-context` (handles it automatically) instead of hand-tuned bars.
+- **RN ≥0.84 requires Node ≥22.11.**
 
 #### Interaction
 
