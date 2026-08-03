@@ -168,25 +168,27 @@ Test what the user sees and interacts with. Test the disabled state, the loading
 
 ```typescript
 import { describe, it, expect, vi } from "vitest"
-import { render, fireEvent } from "@testing-library/react-native"
+import { render, userEvent } from "@testing-library/react-native"
 import { Button } from "./button"
 
 describe("Button", () => {
-  it("calls onPress when tapped", () => {
+  it("calls onPress when tapped", async () => {
     const onPress = vi.fn()
-    const { getByRole } = render(
+    const user = userEvent.setup()
+    const { getByRole } = await render(
       <Button title="Submit" onPress={onPress} />
     )
-    fireEvent.press(getByRole("button"))
+    await user.press(getByRole("button"))
     expect(onPress).toHaveBeenCalledTimes(1)
   })
 
-  it("does not call onPress when disabled", () => {
+  it("does not call onPress when disabled", async () => {
     const onPress = vi.fn()
-    const { getByRole } = render(
+    const user = userEvent.setup()
+    const { getByRole } = await render(
       <Button title="Submit" onPress={onPress} disabled />
     )
-    fireEvent.press(getByRole("button"))
+    await user.press(getByRole("button"))
     expect(onPress).not.toHaveBeenCalled()
   })
 })

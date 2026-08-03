@@ -54,7 +54,6 @@ interface User {
 
 interface UseUserOptions {
   enabled?: boolean;
-  onSuccess?: (user: User) => void;
 }
 
 function useUser(id: number, options?: UseUserOptions) {
@@ -66,17 +65,12 @@ function useUser(id: number, options?: UseUserOptions) {
       return response.json();
     },
     enabled: options?.enabled,
-    onSuccess: options?.onSuccess,
   });
 }
 
-// Usage
-const { data } = useUser(1, {
-  enabled: true,
-  onSuccess: (user) => {
-    console.log(user.name); // TypeScript knows user is User
-  },
-});
+// Usage — side effects on query data go in an effect or the caller's useMutation,
+// never in useQuery callbacks (removed in v5)
+const { data } = useUser(1, { enabled: true });
 ```
 
 ### Typed Mutations

@@ -16,14 +16,14 @@ import { renderHook, act } from "@testing-library/react-native"
 import { useCounter } from "./use-counter"
 
 describe("useCounter", () => {
-  it("starts at 0 by default", () => {
-    const { result } = renderHook(() => useCounter())
+  it("starts at 0 by default", async () => {
+    const { result } = await renderHook(() => useCounter())
     expect(result.current.count).toBe(0)
   })
 
-  it("increments count", () => {
-    const { result } = renderHook(() => useCounter())
-    act(() => {
+  it("increments count", async () => {
+    const { result } = await renderHook(() => useCounter())
+    await act(() => {
       result.current.increment()
     })
     expect(result.current.count).toBe(1)
@@ -63,7 +63,7 @@ describe("usePatients", () => {
       ]),
     }))
 
-    const { result } = renderHook(() => usePatients(), {
+    const { result } = await renderHook(() => usePatients(), {
       wrapper: createWrapper(),
     })
 
@@ -76,7 +76,7 @@ describe("usePatients", () => {
       fetchPatients: vi.fn().mockRejectedValue(new Error("API error")),
     }))
 
-    const { result } = renderHook(() => usePatients(), {
+    const { result } = await renderHook(() => usePatients(), {
       wrapper: createWrapper(),
     })
 
@@ -97,10 +97,10 @@ describe("useCartStore", () => {
     useCartStore.setState({ items: [], total: 0 })
   })
 
-  it("adds item to cart", () => {
-    const { result } = renderHook(() => useCartStore())
+  it("adds item to cart", async () => {
+    const { result } = await renderHook(() => useCartStore())
 
-    act(() => {
+    await act(() => {
       result.current.addItem({ id: "1", name: "Item", price: 10 })
     })
 
@@ -115,7 +115,7 @@ describe("useCartStore", () => {
 ```typescript
 describe("authStore login via hook", () => {
   it("handles login success", async () => {
-    const { result } = renderHook(() => useAuthStore())
+    const { result } = await renderHook(() => useAuthStore())
 
     await act(async () => {
       await result.current.login({
@@ -131,14 +131,16 @@ describe("authStore login via hook", () => {
 
 ## `act()` and `waitFor`
 
-- **`act()`** — wraps state updates. Every `result.current.someSetter()` call needs `act`.
+- **`act()`** — wraps state updates. Every `result.current.someSetter()` call needs `act`. In RNTL v14 `act` is async: always `await act(...)`.
+- **`renderHook`** — async in RNTL v14: always `await renderHook(...)`.
 - **`waitFor()`** — waits for async conditions. Use when the hook's state changes asynchronously (TanStack Query, API calls).
 - **`findBy*` queries** — in component tests, these are async and wait for the element to appear. Equivalent to `waitFor` + `getBy`.
 
 ## Key Rules
 
-1. Always wrap state-changing calls in `act()`
-2. Use `waitFor` for async assertions, not arbitrary timeouts
-3. Provide a `wrapper` option for hooks that need providers (QueryClient, Theme, Navigation)
-4. Reset mocks and stores in `beforeEach`
-5. Test the loading state too — not just success and error
+1. Always wrap state-changing calls in `await act()`
+2. `render`, `renderHook`, `fireEvent`, `userEvent`, and `act` are async in RNTL v14 — always `await` them
+3. Use `waitFor` for async assertions, not arbitrary timeouts
+4. Provide a `wrapper` option for hooks that need providers (QueryClient, Theme, Navigation)
+5. Reset mocks and stores in `beforeEach`
+6. Test the loading state too — not just success and error

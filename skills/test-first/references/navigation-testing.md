@@ -28,9 +28,10 @@ vi.mock("expo-router", () => ({
 }))
 
 // In test, assert navigation:
-it("navigates to profile on button press", () => {
-  const { getByText } = render(<HomeScreen />)
-  fireEvent.press(getByText("View Profile"))
+it("navigates to profile on button press", async () => {
+  const user = userEvent.setup()
+  const { getByText } = await render(<HomeScreen />)
+  await user.press(getByText("View Profile"))
   expect(mockRouter.push).toHaveBeenCalledWith("/profile")
 })
 ```
@@ -45,8 +46,8 @@ vi.mock("expo-router", () => ({
   useLocalSearchParams: () => mockParams,
 }))
 
-it("uses route param to fetch data", () => {
-  const { result } = renderHook(() => useProduct(), {
+it("uses route param to fetch data", async () => {
+  const { result } = await renderHook(() => useProduct(), {
     wrapper: createWrapper(),
   })
   // The hook reads mockParams.id internally
@@ -62,8 +63,8 @@ vi.mock("expo-router", () => ({
   useRouter: () => mockRouter,
 }))
 
-it("shows auth layout when user is not logged in", () => {
-  render(<RootLayout />)
+it("shows auth layout when user is not logged in", async () => {
+  await render(<RootLayout />)
   // Component renders login screen based on segment
 })
 ```
@@ -95,9 +96,10 @@ vi.mock("expo-router", () => ({
   useLocalSearchParams: () => ({}),
 }))
 
-it("navigates to patient detail on press", () => {
-  const { getByText } = render(<PatientCard id="42" />)
-  fireEvent.press(getByText("View Patient"))
+it("navigates to patient detail on press", async () => {
+  const user = userEvent.setup()
+  const { getByText } = await render(<PatientCard id="42" />)
+  await user.press(getByText("View Patient"))
   expect(mockPush).toHaveBeenCalledWith("/patient/42")
 })
 ```
@@ -107,7 +109,7 @@ it("navigates to patient detail on press", () => {
 Test a screen that uses route params, fetches data, and navigates:
 
 ```typescript
-import { render, fireEvent, waitFor } from "@testing-library/react-native"
+import { render, userEvent, waitFor } from "@testing-library/react-native"
 import PatientDetailScreen from "../screens/patient-detail-screen"
 
 const mockPush = vi.fn()
@@ -127,7 +129,8 @@ vi.mock("../api/patients.api", () => ({
 }))
 
 it("loads patient and allows editing", async () => {
-  const { getByText, findByText } = render(<PatientDetailScreen />)
+  const user = userEvent.setup()
+  const { getByText } = await render(<PatientDetailScreen />)
 
   // Wait for data to load
   await waitFor(() => {
@@ -135,7 +138,7 @@ it("loads patient and allows editing", async () => {
   })
 
   // Navigate to edit
-  fireEvent.press(getByText("Edit"))
+  await user.press(getByText("Edit"))
   expect(mockPush).toHaveBeenCalledWith("/patient/1/edit")
 })
 ```
