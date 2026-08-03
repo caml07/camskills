@@ -1,133 +1,84 @@
-# Layout
+Layout turns product priority into reading order, grouping, rhythm, and usable space. Diagnose the structural problem before moving boxes.
 
-Fix spacing, alignment, visual rhythm, safe areas, and Flexbox layout for React Native.
+---
 
-## RN Flexbox vs CSS Flexbox
+## Visitor mode
 
-RN Flexbox looks like CSS but has critical default differences. These cause the most common layout bugs for web-trained developers:
+- **Persuade + Experience:** composition may be asymmetric, fluid, or intentionally disruptive when the selected world earns it.
+- **Operate + Read:** predictable structure, stable density, and navigable linearity are affordances.
+- **Native:** follow [ios.md](ios.md) or [android.md](android.md) for navigation, insets, adaptation, and touch targets.
 
-| Property | CSS default | RN default |
-|---|---|---|
-| `flexDirection` | `row` | `column` |
-| `flexShrink` | `1` | `0` |
-| `alignContent` | `stretch` | `flex-start` |
-| `flex` | shorthand (`1 1 auto`) | single number (`flex: 1` = `flexGrow: 1`) |
+Preserve the established visual world. A layout command changes structure inside it; identity replacement belongs to [new-work.md](new-work.md).
 
-### Flexbox principles for RN
+## Two isolated assessments
 
-- `flex: 1` fills available space. Used at screen level: root View gets `flex: 1`, children distribute proportionally.
-- `flexDirection: 'row'` for horizontal layouts. Default `'column'` stacks vertically.
-- `gap` works on both directions (RN supports `gap`, `rowGap`, `columnGap` from RN 0.71+).
-- No CSS Grid in RN. For 2D layouts, combine `flexDirection: 'row'` with `flexWrap: 'wrap'`.
-- No `auto` margins. Use `justifyContent` / `alignItems` / Spacer components.
+When a sub-agent tool is available and permitted, run these independently; otherwise run them yourself in this order.
 
-## Responsive Layout
+1. **Layout assessment:** inspect representative states and viewports. Answer every question below with rendered or source evidence:
+   - **Reading order:** Apply the squint test. With detail blurred, can you still identify the primary element, the secondary element, and the major groups in order?
+   - **Grouping:** Are related items close and distinct groups separated, or are containers compensating for weak proximity?
+   - **Rhythm:** Do tight and generous intervals create a deliberate cadence, or is one spacing value repeated until everything has equal weight?
+   - **Structure:** Does the topology match the content and task? Are repeated cards, columns, or sections genuinely equivalent, or merely a framework default?
+   - **Density:** Does the amount of information per region fit use frequency, decision complexity, and visitor mode?
+   - **Adaptation:** At narrow, intermediate, wide, zoomed, and localized states, what reorders, collapses, wraps, scrolls, or remains fixed? Does DOM and focus order still agree with the visual order?
+   - **Extremes:** Do long content, empty states, overlays, sticky elements, safe areas, and small touch targets expose structural failures?
+2. **Mechanical scan:** run:
 
-RN handles "responsive" differently from web. There are no CSS breakpoints; use:
-
-- `useWindowDimensions()` for screen width/height
-- `Dimensions.get('window')` for static reads
-- `useSafeAreaInsets()` for notch/home indicator insets
-- `Platform.isPad` / `Platform.OS` for device-level branching
-
-```tsx
-import { useWindowDimensions } from 'react-native';
-
-function Feed() {
-  const { width } = useWindowDimensions();
-  const isTablet = width >= 768;
-  const numColumns = isTablet ? 2 : 1;
-
-  return <FlashList numColumns={numColumns} ... />;
-}
+```bash
+node .opencode/skills/impeccable/scripts/detect.mjs --json --scope layout [target files or dirs]
 ```
 
-### Spacing Token Scale
+Also inspect arbitrary spacing, overflow, stacking, and container behavior the detector cannot resolve. Keep mechanical evidence out of the first assessment, then synthesize both passes before editing. A clean scan cannot prove hierarchy or rhythm.
 
-Multiply of 4 base:
+## Set the spatial thesis
 
-```ts
-export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  xxl: 32,
-  xxxl: 48,
-} as const;
+Before editing, name:
+
+- the primary reading or task path;
+- what belongs together and what must separate;
+- which element leads and which supports;
+- the intended density and spacing rhythm;
+- how the structure changes across containers, viewports, input modes, and content extremes.
+
+Choose the simplest structural model that expresses those relationships. Use layout primitives according to the relationships they control, and name reusable spacing and container roles semantically.
+
+## Apply
+
+- Group by meaning. Use proximity before adding containers or decoration.
+- Create rhythm through deliberate contrast between tight and generous intervals.
+- Use a documented spacing scale rather than one-off values. A 4-unit base usually provides the useful middle steps that an 8-only scale misses.
+- Let hierarchy follow product priority, not framework defaults.
+- Keep distinct content visually distinct without turning every group into an isolated component.
+- Make responsive behavior structural: reorder, collapse, reflow, or reveal based on what remains important.
+- Prefer container-aware components when the same component appears in different contexts.
+- Use `gap` for sibling rhythm when it expresses the relationship more directly than child margins.
+- Keep touch targets usable even when their visible marks are small.
+- Use depth only when it clarifies state or hierarchy.
+- Make optical corrections only after inspecting the rendered result.
+
+Variation is not a goal by itself. Repetition should support recognition; break it only when content or priority changes.
+
+## Verify
+
+- The squint test still reveals the primary, secondary, and major groups in order.
+- The reading and task path remains clear at every supported size.
+- Related content groups naturally; unrelated content does not blur together.
+- Tight and generous spacing create intentional rhythm instead of monotonous repetition.
+- Density matches use frequency and content complexity.
+- Long text, empty states, localization, zoom, and dynamic content do not break the structure.
+- Keyboard, touch, and assistive-technology order agree with the visual order.
+- The final mechanical scan has no unexplained findings.
+
+Answer each item with rendered or source evidence, then rerun the scan. Do not substitute a bare “yes” for verification.
+
+When the structure holds, hand off to `/impeccable polish`.
+
+## Live-mode signature params
+
+Every variant declares a coarse `density` parameter and authors spacing against `var(--p-density, 1)`.
+
+```json
+{"id":"density","kind":"range","min":0.6,"max":1.4,"step":0.05,"default":1,"label":"Density"}
 ```
 
-Every padding/margin value must come from this scale. Never hardcode `padding: 5` or `margin: 7`.
-
-### Semantic Insets
-
-```tsx
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-function Screen() {
-  const insets = useSafeAreaInsets();
-  // insets.top (status bar), insets.bottom (home indicator)
-  
-  return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
-      ...
-    </View>
-  );
-}
-```
-
-Don't hardcode status bar height. Use `SafeAreaView` from `react-native-safe-area-context` for screen-level wrappers.
-
-### Cards & Containers
-
-- Consistent `borderRadius` per component type: card 16, button 12, input 10, chip 999 (full).
-- Cards need both iOS shadow properties AND Android `elevation`:
-  ```ts
-  cardShadow: Platform.select({
-    ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 8 },
-    android: { elevation: 4 },
-  }),
-  ```
-- Nested cards are always wrong.
-
-### ScrollView vs FlatList vs FlashList
-
-| Need | Component |
-|---|---|
-| < 5 static items | `ScrollView` |
-| Dynamic list, any size | `FlashList` (from `@shopify/flash-list`) |
-| Horizontal scroll chips | `ScrollView horizontal` or `FlashList horizontal` |
-| Sectioned list | `SectionList` or FlashList with sticky headers |
-
-### Semantic z-index scale
-
-RN z-index is simpler than CSS. Use:
-- `zIndex: 1` for absolute-positioned overlays
-- `elevation` for Android shadows (creates z-index automatically)
-- Never arbitrary 999 values
-
-```ts
-const zIndex = {
-  dropdown: 10,
-  sticky: 20,
-  modalBackdrop: 30,
-  modal: 40,
-  toast: 50,
-  tooltip: 60,
-} as const;
-```
-
-## Verification Checklist
-
-- [ ] No hardcoded status bar / notch padding — uses `SafeAreaView` or `useSafeAreaInsets`
-- [ ] `flex: 1` on screen-level container
-- [ ] All padding/margin from token scale, no arbitrary values
-- [ ] Cards use both iOS shadow and Android elevation
-- [ ] `gap` used instead of manual margin on children where possible
-- [ ] NumColumns for tablet layouts
-- [ ] KeyboardAvoidingView for form screens
-- [ ] FlashList for dynamic lists > 5 items
-- [ ] No ScrollView inside ScrollView
-- [ ] No CSS Grid patterns — RN doesn't support it
-- [ ] Touch targets ≥ 44×44pt
+Add one structural parameter only when the topology genuinely branches. Follow [live.md](live.md)'s parameter contract.

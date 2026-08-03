@@ -1,158 +1,86 @@
-# Animate
+> **Additional context needed**: performance constraints.
 
-Add purposeful motion with Reanimated 4. Motion conveys state, not decoration.
+Use motion to explain state, relationship, and hierarchy, or to create one authored moment the surface has earned. Decoration without purpose is animation debt.
 
-## Core Pattern: useAnimatedStyle
+---
 
-The fundamental building block. A shared value drives an animated style:
+## Visitor mode
 
-```tsx
-import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+- **Persuade + Experience:** motion may carry the voice. Prefer one rehearsed focal sequence to repeated section reveals.
+- **Operate + Read:** motion serves feedback, state, and continuity. Keep routine transitions fast and do not make users wait through page-load choreography.
+- **Native (`ios` / `android` / `adaptive`):** follow the Motion section of [ios.md](ios.md) or [android.md](android.md), including the platform's Reduce Motion behavior. Do not apply the web tooling below.
 
-function AnimatedCard() {
-  const scale = useSharedValue(1);
+## Find the job
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+Inspect the existing motion language, interaction states, target devices, and performance budget. Find only the places where motion would:
 
-  return (
-    <Animated.View
-      style={[styles.card, animatedStyle]}
-      onTouchStart={() => { scale.value = withSpring(0.96); }}
-      onTouchEnd={() => { scale.value = withSpring(1); }}
-    />
-  );
-}
-```
+- acknowledge an action;
+- make a state change or spatial relationship legible;
+- preserve continuity through navigation or layout change;
+- direct attention at a meaningful moment;
+- embody the selected visual world.
 
-### Animation Functions
+Ask only when a material constraint cannot be inferred. Do not animate a static area merely because it exists.
 
-| Function | Use case |
+## Set the motion thesis
+
+Write a short plan before implementation:
+
+- **Focal moment:** the one sequence or interaction that deserves authorship, if any.
+- **Continuity:** the state, layout, or navigation changes that need explanation.
+- **Feedback:** the controls and outcomes that need acknowledgment.
+- **Budget:** which effects may be expensive and how often they run.
+
+The focal moment must come from this product and surface concept. A generic fade-and-rise, hover lift, parallax layer, or scroll reveal is not a thesis.
+
+## Choose material by meaning
+
+Transform and opacity are reliable foundations, not the entire palette. Choose properties for what the transition communicates:
+
+- **Continuity and relationship:** shared-element motion, FLIP-style transforms, view transitions, or deliberate spatial movement.
+- **Focus and depth:** bounded blur, filter, backdrop, light, or shadow changes.
+- **Reveal and composition:** masks, clip paths, cropping, or controlled occlusion.
+- **Material and energy:** color, gradient position, texture, distortion, or shader effects when the world and runtime support them.
+- **State and feedback:** the smallest change that makes cause and result unmistakable.
+
+Do not stack techniques for spectacle. One strong material idea, carried through the focal sequence and quiet supporting states, is usually enough.
+
+Sibling stagger is appropriate when a list appears as a list. Cap the total delay, and never reinterpret every scrolled section as a staggered list.
+
+## Timing and easing
+
+Timing should express distance and consequence:
+
+| Duration | Typical use |
 |---|---|
-| `withSpring(value, { damping, mass, stiffness })` | Natural feel, press feedback, card movements |
-| `withTiming(value, { duration, easing })` | Precise timing, opacity, position |
-| `withSequence(...)` | Chain animations (shake, multi-step) |
-| `withDelay(delay, animation)` | Staggered reveals |
-| `withRepeat(animation, count, reverse)` | Pulse, shimmer loops |
+| 100–150 ms | immediate feedback |
+| 150–300 ms | routine state change |
+| 300–500 ms | layout, overlay, or view transition |
+| 500–800 ms | a deliberately authored focal entrance |
 
-### Easing
+Exit faster than entrance. Use natural deceleration such as `cubic-bezier(0.16, 1, 0.3, 1)` for confident arrivals; do not use bounce or elastic curves by reflex. Long feedback feels like latency.
 
-- Default for `withTiming`: `Easing.out(Easing.exp)` (exponential ease-out).
-- No bounce, no elastic. They feel dated on mobile.
-- 150–250ms for most transitions. Users are in flow.
+## Implement to the runtime
 
-### Layout Animations
+- Use CSS transitions and keyframes for declarative state and bounded sequences.
+- Use Web Animations API or the project's existing motion library for interruption, sequencing, and dynamic values.
+- Use View Transitions or shared-element techniques when continuity across states is the point.
+- Use scroll-driven motion only when the scroll relationship itself carries meaning, with a robust fallback.
+- Do not add a dependency for an effect the existing stack can express cleanly.
 
-For mount/unmount animations on elements within a list or conditional render:
+Keep content visible in the default state so failed scripts do not hide the page. Avoid casually animating layout-driving properties such as `width`, `height`, `top`, `left`, and margins; use FLIP, transforms, or grid techniques when appropriate. Bound blur, filter, shadow, canvas, and shader work to isolated regions. Apply `will-change` only during known animation. Measure on target viewports and devices rather than assuming transform means fast.
 
-```tsx
-import { EntryExitTransition } from 'react-native-reanimated';
+## Accessibility and control
 
-<Animated.View
-  entering={EntryExitTransition.entering().exiting()}
-/>
-// Or with specific presets:
-import { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
+Respect autoplay and sound preferences. Any nonessential loop must stop when offscreen or hidden.
 
-<Animated.View entering={FadeIn.duration(300)} exiting={FadeOut.duration(200)} />
-```
+## Verify
 
-### Pressable with Scale Feedback
+- The focal motion is specific to the selected world and surface.
+- Every supporting animation explains feedback, state, or relationship.
+- Interruption and repeated use behave correctly.
+- Desktop, mobile, and keyboard paths remain usable.
+- Expensive effects stay smooth on the target device.
+- Removing an animation would lose meaning or authored character, not merely decoration.
 
-Standard press interaction pattern:
-
-```tsx
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-
-function PressableCard({ children, onPress }) {
-  const scale = useSharedValue(1);
-
-  const tapGesture = Gesture.Tap()
-    .onBegin(() => { scale.value = withSpring(0.96); })
-    .onEnd(() => { scale.value = withSpring(1); onPress?.(); })
-    .onFinalize(() => { scale.value = withSpring(1); });
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  return (
-    <GestureDetector gesture={tapGesture}>
-      <Animated.View style={[styles.card, animatedStyle]}>
-        {children}
-      </Animated.View>
-    </GestureDetector>
-  );
-}
-```
-
-### Shimmer / Skeleton Loading
-
-```tsx
-function SkeletonCard() {
-  const opacity = useSharedValue(0.3);
-
-  useEffect(() => {
-    opacity.value = withRepeat(
-      withTiming(0.7, { duration: 1000, easing: Easing.inOut(Easing.quad) }),
-      -1,
-      true,
-    );
-  }, []);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
-
-  return <Animated.View style={[styles.skeleton, animatedStyle]} />;
-}
-```
-
-### Reduced Motion
-
-Check system preference. Gate heavy animations:
-
-```tsx
-import { AccessibilityInfo } from 'react-native';
-
-const [reduceMotion, setReduceMotion] = useState(false);
-
-useEffect(() => {
-  AccessibilityInfo.isReduceMotionEnabled().then(setReduceMotion);
-}, []);
-
-// Then conditionally:
-if (reduceMotion) {
-  // Skip animation, set final state immediately
-  opacity.value = 1;
-} else {
-  opacity.value = withTiming(1, { duration: 300 });
-}
-```
-
-### Premium Motion
-
-Not just transform/opacity. Blur, backdrop-filter (via iOS vibrancy), clip-path (via Skia), and shadow animation are part of the palette. Use libraries:
-
-- Reanimated 4: core animations
-- `@shopify/react-native-skia`: custom shaders, clip paths, advanced effects
-- `lottie-react-native`: complex vector animations (Lottie files)
-- `react-native-masked-view`: mask-based reveals
-
-### What NOT to animate
-
-- Layout properties (width, height, padding) — causes layout thrashing. Use `transform: [{ scale }]`.
-- Color changes across many elements (causes jank on Android).
-- Navigation transitions (let Expo Router handle them).
-
-### Verification Checklist
-
-- [ ] Pressable components use Reanimated scale, not bare TouchableOpacity
-- [ ] No bounce/elastic easing
-- [ ] Reduced motion handled via `AccessibilityInfo`
-- [ ] Layout animations for list mount/unmount
-- [ ] Shimmer on skeleton loaders, not plain spinners
-- [ ] No animation of layout properties
-- [ ] Duration 150–250ms for interactions
-- [ ] Gesture Handler for complex gestures (swipe, drag)
+When motion earns its place, hand off to `/impeccable polish` for the final pass.

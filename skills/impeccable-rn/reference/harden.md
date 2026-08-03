@@ -1,122 +1,336 @@
-# Harden (React Native)
+Designs that only work with perfect data aren't production-ready. Harden the interface against the inputs, errors, languages, and network conditions that real users will throw at it.
 
-Production-ready: errors, offline, i18n, edge cases. Designs that only work with perfect data aren't production-ready.
+## Assess Hardening Needs
 
-## RN-Specific Hardening
+Identify weaknesses and edge cases:
 
-### Network & Offline
+1. **Test with extreme inputs**:
+   - Very long text (names, descriptions, titles)
+   - Very short text (empty, single character)
+   - Special characters (emoji, RTL text, accents)
+   - Large numbers (millions, billions)
+   - Many items (1000+ list items, 50+ options)
+   - No data (empty states)
 
-RN apps frequently operate on unreliable connections. Handle these with:
+2. **Test error scenarios**:
+   - Network failures (offline, slow, timeout)
+   - API errors (400, 401, 403, 404, 500)
+   - Validation errors
+   - Permission errors
+   - Rate limiting
+   - Concurrent operations
 
-```tsx
-import { useNetInfo } from '@react-native-community/netinfo';
+3. **Test internationalization**:
+   - Long translations (German is often 30% longer than English)
+   - RTL languages (Arabic, Hebrew)
+   - Character sets (Chinese, Japanese, Korean, emoji)
+   - Date/time formats
+   - Number formats (1,000 vs 1.000)
+   - Currency symbols
 
-function Feed() {
-  const netInfo = useNetInfo();
+**CRITICAL**: Designs that only work with perfect data aren't production-ready. Harden against reality.
 
-  if (!netInfo.isConnected) {
-    return <OfflineBanner />;  // Top banner + stale data
-  }
-  // ...
+## Hardening Dimensions
+
+Systematically improve resilience:
+
+### Text Overflow & Wrapping
+
+**Long text handling**:
+```css
+/* Single line with ellipsis */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Multi-line with clamp */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Allow wrapping */
+.wrap {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 ```
 
-**Critical paths:**
-- API calls wrapped in try/catch with user-facing error messages
-- Retry button on network failures
-- Offline banner at top of screen (not a blocking modal)
-- Stale data shown when offline (cache last successful response)
-- Optimistic updates with rollback
+**Flex/Grid overflow**:
+```css
+/* Prevent flex items from overflowing */
+.flex-item {
+  min-width: 0; /* Allow shrinking below content size */
+  overflow: hidden;
+}
 
-### AppState (Foreground/Background)
-
-```tsx
-import { AppState, AppStateStatus } from 'react-native';
-
-useEffect(() => {
-  const sub = AppState.addEventListener('change', (state: AppStateStatus) => {
-    if (state === 'active') refetch();  // Refresh data on return
-  });
-  return () => sub.remove();
-}, []);
+/* Prevent grid items from overflowing */
+.grid-item {
+  min-width: 0;
+  min-height: 0;
+}
 ```
 
-### Text Overflow
-
-RN equivalents of CSS overflow handling:
-
-| CSS | RN |
-|---|---|
-| `text-overflow: ellipsis` | `numberOfLines={3}` (or any N) |
-| `overflow: hidden` | `overflow: 'hidden'` (works on View) |
-| `word-break` | RN handles word break naturally |
-| `hyphens` | Not supported. Use `numberOfLines` or adaptive layout |
-| `min-width: 0` on flex items | Not needed - RN flex items shrink by default with `flexShrink: 1` |
-
-```tsx
-<Text numberOfLines={2} ellipsizeMode="tail">
-  Long text that will truncate after two lines...
-</Text>
-```
+**Responsive text sizing**:
+- Use `clamp()` for fluid typography
+- Set minimum readable sizes (16px body on mobile, the same floor the typography guidance sets; 14px only for genuinely secondary text. iOS Safari force-zooms focused inputs under 16px, which breaks form layouts)
+- Test text scaling (zoom to 200%)
+- Ensure containers expand with text
 
 ### Internationalization (i18n)
 
-Use `expo-localization` for device locale detection:
+**Text expansion**:
+- Add 30-40% space budget for translations
+- Use flexbox/grid that adapts to content
+- Test with longest language (usually German)
+- Avoid fixed widths on text containers
 
-```tsx
-import { getLocales } from 'expo-localization';
-import { I18n } from 'i18n-js';
+```jsx
+// ❌ Bad: Assumes short English text
+<button className="w-24">Submit</button>
 
-const i18n = new I18n({ en, es, pt });
-i18n.locale = getLocales()[0].languageCode;
-i18n.enableFallback = true;
+// ✅ Good: Adapts to content
+<button className="px-4 py-2">Submit</button>
 ```
 
-**Text expansion:** German is often 30% longer than English. Test tablet layouts with long text. Use flexible containers, not fixed widths.
+**RTL (Right-to-Left) support**:
+```css
+/* Use logical properties */
+margin-inline-start: 1rem; /* Not margin-left */
+padding-inline: 1rem; /* Not padding-left/right */
+border-inline-end: 1px solid; /* Not border-right */
 
-**RTL:** RN supports RTL natively via `I18nManager`:
-```tsx
-import { I18nManager } from 'react-native';
-// Text will auto-align based on language
+/* Or use dir attribute */
+[dir="rtl"] .arrow { transform: scaleX(-1); }
 ```
 
-**Date/Number formatting:**
+**Character set support**:
+- Use UTF-8 encoding everywhere
+- Test with Chinese/Japanese/Korean (CJK) characters
+- Test with emoji (they can be 2-4 bytes)
+- Handle different scripts (Latin, Cyrillic, Arabic, etc.)
+
+**Date/Time formatting**:
 ```javascript
-new Intl.DateTimeFormat(locale).format(date);
-new Intl.NumberFormat(locale, { style: 'currency', currency: 'USD' }).format(n);
+// ✅ Use Intl API for proper formatting
+new Intl.DateTimeFormat('en-US').format(date); // 1/15/2024
+new Intl.DateTimeFormat('de-DE').format(date); // 15.1.2024
+
+new Intl.NumberFormat('en-US', { 
+  style: 'currency', 
+  currency: 'USD' 
+}).format(1234.56); // $1,234.56
+```
+
+**Pluralization**:
+```javascript
+// ❌ Bad: Assumes English pluralization
+`${count} item${count !== 1 ? 's' : ''}`
+
+// ✅ Good: Use proper i18n library
+t('items', { count }) // Handles complex plural rules
 ```
 
 ### Error Handling
 
-- **API errors**: catch in TanStack Query / fetch, show inline error below content, offer retry.
-- **Form validation**: Zod schema → field-level errors inline (not Alert).
-- **Crashes**: wrap each section in error boundary. One component crashing shouldn't crash the app.
+**Network errors**:
+- Show clear error messages
+- Provide retry button
+- Explain what happened
+- Offer offline mode (if applicable)
+- Handle timeout scenarios
 
-### Empty States
+```jsx
+// Error states with recovery
+{error && (
+  <ErrorMessage>
+    <p>Failed to load data. {error.message}</p>
+    <button onClick={retry}>Try again</button>
+  </ErrorMessage>
+)}
+```
 
-Every list/view must handle:
-- No initial data (first launch)
+**Form validation errors**:
+- Inline errors near fields
+- Clear, specific messages
+- Suggest corrections
+- Don't block submission unnecessarily
+- Preserve user input on error
+
+**API errors**:
+- Handle each status code appropriately
+  - 400: Show validation errors
+  - 401: Redirect to login
+  - 403: Show permission error
+  - 404: Show not found state
+  - 429: Show rate limit message
+  - 500: Show generic error, offer support
+
+**Graceful degradation**:
+- Core functionality works without JavaScript
+- Images have alt text
+- Progressive enhancement
+- Fallbacks for unsupported features
+
+### Edge Cases & Boundary Conditions
+
+**Empty states**:
+- No items in list
 - No search results
-- Cleared feed (all items processed)
-- Empty with CTA to next action
+- No notifications
+- No data to display
+- Provide clear next action
 
-### Edge Cases
+**Loading states**:
+- Initial load
+- Pagination load
+- Refresh
+- Show what's loading ("Loading your projects...")
+- Time estimates for long operations
 
-- Very long text (name with 100+ chars)
-- Zero items (show empty state, not blank screen)
-- Items with no image (fallback placeholder)
-- Double-tap submit (disable button with `isSubmitting`)
+**Large datasets**:
+- Pagination or virtual scrolling
+- Search/filter capabilities
+- Performance optimization
+- Don't load all 10,000 items at once
 
-## Verification Checklist
+**Concurrent operations**:
+- Prevent double-submission (disable button while loading)
+- Handle race conditions
+- Optimistic updates with rollback
+- Conflict resolution
 
-- [ ] Network failures caught, show retry + offline banner
-- [ ] Optimistic updates with rollback on failure
-- [ ] AppState listener refreshes data on foreground
-- [ ] `numberOfLines` on all text that could overflow
-- [ ] i18n setup with expo-localization
-- [ ] RTL tested (Arabic, Hebrew)
-- [ ] Long text tested (German, CJK)
-- [ ] Empty states for every list
-- [ ] Error boundaries around sections
-- [ ] Double-submit prevented on forms
-- [ ] Form data preserved on validation error
+**Permission states**:
+- No permission to view
+- No permission to edit
+- Read-only mode
+- Clear explanation of why
+
+**Browser compatibility**:
+- Polyfills for modern features
+- Fallbacks for unsupported CSS
+- Feature detection (not browser detection)
+- Test in target browsers
+
+### Input Validation & Sanitization
+
+**Client-side validation**:
+- Required fields
+- Format validation (email, phone, URL)
+- Length limits
+- Pattern matching
+- Custom validation rules
+
+**Server-side validation** (always):
+- Never trust client-side only
+- Validate and sanitize all inputs
+- Protect against injection attacks
+- Rate limiting
+
+**Constraint handling**:
+```html
+<!-- Set clear constraints -->
+<input 
+  type="text"
+  maxlength="100"
+  pattern="[A-Za-z0-9]+"
+  required
+  aria-describedby="username-hint"
+/>
+<small id="username-hint">
+  Letters and numbers only, up to 100 characters
+</small>
+```
+
+### Accessibility Resilience
+
+**Keyboard navigation**:
+- All functionality accessible via keyboard
+- Logical tab order
+- Focus management in modals
+- Skip links for long content
+
+**Screen reader support**:
+- Proper ARIA labels
+- Announce dynamic changes (live regions)
+- Descriptive alt text
+- Semantic HTML
+
+**High contrast mode**:
+- Test in Windows high contrast mode
+- Don't rely only on color
+- Provide alternative visual cues
+
+### Performance Resilience
+
+**Slow connections**:
+- Progressive image loading
+- Skeleton screens
+- Optimistic UI updates
+- Offline support (service workers)
+
+**Memory leaks**:
+- Clean up event listeners
+- Cancel subscriptions
+- Clear timers/intervals
+- Abort pending requests on unmount
+
+**Throttling & Debouncing**:
+```javascript
+// Debounce search input
+const debouncedSearch = debounce(handleSearch, 300);
+
+// Throttle scroll handler
+const throttledScroll = throttle(handleScroll, 100);
+```
+
+## Testing Strategies
+
+**Manual testing**:
+- Test with extreme data (very long, very short, empty)
+- Test in different languages
+- Test offline
+- Test slow connection (throttle to 3G)
+- Test with screen reader
+- Test keyboard-only navigation
+- Test on old browsers
+
+**Automated testing**:
+- Unit tests for edge cases
+- Integration tests for error scenarios
+- E2E tests for critical paths
+- Visual regression tests
+- Accessibility tests (axe, WAVE)
+
+**IMPORTANT**: Hardening is about expecting the unexpected. Real users will do things you never imagined.
+
+**NEVER**:
+- Assume perfect input (validate everything)
+- Ignore internationalization (design for global)
+- Leave error messages generic ("Error occurred")
+- Forget offline scenarios
+- Trust client-side validation alone
+- Use fixed widths for text
+- Assume English-length text
+- Block entire interface when one component errors
+
+## Verify Hardening
+
+Test thoroughly with edge cases:
+
+- **Long text**: Try names with 100+ characters
+- **Emoji**: Use emoji in all text fields
+- **RTL**: Test with Arabic or Hebrew
+- **CJK**: Test with Chinese/Japanese/Korean
+- **Network issues**: Disable internet, throttle connection
+- **Large datasets**: Test with 1000+ items
+- **Concurrent actions**: Click submit 10 times rapidly
+- **Errors**: Force API errors, test all error states
+- **Empty**: Remove all data, test empty states
+
+When edge cases are covered, hand off to `/impeccable polish` for the final pass.
