@@ -3,22 +3,29 @@
 | Skill | Origin | Type | Upstream | Update |
 |-------|--------|------|----------|--------|
 | context7-mcp | Context7 (Upstash) | third-party | `@upstash/context7-mcp` (npm) | `npx ctx7 setup --opencode` |
-| doc-system | psistema | own | — | edición directa |
-| emil-design-eng | psistema (basado en Emil Kowalski) | own | — | edición directa |
+| doc-system | psistema/caml07 | own | — | edición directa |
+| eas-app-stores | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-app-stores -g -y` |
+| emil-design-eng | psistema/caml07 (basado en Emil Kowalski) | own | — | edición directa |
+| expo-data-fetching | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-data-fetching -g -y` |
+| expo-dev-client | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-dev-client -g -y` |
+| expo-native-ui | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-native-ui -g -y` |
+| expo-router | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-router -g -y` |
+| expo-upgrade | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-upgrade -g -y` |
 | find-skills | vercel-labs | third-party | `vercel-labs/skills` | `npx skills use https://github.com/vercel-labs/skills --skill find-skills` |
-| fix-debug | psistema | own | — | edición directa |
+| fix-debug | psistema/caml07 | own | — | edición directa |
 | impeccable | pbakaus | third-party | `pbakaus/impeccable` | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` |
-| impeccable-rn | Fork de impeccable por psistema | fork | `pbakaus/impeccable` (upstream) | `./scripts/sync-upstream.sh --check` |
+| impeccable-rn | Fork de impeccable por psistema/caml07 | fork | `pbakaus/impeccable` (upstream) | `./scripts/sync-upstream.sh --check` |
 | junior-to-senior | juliusbrussee | third-party | `juliusbrussee/skills` | `npx skills use https://github.com/juliusbrussee/skills --skill junior-to-senior` |
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
-| no-commit-secrets | psistema | own | — | edición directa |
-| no-use-effect | psistema | own | — | edición directa |
-| notification | psistema | own | — | edición directa |
-| notes-vault | psistema | own | — | edición directa |
+| no-commit-secrets | psistema/caml07 | own | — | edición directa |
+| no-use-effect | psistema/caml07 | own | — | edición directa |
+| notification | psistema/caml07 | own | — | edición directa |
+| notes-vault | psistema/caml07 | own | — | edición directa |
 | ponytail | @dietrichgebert | plugin | npm | `npm update @dietrichgebert/ponytail` |
-| skill-creator | psistema | own | — | edición directa |
-| tanstack-query | psistema | own | — | edición directa |
-| test-first | psistema | own | — | edición directa |
+| skill-creator | psistema/caml07 | own | — | edición directa |
+| tanstack-query | psistema/caml07 | own | — | edición directa |
+| test-first | psistema/caml07 | own | — | edición directa |
+| vercel-react-native-skills | vercel-labs | third-party | `vercel-labs/agent-skills` | `npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-native-skills -g -y` |
 
 **Legend:**
 - `own` — skill original, sin upstream externo

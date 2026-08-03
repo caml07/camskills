@@ -8,7 +8,13 @@ Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máqui
 |-------|-------------|
 | `context7-mcp` | MCP de Context7 para docs actuales de librerías |
 | `doc-system` | Documentación técnica estructurada DOC-NNN-TYPE |
+| `eas-app-stores` | Deploy de apps Expo a tiendas con EAS (build + submit, eas.json) |
 | `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
+| `expo-data-fetching` | Networking/API en Expo: fetch, React Query, offline, caching |
+| `expo-dev-client` | Dev clients Expo para probar código nativo en dispositivos |
+| `expo-native-ui` | UI nativa Expo: HIG, controles nativos, animaciones, storage |
+| `expo-router` | Navegación y routing en Expo Router |
+| `expo-upgrade` | Guía de upgrades de SDK Expo y fixes de dependencias |
 | `find-skills` | Descubrimiento e instalación de skills desde la CLI |
 | `fix-debug` | Debug asistido con Context7 |
 | `impeccable` | Diseño frontend web (fork de pbakaus/impeccable) |
@@ -21,6 +27,7 @@ Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máqui
 | `skill-creator` | Creación de skills (flujo legacy con scripts) |
 | `tanstack-query` | TanStack Query patterns y best practices |
 | `test-first` | TDD con Vitest + testing-library/react-native |
+| `vercel-react-native-skills` | Best practices de perf RN/Expo (FlashList, animaciones, native modules) |
 
 Origen y estado de cada skill (third-party / fork / own): ver `UPSTREAM.md`.
 
