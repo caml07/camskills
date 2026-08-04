@@ -4,34 +4,31 @@ Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máqui
 
 ## Skills
 
+Los skills se organizan en `skills/` por **categoría** (cada skill es una carpeta con `SKILL.md`).
+
+### `mobile/` — React Native / Expo
+
 | Skill | Descripción |
 |-------|-------------|
-| `context7-mcp` | MCP de Context7 para docs actuales de librerías |
-| `doc-system` | Documentación técnica estructurada DOC-NNN-TYPE |
 | `eas-app-stores` | Deploy de apps Expo a tiendas con EAS (build + submit, eas.json) |
-| `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
 | `expo-data-fetching` | Networking/API en Expo: fetch, React Query, offline, caching |
 | `expo-dev-client` | Dev clients Expo para probar código nativo en dispositivos |
 | `expo-native-ui` | UI nativa Expo: HIG, controles nativos, animaciones, storage |
 | `expo-router` | Navegación y routing en Expo Router |
 | `expo-upgrade` | Guía de upgrades de SDK Expo y fixes de dependencias |
-| `find-skills` | Descubrimiento e instalación de skills desde la CLI |
-| `fix-debug` | Debug asistido con Context7 |
-| `impeccable` | Diseño frontend web (fork de pbakaus/impeccable) |
-| `impeccable-rn` | Diseño frontend React Native / Expo (fork + doctor/audit propios) |
-| `junior-to-senior` | Senior review adversarial de planes y arquitectura |
 | `mobile-app-ui-design` | Diseño de UI móvil |
-| `no-commit-secrets` | Previene commits de secrets a git |
-| `no-use-effect` | Prohíbe useEffect directo en React |
-| `notes-vault` | Creación de notas en Obsidian vault |
-| `skill-creator` | Creación de skills (flujo legacy con scripts) |
-| `tanstack-query` | TanStack Query patterns y best practices |
+| `impeccable-rn` | Diseño frontend React Native / Expo (fork + doctor/audit propios) |
 | `test-first` | TDD con Vitest + testing-library/react-native |
 | `vercel-react-native-skills` | Best practices de perf RN/Expo (FlashList, animaciones, native modules) |
 
-### Suite engineering (mattpocock/skills) — stack-agnostic
+### `design/` — Diseño web/UI
 
-Workflow general de ingeniería (no RN). Origen y estado: ver `UPSTREAM.md`.
+| Skill | Descripción |
+|-------|-------------|
+| `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
+| `impeccable` | Diseño frontend web (fork de pbakaus/impeccable) |
+
+### `engineering/` — Workflow general (mattpocock/skills, stack-agnostic)
 
 | Skill | Descripción |
 |-------|-------------|
@@ -53,20 +50,49 @@ Workflow general de ingeniería (no RN). Origen y estado: ver `UPSTREAM.md`.
 | `triage` | Mover issues por máquina de estados de roles |
 | `wayfinder` | Planear trabajo enorme como mapa de tickets de decisión en el tracker |
 
-Origen y estado de cada skill (third-party / fork / own): ver `UPSTREAM.md`.
+### `workflow/` — Herramientas propias y de productividad
+
+| Skill | Descripción |
+|-------|-------------|
+| `context7-mcp` | MCP de Context7 para docs actuales de librerías |
+| `doc-system` | Documentación técnica estructurada DOC-NNN-TYPE |
+| `find-skills` | Descubrimiento e instalación de skills desde la CLI |
+| `fix-debug` | Debug asistido con Context7 |
+| `junior-to-senior` | Senior review adversarial de planes y arquitectura |
+| `no-commit-secrets` | Previene commits de secrets a git |
+| `no-use-effect` | Prohíbe useEffect directo en React |
+| `notes-vault` | Creación de notas en Obsidian vault |
+| `skill-creator` | Creación de skills (flujo legacy con scripts) |
+| `tanstack-query` | TanStack Query patterns y best practices |
+
+Origen y estado de cada skill (own / third-party / fork / plugin): ver `UPSTREAM.md`.
 
 ## Instalación
 
-```bash
-# Skill individual (vía npx skills)
-npx skills add https://github.com/caml07/camskills --skill doc-system
+### Instalador CamSkills (recomendado)
 
-# Todos a la vez (symlink desde ~/.config/opencode)
+Elegís por categoría y activa los skills en `~/.config/opencode/skills/`:
+
+```bash
 git clone git@github.com:caml07/camskills.git ~/camskills
-ln -s ~/camskills/skills/* ~/.config/opencode/skills/
+cd ~/camskills && ./install.sh
 ```
 
-Nota: si ya tenés `context7-mcp` instalado en otra ruta, no lo symlinkees.
+### Skill individual (vía npx skills)
+
+```bash
+npx skills add https://github.com/caml07/camskills --skill doc-system
+```
+
+### Todos a la vez (manual)
+
+```bash
+git clone git@github.com:caml07/camskills.git ~/camskills
+# Linux/macOS: symlinks
+ln -s ~/camskills/skills/*/* ~/.config/opencode/skills/
+```
+
+Nota: si ya tenés `context7-mcp` instalado en otra ruta, no lo actives.
 
 ## Plugins
 
