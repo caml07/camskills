@@ -1,8 +1,10 @@
 ---
 name: fix-debug
 description: >-
-  Auto-fetches Context7 documentation for debugging and fixing tasks. Triggers
-  on 'fix', 'debug', 'arreglar', 'depurar', 'solucionar'. Works for any
+  Debugging and fixing tasks assisted by auto-fetching Context7 documentation
+  (quick lookup of current library docs/API). For deep, hard-to-reproduce bugs
+  or performance regressions that need a disciplined diagnosis loop (reproduce →
+  hypothesise → fix), prefer the 'diagnosing-bugs' skill instead. Works for any
   library/stack. Decision tree: simple fixes (typos, syntax, obvious config)
   skip Context7; complex bugs (runtime errors, API misuse, regressions, auth
   failures, performance issues) fetch docs first. Per-stack references for React

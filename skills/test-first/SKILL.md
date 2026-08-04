@@ -1,8 +1,9 @@
 ---
 name: test-first
 description: >-
-  Test-Driven Development for React Native + Expo with Vitest and
-  @testing-library/react-native. Write tests BEFORE functional code for every
+  Test-Driven Development specifically for React Native + Expo with Vitest and
+  @testing-library/react-native (RN/Expo mobile only; for generic/other-stack
+  TDD use the 'tdd' skill). Write tests BEFORE functional code for every
   new feature, service, store, hook, screen, or validation schema. Covers Red-
   Green-Refactor cycle, mocking patterns, hook testing, navigation testing, and
   Zod validation. Trigger when the user asks to implement a feature, create a

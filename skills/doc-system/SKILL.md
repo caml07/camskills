@@ -1,13 +1,15 @@
 ---
 name: doc-system
 description: >-
-  Crea y mantiene documentación técnica estructurada con el sistema DOC-NNN-TYPE.
+  Documentación técnica estructurada con el sistema DOC-NNN-TYPE (propio).
   Tipos: FR-NFR, ADR, ARCHITECTURE, DESIGN, FLUJO (con PUML), API, RUNBOOK, SETUP,
   PLAN, AUDIT, CRITIQUE, OFFLINE. Soporta /doc:init, /doc:new, /doc:adr, /doc:diagram,
   /doc:audit, /doc:status. Detecta el idioma del proyecto (español/inglés).
   Compatible con notes-vault para persistir decisiones importantes.
   Activar cuando el usuario pida crear, actualizar, auditar o iniciar documentación
   técnica del proyecto, o mencione DOC-NNN, ADR, FR-NFR, PUML, diagramas de flujo.
+  (Para definir modelo de dominio, lenguaje ubicuo o pasar una conversación a spec
+  con issue tracker, usa 'domain-modeling' y 'to-spec' de la suite engineering.)
 license: MIT
 compatibility: opencode
 ---
