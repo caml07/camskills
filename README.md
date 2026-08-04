@@ -29,6 +29,30 @@ Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máqui
 | `test-first` | TDD con Vitest + testing-library/react-native |
 | `vercel-react-native-skills` | Best practices de perf RN/Expo (FlashList, animaciones, native modules) |
 
+### Suite engineering (mattpocock/skills) — stack-agnostic
+
+Workflow general de ingeniería (no RN). Origen y estado: ver `UPSTREAM.md`.
+
+| Skill | Descripción |
+|-------|-------------|
+| `ask-matt` | Router de skills: dice cuál/flow usar según la situación |
+| `codebase-design` | Diseño de módulos profundos: interfaces chicas, seams limpios |
+| `code-review` | Review de diff en 2 ejes (standards + spec) con sub-agents en paralelo |
+| `diagnosing-bugs` | Loop de diagnóstico: reproduce → minimiza → hipótesis → instrument → fix |
+| `domain-modeling` | Construir/afinar el modelo de dominio y lenguaje ubicuo (CONTEXT.md + ADRs) |
+| `grill-with-docs` | Sesión que afila terminología del dominio y actualiza CONTEXT.md/ADRs |
+| `implement` | Construir desde spec/tickets con `/tdd` y cierre con `/code-review` |
+| `improve-codebase-architecture` | Escanear la codebase por oportunidades de profundización + reporte HTML |
+| `prototype` | Prototipo descartable para responder preguntas de diseño |
+| `research` | Investigar contra fuentes primarias y capturar como Markdown citado |
+| `resolving-merge-conflicts` | Resolver conflictos de merge hunk a hunk por intención |
+| `setup-matt-pocock-skills` | Config del repo para la suite (issue tracker, labels, doc layout) |
+| `tdd` | TDD genérico red-green-refactor (para RN usar `test-first`) |
+| `to-spec` | Convertir la conversación en spec y publicarla al issue tracker |
+| `to-tickets` | Romper plan/spec en tickets tracer-bullet con edges de bloqueo |
+| `triage` | Mover issues por máquina de estados de roles |
+| `wayfinder` | Planear trabajo enorme como mapa de tickets de decisión en el tracker |
+
 Origen y estado de cada skill (third-party / fork / own): ver `UPSTREAM.md`.
 
 ## Instalación

@@ -16,6 +16,7 @@
 | impeccable | pbakaus | third-party | `pbakaus/impeccable` | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` |
 | impeccable-rn | Fork de impeccable por psistema/caml07 | fork | `pbakaus/impeccable` (upstream) | `./scripts/sync-upstream.sh --check` |
 | junior-to-senior | juliusbrussee | third-party | `juliusbrussee/skills` | `npx skills use https://github.com/juliusbrussee/skills --skill junior-to-senior` |
+| mattpocock-engineering/* | mattpocock | third-party | `mattpocock/skills` (`skills/engineering/`) | clonar repo y recopiar las 17 carpetas (ask-matt, codebase-design, code-review, diagnosing-bugs, domain-modeling, grill-with-docs, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, to-spec, to-tickets, triage, wayfinder) |
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
 | no-commit-secrets | psistema/caml07 | own | — | edición directa |
 | no-use-effect | psistema/caml07 | own | — | edición directa |
