@@ -34,7 +34,13 @@ Would a fluent Android user trust this app, or trip on off-spec components? The 
 
 ## Components & motion
 
-- **Material components.** Buttons (filled / tonal / outlined / text), FAB, switches, chips, snackbars, bottom sheets, Material dialogs, navigation bar/rail/drawer. Never port iOS controls or invent equivalents. <!-- rule:android-components-material -->
-- **One FAB, one primary action.** Never stack FABs or spend one on a secondary task. <!-- rule:android-components-single-fab -->
-- **Snackbars for transient feedback** (actionable when useful, never a toast for that); dialogs only for decisions that must interrupt. <!-- rule:android-components-snackbar -->
-- **Material motion patterns.** Container transform, shared-axis, fade-through, with standard easing and durations; honor the system Remove animations setting with a crossfade or instant cut. <!-- rule:android-motion-material-and-reduce -->
+- **Material components.** Buttons (filled / tonal / outlined / text), FAB, switches, chips, snackbars, bottom sheets, Material dialogs, navigation bar/rail/drawer. Never port iOS controls or invent equivalents.
+- **One FAB, one primary action.** Never stack FABs or spend one on a secondary task.
+- **Snackbars for transient feedback** (actionable when useful, never a toast for that); dialogs only for decisions that must interrupt.
+- **Material motion patterns.** Container transform, shared-axis, fade-through, with standard easing and durations; honor the system Remove animations setting with a crossfade or instant cut.
+
+## Verifying the build
+
+- **Screenshots come from the emulator or a connected device, never a browser.** Build and install, then capture with `adb exec-out screencap -p > <path>` (pick a device with `adb -s <serial>` when several are attached). Capture every device class the app ships to, at least one phone and, when tablets are a target, one tablet, and write the files where the review flow expects them.
+- **Dark theme and font scale belong in the pass.** `adb shell cmd uimode night yes` flips the theme; `adb shell settings put system font_scale 1.3` (restore `1.0` after) catches the clipped labels a fixed layout hides; with several targets attached, the capture's `-s <serial>` goes on these commands too.
+- **Emulators give breadth; gestures, refresh rates, and performance need hardware.** Say which one produced the evidence.
