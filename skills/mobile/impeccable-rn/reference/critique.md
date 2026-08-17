@@ -4,21 +4,25 @@ Resolve one stable target, run two independent assessments, synthesize a design 
 
 ### Hard Invariants
 
-- Assessment A (design review) and Assessment B (detector/browser evidence) are both required.
+- Assessment A (design review) and Assessment B (evidence) are both required.
+  For native targets, Assessment B is source, simulator/emulator, device, and
+  platform evidence; the HTML/CSS detector and browser overlay do not apply.
 - Assessment A and B MUST run as two isolated sub-agents whenever a sub-agent/Task tool is exposed. Running them inline in this context is "possible" but is NOT permitted; it is a degraded run. Inline is allowed ONLY when no sub-agent tool exists (or the user declined, on harnesses that ask).
 - If you degrade for any reason, the report's first line MUST be a banner: `⚠️ DEGRADED: single-context (<reason>)`. A silent degraded critique is a failed critique.
 - Assessment A must finish before detector findings enter the parent synthesis context. Detector output is deterministic, but it still anchors judgment.
-- A skipped detector is a failed critique run unless `detect.mjs` is missing or crashes after a real attempt.
-- Viewable targets require browser inspection when available.
+- A skipped detector is expected for native targets. A web target must attempt
+  the detector unless it is missing or crashes after a real attempt.
+- Viewable web targets require browser inspection when available. Native targets
+  require a simulator, emulator, or hardware inspection instead.
 - Any local server started only for critique visualization must run in the background, have a recorded stop method, and be stopped before final reporting unless the user asks to keep it.
 - Do not claim a user-visible overlay exists unless script injection succeeded and the detector ran in the page.
 
 ### Setup
 
 1. **Resolve the target** to a concrete file path or URL. Prefer a source path over a dev-server URL when both identify the same surface; ports drift, paths do not.
-   - "the homepage" -> `site/pages/index.astro` or `index.html`
-   - "the settings modal" -> the primary component file
-   - "this page" -> the current URL or source file
+    - "the home screen" -> the primary screen or route component
+    - "the settings sheet" -> the screen and sheet component files
+    - "this screen" -> the source component and its navigation entry
 2. **Confirm the target slugs cleanly**:
    ```bash
    node .opencode/skills/impeccable/scripts/critique-storage.mjs slug "<resolved-path-or-url>"
@@ -36,11 +40,15 @@ Sub-agent gate (all harnesses):
 - If and only if sub-agents are unavailable, fall back sequentially: finish and record Assessment A, then run Assessment B, then synthesize, and emit the degraded banner.
 - Whichever path you take, declare it in the report header (see Report header provenance). Skipping sub-agents without the banner is the most common failure of this command.
 
-If browser automation is available, each assessment creates its own new tab. Never reuse an existing tab, even if it is already at the right URL.
+For web targets, each browser assessment creates its own new tab. Never reuse
+an existing tab. For native targets, each assessment uses its own clean
+simulator/emulator state or explicitly records the device state it reused.
 
 ### Assessment A: Design Review
 
-Read relevant source files and visually inspect the live page when browser automation is available. Think like a design director.
+Read relevant source files and visually inspect the rendered screen on the
+representative simulator, emulator, or device when available. Think like a
+design director, not a screenshot comparator.
 
 Evaluate:
 - **Design specificity**: Is the composition, interaction, and visual language grounded in this product, or could an unrelated product use it unchanged? Make this judgment before seeing detector output.
@@ -51,9 +59,18 @@ Evaluate:
 
 Return: design-specificity verdict, heuristic scores, cognitive load, emotional journey, 2-3 strengths, 3-5 priority issues, persona red flags, minor observations, and provocative questions.
 
-### Assessment B: Detector + Browser Evidence
+### Assessment B: Detector or Native Evidence
 
-Run the bundled detector and browser visualization evidence. Assessment B is mandatory and must remain isolated from Assessment A until both are complete.
+Assessment B remains isolated from Assessment A until both are complete.
+
+For an iOS, Android, or adaptive target, do not run the bundled HTML/CSS
+detector. Instead inspect source and rendered evidence for safe areas, window
+size, font scale, loading/error states, accessibility semantics, platform
+navigation, dropped frames, and runtime warnings. Capture the exact device
+class and build mode used. Use [audit.native.md](audit.native.md) as the
+technical checklist.
+
+For a web target, run the bundled detector and browser visualization:
 
 CLI scan:
 ```bash
@@ -672,28 +689,30 @@ Test the interface through the eyes of 5 distinct user archetypes. Each persona 
 
 #### 3. Accessibility-Dependent User: "Sam"
 
-**Profile**: Uses screen reader (VoiceOver/NVDA), keyboard-only navigation. May have low vision, motor impairment, or cognitive differences.
+**Profile**: Uses VoiceOver or TalkBack, and may use a hardware keyboard or
+switch access where the device supports it. May have low vision, motor
+impairment, or cognitive differences.
 
 **Behaviors**:
-- Tabs through the interface linearly
-- Relies on ARIA labels and heading structure
-- Cannot see hover states or visual-only indicators
+- Explores the native accessibility tree linearly
+- Relies on native roles, labels, states, values, and actions
+- Cannot use hover or visual-only indicators as the sole affordance
 - Needs adequate color contrast (4.5:1 minimum)
-- May use browser zoom up to 200%
+- May use large font scale, bold text, high contrast, or reduced motion
 
 **Test Questions**:
-- Can the entire primary flow be completed keyboard-only?
-- Are all interactive elements focusable with visible focus indicators?
-- Do images have meaningful alt text?
+- Can the primary flow be completed with VoiceOver/TalkBack and touch?
+- Are interactive elements grouped, ordered, labeled, and assigned the correct role and state?
+- Do content images have meaningful `accessibilityLabel` values and do decorative images stay out of the tree?
 - Is color contrast WCAG AA compliant (4.5:1 for text)?
-- Does the screen reader announce state changes (loading, success, errors)?
+- Do loading, success, error, permission, modal, and custom-action states announce correctly?
 
 **Red Flags** (report these specifically):
-- Click-only interactions with no keyboard alternative
-- Missing or invisible focus indicators
+- Gesture- or touch-only interactions with no visible or accessibility-action alternative
+- Missing labels, roles, states, actions, or a usable native focus order
 - Meaning conveyed by color alone (red = error, green = success)
 - Unlabeled form fields or buttons
-- Time-limited actions without extension option
+- Time-limited actions without an accessible timeout strategy
 - Custom components that break screen reader flow
 
 ---

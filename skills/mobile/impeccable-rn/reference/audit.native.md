@@ -9,8 +9,12 @@ Run comprehensive checks across 5 dimensions. Score each dimension 0-4 using the
 ### 1. Accessibility (VoiceOver / TalkBack)
 
 **Check for**:
-- **Missing labels**: interactive elements without accessibility labels, traits/roles, or state announcements
-- **Reading and focus order**: illogical traversal, unreachable controls, focus lost on navigation
+- **Missing semantics**: custom controls without `accessible`, `accessibilityRole`, a usable label, or the correct `accessibilityHint`
+- **Stale state**: `accessibilityState` / `accessibilityValue` not synchronized with disabled, selected, checked, busy, expanded, progress, or adjustable values
+- **Reading and focus order**: illogical traversal, unreachable controls, focus lost on navigation, or decorative children interrupting one logical control
+- **Custom actions**: important swipe, adjust, expand, collapse, or delete actions missing `accessibilityActions` / `onAccessibilityAction` alternatives
+- **Dynamic announcements**: loading, error, success, permission, and navigation changes that are visible but not announced when needed
+- **Modal isolation**: VoiceOver/TalkBack can still traverse content behind an active modal or sheet
 - **Text scaling**: fixed point sizes defeating Dynamic Type (iOS) or px instead of sp (Android); layouts that clip or overlap at large sizes
 - **Touch targets**: below 44 pt (iOS) / 48 dp (Android), or crammed without spacing
 - **Reduce Motion ignored**: parallax and large slides with no crossfade alternative
@@ -22,11 +26,13 @@ Run comprehensive checks across 5 dimensions. Score each dimension 0-4 using the
 
 **Check for**:
 - **Slow startup**: heavy work on launch before first frame
-- **Unvirtualized lists**: long content without FlatList / LazyColumn / List recycling
+- **Unvirtualized lists**: long content in `ScrollView` instead of `FlatList`, `SectionList`, or `VirtualizedList`
+- **Poor list configuration**: no stable keys, heavy rows, missing `getItemLayout` for fixed-size rows, or batch/window values causing blank areas or blocked presses
 - **Main-thread jank**: synchronous work in scroll or gesture paths, dropped frames on 60/120 Hz
-- **Wasted rendering**: unnecessary re-renders (React Native) or recompositions (Compose); missing memoization/keys
-- **Image handling**: full-size images decoded for thumbnails, no caching
-- **App weight**: bloated JS bundle or binary, unused dependencies
+- **Wasted rendering**: unnecessary React Native renders, unstable `renderItem`, or memoization added without evidence that it helps
+- **Image handling**: full-size images decoded for thumbnails, no dimensions, no cache, or layout shift in a list
+- **Startup and runtime**: heavy work before first frame, excessive JS/native boundary traffic, or legacy-architecture assumptions in a New Architecture app
+- **App weight**: bloated JS bundle or binary, unused dependencies, or a new animation/native dependency without a measured need
 
 **Score 0-4**: 0=Janky everywhere, 1=Major problems (unvirtualized lists, slow launch), 2=Partial, 3=Good (minor improvements possible), 4=Excellent (fast launch, smooth scroll, lean)
 

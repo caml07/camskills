@@ -78,14 +78,15 @@ Systematically remove complexity across these dimensions:
 - **Remove redundant copy**: No headers restating intros, no repeated explanations, say it once
 
 ### Code Simplification
-- **Remove unused code**: Dead CSS, unused components, orphaned files
+- **Remove unused code**: Dead styles, unused components, orphaned files
 - **Flatten component trees**: Reduce nesting depth
 - **Consolidate styles**: Merge similar styles, use utilities consistently
 - **Reduce variants**: Does that component need 12 variations, or can 3 cover 90% of cases?
 
 **NEVER**:
 - Remove necessary functionality (simplicity ≠ feature-less)
-- Sacrifice accessibility for simplicity (clear labels and ARIA still required)
+- Sacrifice accessibility for simplicity (native roles, labels, state, actions,
+  focus order, and announcements still required)
 - Make things so simple they're unclear (mystery ≠ minimalism)
 - Remove information users need to make decisions
 - Eliminate hierarchy completely (some things should stand out)

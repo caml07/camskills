@@ -11,13 +11,23 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | Skill | Descripción |
 |-------|-------------|
 | `eas-app-stores` | Deploy de apps Expo a tiendas con EAS (build + submit, eas.json) |
+| `eas-simulator` | Ejecutar y depurar apps Expo en simuladores iOS/Android con EAS |
+| `expo-app-clip` | App Clips iOS integrados con proyectos Expo |
+| `expo-brownfield` | Integrar Expo dentro de una app nativa existente |
 | `expo-data-fetching` | Networking/API en Expo: fetch, React Query, offline, caching |
 | `expo-dev-client` | Dev clients Expo para probar código nativo en dispositivos |
+| `expo-examples` | Encontrar ejemplos oficiales de Expo antes de inventar una implementación |
+| `expo-module` | Crear módulos nativos Expo y config plugins |
 | `expo-native-ui` | UI nativa Expo: HIG, controles nativos, animaciones, storage |
+| `expo-project-structure` | Estructura y límites recomendados para proyectos Expo |
 | `expo-router` | Navegación y routing en Expo Router |
+| `expo-skill-feedback` | Enviar feedback accionable sobre skills Expo |
+| `expo-tailwind-setup` | Configurar Tailwind en proyectos Expo |
+| `expo-ui` | Componentes y patrones de UI para Expo |
 | `expo-upgrade` | Guía de upgrades de SDK Expo y fixes de dependencias |
+| `expo-web-to-native` | Migrar superficies web a patrones nativos Expo |
 | `mobile-app-ui-design` | Diseño de UI móvil |
-| `impeccable-rn` | Diseño frontend React Native / Expo (fork + doctor/audit propios) |
+| `impeccable-rn` | Diseño frontend React Native / Expo (fork + doctor/audit + accesibilidad nativa) |
 | `test-first` | TDD con Vitest + testing-library/react-native |
 | `vercel-react-native-skills` | Best practices de perf RN/Expo (FlashList, animaciones, native modules) |
 
@@ -49,6 +59,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `to-tickets` | Romper plan/spec en tickets tracer-bullet con edges de bloqueo |
 | `triage` | Mover issues por máquina de estados de roles |
 | `wayfinder` | Planear trabajo enorme como mapa de tickets de decisión en el tracker |
+| `wizard` | Generar wizards Bash interactivos para pasos que requieren intervención humana |
 
 ### `workflow/` — Herramientas propias y de productividad
 
@@ -66,6 +77,13 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `tanstack-query` | TanStack Query patterns y best practices |
 
 Origen y estado de cada skill (own / third-party / fork / plugin): ver `UPSTREAM.md`.
+
+## MCPs
+
+La plantilla opcional y la configuración segura de Context7, Obsidian y
+Composio están en [`MCP.md`](MCP.md) y
+[`opencode.mcp.example.jsonc`](opencode.mcp.example.jsonc). No contienen
+credenciales.
 
 ## Instalación
 

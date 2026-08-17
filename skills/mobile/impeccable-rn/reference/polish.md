@@ -70,8 +70,12 @@ Do not perfect one corner while leaving the rest below the same quality bar.
 
 ### Interaction and state
 
-- Every control needs appropriate default, hover, focus, active, disabled, loading, error, and success behavior.
-- Preserve visible keyboard focus, logical tab order, labels, and platform-appropriate touch targets.
+- Every control needs appropriate default, pressed, disabled, busy, loading,
+  error, and success behavior. Add hover or hardware-keyboard states only when
+  the target device supports them.
+- Preserve native accessibility order, roles, labels, states, actions, and
+  platform-appropriate touch targets. Do not substitute web tab-order rules for
+  VoiceOver/TalkBack behavior.
 - Keep motion coherent, interruptible, and performant. Do not add animation merely to make polish visible.
 - Validate long, missing, localized, offline, slow, and permission-limited content where the product can encounter it.
 
@@ -86,9 +90,11 @@ Do not perfect one corner while leaving the rest below the same quality bar.
 
 Walk the complete path again with mouse, keyboard, and touch where applicable. Check:
 
-- mobile, intermediate, and wide layouts on the web; phone and tablet size classes in both supported orientations on native;
+- mobile, intermediate, and wide layouts on the web; phone and tablet window or
+  size classes in both supported orientations on native;
 - loading, empty, error, success, disabled, long-content, and missing-content states;
-- zoom, contrast, focus, semantics, and screen-reader names;
+- contrast, font scale, reduced motion, native semantics, screen-reader names,
+  and accessibility actions;
 - console errors, layout shift, interaction latency, and image loading everywhere; supported browsers on the web; supported OS versions, runtime warnings, and dropped frames on native;
 - agreement with DESIGN.md, neighboring features, and the user's scope.
 

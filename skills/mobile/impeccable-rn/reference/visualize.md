@@ -2,6 +2,11 @@
 
 Load this from [new-work.md](new-work.md) on a comp-led build, when image generation is available (a harness-native tool or the API fallback context.mjs reports). A code-led execution contract skips this file by design, not by drift: its ambition lives in the written direction contract and is audited in behavior, so do not load it for a code-led round. PRODUCT.md and DESIGN.md are preconditions. New-work has already resolved the visual world; this file must not reopen it. A surface-scope structure round that already put three visualized cards before the user (new-work.md, established world) has discharged this round: the locked card’s comp is the approved comp, so record the approval and continue at After approval; generate nothing new.
 
+For native targets, compose at the shipped device viewport and translate the
+approved direction into semantic React Native views, platform controls, native
+lists, and the existing image pipeline. A comp is not permission to rasterize
+text or controls, ignore safe areas, or replace VoiceOver/TalkBack semantics.
+
 The purpose of a probe is to test composition, narrative, hierarchy, density, focal moment, signature use, and image requirements. It is not a second identity workshop. Keep DESIGN.md's palette, typography direction, material language, component character, imagery stance, and motion grammar fixed.
 
 ## Generate three compositional options

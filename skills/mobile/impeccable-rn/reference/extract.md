@@ -37,7 +37,10 @@ Create a systematic plan:
 
 Build improved, reusable versions:
 
-- **Components**: Clear props API with sensible defaults, proper variants for different use cases, accessibility built in (ARIA, keyboard navigation, focus management), documentation and usage examples
+- **Components**: Clear props API with sensible defaults, proper variants for
+  different use cases, native accessibility built in (`accessibilityRole`,
+  labels, state, value, actions, screen-reader order, and platform keyboard or
+  pointer behavior where supported), documentation, and usage examples
 - **Design tokens**: Clear naming (primitive vs semantic), proper hierarchy and organization, documentation of when to use each token
 - **Patterns**: When to use this pattern, code examples, variations and combinations
 
@@ -66,4 +69,3 @@ Update design system documentation:
 - Skip proper TypeScript types or prop documentation
 - Create tokens for every single value (tokens should have semantic meaning)
 - Extract things that differ in intent (two buttons that look similar but serve different purposes should stay separate)
-

@@ -71,7 +71,8 @@ Voice stays consistent; tone adapts to the moment. Use plain language without fl
 - Write complete translatable messages rather than concatenated fragments.
 - Keep variables and numbers structured so translators can reorder them.
 - Allow expansion instead of abbreviating prematurely.
-- Make alt text convey the image's information; use empty alt for decoration.
+- Give content images a meaningful `accessibilityLabel`; keep decorative images
+  out of the accessible tree.
 - Keep screen-reader names aligned with visible labels and outcomes.
 - Do not rely on punctuation, color, or iconography to carry the message alone.
 
@@ -84,7 +85,7 @@ Read the flow in context and test:
 - comprehension without hidden product knowledge;
 - actionability at errors, empty states, and decision points;
 - factual accuracy and consistent terminology;
-- scanability at target widths and 200% zoom;
+- scanability at target windows and large `fontScale`;
 - long names, localization expansion, pluralization, and dynamic values;
 - accessible names and announced state changes;
 - tone appropriate to consequence and emotional context.

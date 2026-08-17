@@ -2,6 +2,11 @@
 
 When design IS the product: brand sites, landing pages, marketing surfaces, campaign pages, portfolios, long-form content, about pages. The deliverable is the design itself; a visitor's impression is the thing being made.
 
+For a native brand surface, keep the same expressive ambition but translate it
+through React Native views, platform navigation, safe areas, font scaling, and
+the project's image pipeline. Do not carry over CSS, HTML, browser layout, or
+hover assumptions from a web reference.
+
 The register spans every genre. A tech brand (Stripe, Linear, Vercel). A luxury brand (a hotel, a fashion house). A consumer product (a restaurant, a travel site, a CPG packaging page). A creative studio, an agency portfolio, a band's album page. They all share the stance (*communicate, not transact*) and diverge wildly in aesthetic. Don't collapse them into a single look.
 
 ## The brand slop test
@@ -49,7 +54,9 @@ Two families minimum is the rule *only* when the voice needs it. A single well-c
 
 ### Scale
 
-Modular scale, fluid `clamp()` for headings, ≥1.25 ratio between steps. Flat scales (1.1× apart) read as uncommitted.
+Use a committed token scale and enough contrast between roles. On native,
+verify the scale at large `fontScale` and window sizes instead of using CSS
+`clamp()`.
 
 Light text on dark backgrounds: add 0.05–0.1 to line-height. Light type reads as lighter weight and needs more breathing room.
 
@@ -66,9 +73,12 @@ Brand surfaces have permission for Committed, Full palette, and Drenched strateg
 ## Layout
 
 - Asymmetric compositions are one option. Break the grid intentionally for emphasis.
-- Fluid spacing with `clamp()` that breathes on larger viewports. Vary for rhythm: generous separations, tight groupings.
+- On native, use `useWindowDimensions()` and deliberate window thresholds for
+  structural changes. Vary spacing for rhythm: generous separations, tight
+  groupings, and safe-area-aware padding.
 - For image-led briefs (hotels, restaurants, magazines, photography), full-bleed hero imagery with overlaid menu and centered headline is a canonical move; let the photograph be the design.
-- When cards ARE the right affordance, use `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))` for breakpoint-free responsiveness.
+- When cards ARE the right affordance, use the project's native list/grid
+  primitive and test phone, tablet, landscape, and split-screen behavior.
 
 ## Imagery
 
@@ -76,16 +86,24 @@ Brand surfaces lean on imagery. A restaurant, hotel, magazine, or product landin
 
 **When the brief implies imagery, you must ship imagery.** Zero images is a bug, not a design choice. "Restraint" is not an excuse. If the approved comp or brief is image-led, ship real project assets, generated raster assets, or a credible canvas/SVG/WebGL scene. Do not replace photographic, architectural, product, or place imagery with generic CSS panels, decorative diagrams, cards, bullets, or copy.
 
-- **For greenfield work without local assets, use stock imagery.** Unsplash is the default. The URL shape is `https://images.unsplash.com/photo-{id}?auto=format&fit=crop&w=1600&q=80`. **Verify the URLs before referencing them.** If you have an image-search MCP, web-fetch tool, or browser access, use it to find real photo IDs and confirm they resolve. Guessed IDs (even ones that look real) often 404 and ship as broken-image placeholders. Without a verification path, pick fewer photos you're confident exist over more that you guessed; never substitute colored `<div>` placeholders.
+- **For greenfield native work without local assets, use the project's approved
+  asset pipeline.** In Expo, prefer bundled `require()` assets or the existing
+  `expo-image` path; for remote images, verify the URL, dimensions, caching,
+  offline behavior, and licensing before shipping.
 - **Search for the brand's physical object**, not the generic category: "handmade pasta on a scratched wooden table" beats "Italian food"; "cypress trees above a limestone hotel facade at dusk" beats "luxury hotel".
 - **One decisive photo beats five mediocre ones.** Hero imagery should commit to a mood; padding with more stock doesn't rescue an indecisive one.
-- **Alt text is part of the voice.** "Coastal fettuccine, hand-cut, served on the terrace" beats "pasta dish".
+- **Accessibility text is part of the voice.** Use an informative
+  `accessibilityLabel` for a content image and keep decorative imagery out of
+  the accessible tree. "Coastal fettuccine, hand-cut, served on the terrace"
+  beats "pasta dish".
 
 "Imagery" here is broader than stock photography: product screenshots, custom data visualizations, generated SVG, and canvas/WebGL scenes are all imagery. Text-only pages where typography alone carries the entire visual weight are the failure mode.
 
 ## Motion
 
-- One well-orchestrated page-load beats scattered micro-interactions, when the brand invites it. Some brands skip entrance motion entirely; the restraint is the voice.
+- One well-orchestrated screen-entry or navigation moment beats scattered
+  micro-interactions, when the brand invites it. Some surfaces skip entrance
+  motion entirely; the restraint is the voice. Always honor reduced motion.
 
 ## Brand bans (on top of the shared absolute bans)
 

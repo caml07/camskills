@@ -83,23 +83,41 @@ Decide by scanning first (Scan mode Step 1). If the scan finds no tokens, no com
 
 Search the codebase in priority order:
 
-1. **CSS custom properties**: grep for `--color-`, `--font-`, `--spacing-`, `--radius-`, `--shadow-`, `--ease-`, `--duration-` declarations in CSS files (usually `src/styles/`, `public/css/`, `app/globals.css`, etc.). Record name, value, and the file it's defined in.
-2. **Tailwind config**: if `tailwind.config.{js,ts,mjs}` exists, read the `theme.extend` block for colors, fontFamily, spacing, borderRadius, boxShadow.
-3. **CSS-in-JS theme files**: styled-components, emotion, vanilla-extract, stitches; look for `theme.ts`, `tokens.ts`, or equivalent.
-4. **Design token files**: `tokens.json`, `design-tokens.json`, Style Dictionary output, W3C token community group format.
-5. **Component library**: scan the main button, card, input, navigation, dialog components. Note their variant APIs and default styles.
-6. **Global stylesheet**: the root CSS file usually has the base typography and color assignments.
-7. **Visible rendered output**: if browser automation tools are available, load the live site and sample computed styles from key elements (body, h1, a, button, .card). This catches values that tokens miss.
+1. **Native token files**: look for `theme.ts`, `tokens.ts`, `colors.ts`,
+   `typography.ts`, `spacing.ts`, and platform light/dark schemes. Record the
+   semantic role, value, and source of truth.
+2. **React Native styles**: inspect `StyleSheet.create`, shared style helpers,
+   NativeWind or the project's existing styling system. Record repeated values,
+   variants, and platform branches without converting them into CSS concepts.
+3. **Expo and platform config**: read `app.json` / `app.config.*`, font loading,
+   safe-area providers, navigation, status-bar, and supported orientations.
+4. **Design token files**: `tokens.json`, `design-tokens.json`, or the project's
+   generated token format. Do not invent a token format when the project has one.
+5. **Component library**: scan the main button, card, input, list row, sheet,
+   navigation, and dialog components. Note pressed states, accessibility props,
+   variants, and default styles.
+6. **Rendered output**: for native targets, inspect representative simulator,
+   emulator, or device screens at phone/tablet sizes, light/dark appearance,
+   and large font scale. For web targets inside the repo, browser inspection is
+   still valid.
 
 ### Step 2: Auto-extract what can be auto-extracted
 
 Build a structured draft from the discovered tokens. For each token class:
 
-- **Colors**: Group into Primary / Secondary / Tertiary / Neutral (the Material-derived roles Stitch uses). If the project only has one accent, express it as Primary + Neutral; omit Secondary and Tertiary rather than inventing them.
-- **Typography**: Map observed sizes and weights to the Material hierarchy (display / headline / title / body / label). Note font-family stacks and the scale ratio.
-- **Elevation**: Catalogue the shadow vocabulary. If the project is flat and uses tonal layering instead, that's a valid answer; state it explicitly.
-- **Components**: For each common component (button, card, input, chip, list item, tooltip, nav), extract shape (radius), color assignment, hover/focus treatment, internal padding.
-- **Layout + spacing**: Extract grid, container, breakpoint, rhythm, and density behavior into Layout.
+- **Colors**: Group semantic roles for the project's platform and light/dark
+  schemes. Record system colors or Material roles when the app uses them; do
+  not replace an existing token system with generic Primary/Secondary labels.
+- **Typography**: Map observed sizes and weights to the platform roles (display,
+  headline, title, body, label). Note font loading, `fontScale`, fallback, and
+  Dynamic Type behavior.
+- **Elevation**: Catalogue platform shadows, tonal surfaces, materials, and
+  clipping. State when a flat treatment is intentional.
+- **Components**: For each common component (button, card, input, chip, list
+  item, sheet, nav), extract shape, color assignment, pressed/disabled/busy
+  treatment, accessibility semantics, internal padding, and touch target.
+- **Layout + spacing**: Extract safe areas, window or size-class thresholds,
+  orientation, keyboard insets, rhythm, and density behavior into Layout.
 - **Shapes**: Extract radius, corner, border, clipping, and recurring form behavior into Shapes.
 
 ### Step 2b: Stage the frontmatter
@@ -250,7 +268,7 @@ Concrete visual guardrails grounded in the incumbent implementation or the user'
 
 ### Step 4b: Write .impeccable/design.json sidecar (extensions only)
 
-The frontmatter owns token primitives (colors, typography, rounded, spacing, components). The sidecar at `.impeccable/design.json` carries **what Stitch's schema can't hold**: tonal ramps per color, shadow/elevation tokens, motion tokens, breakpoints, full component HTML/CSS snippets (the panel renders these into a shadow DOM), and narrative (north star, rules, do's/don'ts). It extends the frontmatter, it doesn't duplicate it.
+The frontmatter owns token primitives (colors, typography, rounded, spacing, components). The sidecar at `.impeccable/design.json` carries **what the schema can't hold**: tonal ramps per color, shadow/elevation tokens, motion tokens, window or size-class thresholds, platform notes, component implementation handoffs, and narrative (north star, rules, do's/don'ts). For web targets it may also carry self-contained HTML/CSS snippets for the panel; for native targets never pretend those snippets are the implementation.
 
 Regenerate the sidecar whenever you regenerate root `DESIGN.md`. If the user only asks to refresh the sidecar (e.g., from the live panel's stale-hint), preserve `DESIGN.md` and write only `.impeccable/design.json`.
 
@@ -300,9 +318,18 @@ Regenerate the sidecar whenever you regenerate root `DESIGN.md`. If the user onl
 }
 ```
 
-**What changed from schemaVersion 1.** The old sidecar carried token primitive arrays (`tokens.colors[]`, `tokens.typography[]`, etc.). Those values now live in the frontmatter. The sidecar only carries metadata that can't live in the frontmatter (tonal ramps, canonical OKLCH when the hex is an approximation, display names, role hints), keyed by the frontmatter token name (`colorMeta.<token-name>`, `typographyMeta.<token-name>`). Components still carry full HTML/CSS because Stitch's 8-prop set can't hold them.
+**What changed from schemaVersion 1.** The old sidecar carried token primitive arrays (`tokens.colors[]`, `tokens.typography[]`, etc.). Those values now live in the frontmatter. The sidecar only carries metadata that can't live in the frontmatter (tonal ramps, canonical values, display names, role hints, platform behavior), keyed by the frontmatter token name (`colorMeta.<token-name>`, `typographyMeta.<token-name>`). Components carry HTML/CSS only for web panels; native components carry their React Native implementation and accessibility contract instead.
 
 #### Component translation rules
+
+For native targets, record `platform`, `component`, `props`, `states`,
+`accessibility`, `insets`, and `implementation` fields. The implementation
+should name the existing React Native component, token source, navigation or
+sheet primitive, and platform differences. Include pressed, disabled, busy,
+error, loading, and screen-reader behavior. Do not invent HTML/CSS or a browser
+preview for a native component.
+
+For web targets only, use the HTML/CSS rules below:
 
 The `html` and `css` fields must be **self-contained, drop-in snippets** that render correctly when injected into a shadow DOM. The panel applies them directly: no post-processing, no framework runtime.
 

@@ -1,189 +1,158 @@
 # Interaction Design
 
-## The Eight Interactive States
+React Native is not the web. Do not import CSS focus rings, HTML dialogs,
+Popover API, DOM portals, ARIA-only patterns, or browser hover assumptions into
+a native screen. Design the native interaction contract first, then implement
+it with the project's existing components.
 
-Every interactive element needs these states designed:
+## Press states
 
-| State | When | Visual Treatment |
-|-------|------|------------------|
-| **Default** | At rest | Base styling |
-| **Hover** | Pointer over (not touch) | Subtle lift, color shift |
-| **Focus** | Keyboard/programmatic focus | Visible ring (see below) |
-| **Active** | Being pressed | Pressed in, darker |
-| **Disabled** | Not interactive | Reduced opacity, no pointer |
-| **Loading** | Processing | Spinner, skeleton |
-| **Error** | Invalid state | Red border, icon, message |
-| **Success** | Completed | Green check, confirmation |
+Every interactive element needs an intentional state model:
 
-**The common miss**: Designing hover without focus, or vice versa. They're different. Keyboard users never see hover states.
+| State | Native treatment |
+|---|---|
+| Default | Clear affordance and role in the visual hierarchy |
+| Pressed | Immediate visual feedback from `Pressable`'s `pressed` state |
+| Long press | Only when it exposes a useful secondary action; provide a visible alternative |
+| Disabled | `disabled` plus `accessibilityState={{disabled: true}}`; do not rely on opacity alone |
+| Busy | Preserve context, prevent duplicate submission, expose `busy` to assistive technology |
+| Error | Explain the problem near the field or task and provide recovery |
+| Success | Confirm the result without stealing focus or forcing a new screen |
+| Hover | Optional pointer or desktop enhancement, never the only affordance |
 
-## Focus Rings: Do Them Right
+Use `Pressable` for ordinary touch interactions. Its `onPressIn`, `onPressOut`,
+`onPress`, and `onLongPress` callbacks describe different moments; do not use a
+long press where a normal tap is expected.
 
-**Never `outline: none` without replacement.** It's an accessibility violation. Instead, use `:focus-visible` to show focus only for keyboard users:
-
-```css
-/* Hide focus ring for mouse/touch */
-button:focus {
-  outline: none;
-}
-
-/* Show focus ring for keyboard */
-button:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
+```tsx
+<Pressable
+  accessibilityRole="button"
+  accessibilityLabel="Save profile"
+  accessibilityState={{disabled: saving, busy: saving}}
+  disabled={saving}
+  hitSlop={8}
+  onPress={save}
+  style={({pressed}) => [styles.button, pressed && styles.pressed]}
+>
+  <Text>{saving ? 'Saving...' : 'Save'}</Text>
+</Pressable>
 ```
 
-**Focus ring design**:
-- High contrast (3:1 minimum against adjacent colors)
-- 2-3px thick
-- Offset from element (not inside it)
-- Consistent across all interactive elements
+On Android, use `android_ripple` when it fits the visual system. Do not hide
+press feedback behind a custom animation that delays the action or blocks the
+main thread.
 
-## Form Design: The Non-Obvious
+## Touch geometry
 
-**Placeholders aren't labels.** They disappear on input. Always use visible `<label>` elements. **Validate on blur**, not on every keystroke (exception: password strength). Place errors **below** fields with `aria-describedby` connecting them.
+- Meet the platform target: at least 44 pt on iOS and 48 dp on Android. Keep
+  adjacent targets separated enough to prevent accidental activation.
+- Use `hitSlop` to enlarge a small visible icon's touch area, not to excuse an
+  undersized control. The hit area cannot escape the parent bounds, and a
+  sibling with higher z-order still wins overlapping touches.
+- Use `pressRetentionOffset` when a finger can reasonably slide while holding a
+  press. Do not use it to make neighboring controls ambiguous.
+- Test one-handed reach, edge gestures, keyboard or pointer input where the
+  device supports it, and VoiceOver/TalkBack activation.
 
-## Loading States
+## Accessibility contract
 
-**Optimistic updates**: Show success immediately, rollback on failure. Use for low-stakes actions (likes, follows), not payments or destructive actions. **Skeleton screens > spinners**: they preview content shape and feel faster than generic spinners.
+Treat every custom control as a native accessibility API, not a styled `View`.
 
-## Modals: The Inert Approach
+- Set `accessible` deliberately. A composite control should usually expose one
+  logical element rather than making its decorative children interrupt the
+  reading order.
+- Give the element an `accessibilityRole`: `button`, `link`, `header`,
+  `checkbox`, `switch`, `radio`, `tab`, `search`, `adjustable`, `progressbar`,
+  or the role that actually matches the behavior.
+- Give icon-only controls an explicit `accessibilityLabel`. Do not make users
+  infer an icon's meaning from its pixels or nearby layout.
+- Add `accessibilityHint` only when the result is not obvious from the label;
+  do not repeat the label.
+- Keep `accessibilityState` synchronized with `disabled`, `selected`,
+  `checked`, `busy`, and `expanded`. Use `accessibilityValue` for sliders,
+  progress, counters, and other ranges.
+- For a form control, connect the visible label with `nativeID` and
+  `accessibilityLabelledBy` on Android when that produces a clearer announcement.
+- Use `accessibilityLanguage` for content that must be read in a different
+  BCP 47 language.
 
-Focus trapping in modals used to require complex JavaScript. Now use the `inert` attribute:
+The accessible name and the visible label should agree. A control that says
+"Delete" visually must not announce an unrelated internal identifier.
 
-```html
-<!-- When modal is open -->
-<main inert>
-  <!-- Content behind modal can't be focused or clicked -->
-</main>
-<dialog open>
-  <h2>Modal Title</h2>
-  <!-- Focus stays inside modal -->
-</dialog>
-```
+## Custom actions and dynamic state
 
-Or use the native `<dialog>` element:
+Use `accessibilityActions` plus `onAccessibilityAction` for actions that a
+screen-reader user needs to perform directly, such as delete, expand, collapse,
+increment, or decrement. The action must produce the same result as the visible
+interaction.
 
-```javascript
-const dialog = document.querySelector('dialog');
-dialog.showModal();  // Opens with focus trap, closes on Escape
-```
+When content changes without navigation:
 
-## The Popover API
+- Use `accessibilityLiveRegion="polite"` on Android for non-urgent status text.
+- Use `AccessibilityInfo.announceForAccessibility()` when a result must be
+  announced and no live region is reliable for the component.
+- Query `AccessibilityInfo.isScreenReaderEnabled()` only when behavior truly
+  needs to change; do not hide information from sighted users.
+- Keep loading, error, success, and permission changes in the same logical
+  reading order as the visual UI.
 
-For tooltips, dropdowns, and non-modal overlays, use native popovers:
+## Focus, overlays, and navigation
 
-```html
-<button popovertarget="menu">Open menu</button>
-<div id="menu" popover>
-  <button>Option 1</button>
-  <button>Option 2</button>
-</div>
-```
+There is no DOM focus trap to copy. For a modal or sheet:
 
-**Benefits**: Light-dismiss (click outside closes), proper stacking, no z-index wars, accessible by default.
+- Make the modal content the accessible context. On iOS use
+  `accessibilityViewIsModal`; on Android hide the obscured sibling tree with
+  `importantForAccessibility="no-hide-descendants"` when the component requires
+  it.
+- Give the modal a clear heading, close action, and return path. Do not leave
+  VoiceOver or TalkBack reading controls behind an active modal.
+- Restore focus or announce the new screen after navigation when the transition
+  would otherwise leave assistive technology with no useful context.
+- Prefer the navigation and bottom-sheet primitives already used by the app;
+  do not create an absolute-positioned overlay that clips inside a scroll view.
 
-## Dropdown & Overlay Positioning
+`AccessibilityInfo.setAccessibilityFocus()` is deprecated in current React
+Native docs. Prefer `sendAccessibilityEvent()` with a host ref when an
+imperative focus event is genuinely required, and test the behavior on both
+platforms.
 
-Dropdowns rendered with `position: absolute` inside a container that has `overflow: hidden` or `overflow: auto` will be clipped. This is the single most common dropdown bug in generated code.
+## Gestures need visible alternatives
 
-### CSS Anchor Positioning
+Swipe, drag, pinch, and long press are useful accelerators, not exclusive
+paths. Provide a visible button, menu action, or accessibility action for every
+important operation. Explain a non-obvious gesture once, then keep the screen
+usable without the hint.
 
-The modern solution uses the CSS Anchor Positioning API to tether an overlay to its trigger without JavaScript:
+## Reduced motion and device settings
 
-```css
-.trigger {
-  anchor-name: --menu-trigger;
-}
+Read `AccessibilityInfo.isReduceMotionEnabled()` and subscribe to
+`reduceMotionChanged` when motion persists for the lifetime of a screen. In the
+reduced-motion path:
 
-.dropdown {
-  position: fixed;
-  position-anchor: --menu-trigger;
-  position-area: block-end span-inline-end;
-  margin-top: 4px;
-}
+- remove parallax, large travel, and decorative loops;
+- keep short state feedback when it communicates cause and result;
+- prefer a cross-fade or immediate state change;
+- do not replace an accessible state change with silence.
 
-/* Flip above if no room below */
-@position-try --flip-above {
-  position-area: block-start span-inline-end;
-  margin-bottom: 4px;
-}
-```
+Also verify large text, bold text, high contrast, dark mode, color inversion,
+and the user's font scale where the platform exposes those settings.
 
-Because the dropdown uses `position: fixed`, it escapes any `overflow` clipping on ancestor elements. The `@position-try` block handles viewport edges automatically. **Browser support**: Chrome 125+, Edge 125+. Not yet in Firefox or Safari - use a fallback for those browsers.
+## Verification pass
 
-### Popover + Anchor Combo
+Test the rendered flow, not only the JSX:
 
-Combining the Popover API with anchor positioning gives you stacking, light-dismiss, accessibility, and correct positioning in one pattern:
+1. Turn on VoiceOver on a real iOS device or use Accessibility Inspector for a
+   first pass; verify order, names, roles, states, actions, and modal escape.
+2. Turn on TalkBack on an Android device or emulator with the Play Store; verify
+   the same flow and dynamic announcements.
+3. Repeat with a large font scale, reduced motion, dark mode, and a slow or
+   failed request.
+4. Test touch targets and gesture alternatives with one hand. Test pointer or
+   hardware keyboard input only when the product supports those surfaces.
 
-```html
-<button popovertarget="menu" class="trigger">Open</button>
-<div id="menu" popover class="dropdown">
-  <button>Option 1</button>
-  <button>Option 2</button>
-</div>
-```
+## Official React Native references
 
-The `popover` attribute places the element in the **top layer**, which sits above all other content regardless of z-index or overflow. No portal needed.
-
-### Portal / Teleport Pattern
-
-In component frameworks, render the dropdown at the document root and position it with JavaScript:
-
-- **React**: `createPortal(dropdown, document.body)`
-- **Vue**: `<Teleport to="body">`
-- **Svelte**: Use a portal library or mount to `document.body`
-
-Calculate position from the trigger's `getBoundingClientRect()`, then apply `position: fixed` with `top` and `left` values. Recalculate on scroll and resize.
-
-### Fixed Positioning Fallback
-
-For browsers without anchor positioning support, `position: fixed` with manual coordinates avoids overflow clipping:
-
-```css
-.dropdown {
-  position: fixed;
-  /* top/left set via JS from trigger's getBoundingClientRect() */
-}
-```
-
-Check viewport boundaries before rendering. If the dropdown would overflow the bottom edge, flip it above the trigger. If it would overflow the right edge, align it to the trigger's right side instead.
-
-## Destructive Actions: Undo > Confirm
-
-**Undo is better than confirmation dialogs.** Users click through confirmations mindlessly. Remove from UI immediately, show undo toast, actually delete after toast expires. Use confirmation only for truly irreversible actions (account deletion), high-cost actions, or batch operations.
-
-## Keyboard Navigation Patterns
-
-### Roving Tabindex
-
-For component groups (tabs, menu items, radio groups), one item is tabbable; arrow keys move within:
-
-```html
-<div role="tablist">
-  <button role="tab" tabindex="0">Tab 1</button>
-  <button role="tab" tabindex="-1">Tab 2</button>
-  <button role="tab" tabindex="-1">Tab 3</button>
-</div>
-```
-
-Arrow keys move `tabindex="0"` between items. Tab moves to the next component entirely.
-
-### Skip Links
-
-Provide skip links (`<a href="#main-content">Skip to main content</a>`) for keyboard users to jump past navigation. Hide off-screen, show on focus.
-
-## Gesture Discoverability
-
-Swipe-to-delete and similar gestures are invisible. Hint at their existence:
-
-- **Partially reveal**: Show delete button peeking from edge
-- **Onboarding**: Coach marks on first use
-- **Alternative**: Always provide a visible fallback (menu with "Delete")
-
-Don't rely on gestures as the only way to perform actions.
-
----
-
-**Avoid**: Removing focus indicators without alternatives. Using placeholder text as labels. Touch targets <44x44px. Generic error messages. Custom controls without ARIA/keyboard support.
+- [Accessibility](https://reactnative.dev/docs/accessibility)
+- [AccessibilityInfo](https://reactnative.dev/docs/accessibilityinfo)
+- [Pressable](https://reactnative.dev/docs/pressable)
+- [useWindowDimensions](https://reactnative.dev/docs/usewindowdimensions)

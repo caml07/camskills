@@ -1,89 +1,102 @@
-> **Additional context needed**: performance constraints.
+> **Additional context needed**: target platforms, interaction frequency, and performance constraints.
 
-Use motion to explain state, relationship, and hierarchy, or to create one authored moment the surface has earned. Decoration without purpose is animation debt.
-
----
-
-## Visitor mode
-
-- **Persuade + Experience:** motion may carry the voice. Prefer one rehearsed focal sequence to repeated section reveals.
-- **Operate + Read:** motion serves feedback, state, and continuity. Keep routine transitions fast and do not make users wait through page-load choreography.
-- **Native (`ios` / `android` / `adaptive`):** follow the Motion section of [ios.md](ios.md) or [android.md](android.md), including the platform's Reduce Motion behavior. Do not apply the web tooling below.
+Use motion to explain state, relationship, hierarchy, or one authored moment
+the surface has earned. In React Native, motion must remain native-feeling,
+interruptible, accessible, and smooth on the slowest supported device.
 
 ## Find the job
 
-Inspect the existing motion language, interaction states, target devices, and performance budget. Find only the places where motion would:
+Inspect the existing motion language, navigation transitions, gesture model,
+target devices, and reduced-motion behavior. Add motion only when it:
 
-- acknowledge an action;
-- make a state change or spatial relationship legible;
-- preserve continuity through navigation or layout change;
-- direct attention at a meaningful moment;
-- embody the selected visual world.
+- acknowledges an action;
+- makes a state change or spatial relationship legible;
+- preserves continuity through navigation or layout change;
+- directs attention to a meaningful event;
+- expresses the chosen product world without slowing routine work.
 
-Ask only when a material constraint cannot be inferred. Do not animate a static area merely because it exists.
+Do not add a generic fade-and-rise or a scroll reveal because a screen has empty
+space. Ask only when a material motion constraint cannot be inferred.
 
 ## Set the motion thesis
 
-Write a short plan before implementation:
+Before implementation, name:
 
-- **Focal moment:** the one sequence or interaction that deserves authorship, if any.
-- **Continuity:** the state, layout, or navigation changes that need explanation.
-- **Feedback:** the controls and outcomes that need acknowledgment.
-- **Budget:** which effects may be expensive and how often they run.
+- the focal moment, if there is one;
+- the state or spatial change that needs explanation;
+- the controls that need immediate feedback;
+- the animation budget: frequency, device range, and expensive effects;
+- the reduced-motion alternative.
 
-The focal moment must come from this product and surface concept. A generic fade-and-rise, hover lift, parallax layer, or scroll reveal is not a thesis.
+The default state must remain useful if animation is interrupted, skipped, or
+the app is backgrounded.
 
-## Choose material by meaning
+## Choose the native mechanism
 
-Transform and opacity are reliable foundations, not the entire palette. Choose properties for what the transition communicates:
-
-- **Continuity and relationship:** shared-element motion, FLIP-style transforms, view transitions, or deliberate spatial movement.
-- **Focus and depth:** bounded blur, filter, backdrop, light, or shadow changes.
-- **Reveal and composition:** masks, clip paths, cropping, or controlled occlusion.
-- **Material and energy:** color, gradient position, texture, distortion, or shader effects when the world and runtime support them.
-- **State and feedback:** the smallest change that makes cause and result unmistakable.
-
-Do not stack techniques for spectacle. One strong material idea, carried through the focal sequence and quiet supporting states, is usually enough.
-
-Sibling stagger is appropriate when a list appears as a list. Cap the total delay, and never reinterpret every scrolled section as a staggered list.
+- Use the project's existing Reanimated, Animated, LayoutAnimation, or native
+  navigation primitive. Do not add a dependency for one transition.
+- Use `useAnimatedStyle` with transforms and opacity for frequent feedback when
+  the existing animation system supports UI-thread execution.
+- Use `withTiming` for deliberate, predictable state changes and `withSpring`
+  only when physical settling communicates the interaction. Do not use bounce or
+  elastic motion as a generic personality layer.
+- Animate layout only when the relationship changing is the point. Measure the
+  result on target devices; layout transitions can be more expensive than a
+  transform.
+- Use Gesture Handler for pan, pinch, drag, and swipe when the project already
+  uses it. Provide a visible or accessibility action alternative for important
+  gesture-only operations.
+- Use Skia, Lottie, shaders, or a native module only for a real visual job that
+  the existing stack cannot express, and verify startup, memory, and reduced
+  motion costs before keeping it.
 
 ## Timing and easing
 
-Timing should express distance and consequence:
+Use the smallest duration that preserves comprehension:
 
 | Duration | Typical use |
 |---|---|
-| 100–150 ms | immediate feedback |
-| 150–300 ms | routine state change |
-| 300–500 ms | layout, overlay, or view transition |
-| 500–800 ms | a deliberately authored focal entrance |
+| 100-150 ms | press and immediate feedback |
+| 150-300 ms | routine state change |
+| 300-500 ms | sheet, layout, or navigation transition |
+| 500-800 ms | a rare, authored focal entrance |
 
-Exit faster than entrance. Use natural deceleration such as `cubic-bezier(0.16, 1, 0.3, 1)` for confident arrivals; do not use bounce or elastic curves by reflex. Long feedback feels like latency.
+Exits can be faster than entrances. Use confident deceleration for arrivals and
+avoid making the user wait through choreography before a task is usable.
 
-## Implement to the runtime
+## Accessibility and interruption
 
-- Use CSS transitions and keyframes for declarative state and bounded sequences.
-- Use Web Animations API or the project's existing motion library for interruption, sequencing, and dynamic values.
-- Use View Transitions or shared-element techniques when continuity across states is the point.
-- Use scroll-driven motion only when the scroll relationship itself carries meaning, with a robust fallback.
-- Do not add a dependency for an effect the existing stack can express cleanly.
+Respect `AccessibilityInfo.isReduceMotionEnabled()` and the
+`reduceMotionChanged` event. In the reduced-motion path:
 
-Keep content visible in the default state so failed scripts do not hide the page. Avoid casually animating layout-driving properties such as `width`, `height`, `top`, `left`, and margins; use FLIP, transforms, or grid techniques when appropriate. Bound blur, filter, shadow, canvas, and shader work to isolated regions. Apply `will-change` only during known animation. Measure on target viewports and devices rather than assuming transform means fast.
+- remove parallax, large travel, and decorative loops;
+- keep short feedback when it communicates cause and result;
+- prefer a cross-fade or immediate state change;
+- never hide content until an animation completes;
+- pause or stop nonessential loops when the surface is hidden or backgrounded.
 
-## Accessibility and control
-
-Respect autoplay and sound preferences. Any nonessential loop must stop when offscreen or hidden.
-
-Every web animation needs a `prefers-reduced-motion` path with an intentional alternative. Remove or reduce spatial movement while preserving opacity, color, and state transitions that carry meaning. Reduced motion means fewer and gentler animations, not disabling all motion; feedback that confirms an action should remain legible.
+Motion must not steal screen-reader focus, block the back gesture, or make a
+pressed control look disabled. Dynamic state still needs an accessible name,
+role, state, and announcement independent of the animation.
 
 ## Verify
 
-- The focal motion is specific to the selected world and surface.
-- Every supporting animation explains feedback, state, or relationship.
-- Interruption and repeated use behave correctly.
-- Desktop, mobile, and keyboard paths remain usable.
-- The `prefers-reduced-motion` path reduces movement without erasing meaningful feedback or state changes.
-- Expensive effects stay smooth on the target device.
-- Removing an animation would lose meaning or authored character, not merely decoration.
+1. Test the complete interaction with a finger, including interruption and
+   rapid repetition.
+2. Test iOS and Android platform transitions separately; do not assume a
+   cross-platform animation reads as native on both.
+3. Test low-end Android, 60 Hz, and 120 Hz where supported. Check dropped frames,
+   input latency, memory, and battery cost.
+4. Test VoiceOver/TalkBack, large font scale, dark mode, and reduced motion.
+5. Remove the animation. If no meaning, feedback, continuity, or authored
+   character is lost, do not ship it.
 
-When motion earns its place, hand off to `/impeccable polish` for the final pass.
+When motion earns its place and remains smooth, hand off to
+`/impeccable-rn polish`.
+
+## Official React Native references
+
+- [Animations](https://reactnative.dev/docs/animations)
+- [Pressable](https://reactnative.dev/docs/pressable)
+- [AccessibilityInfo](https://reactnative.dev/docs/accessibilityinfo)
+- [Gesture Responder System](https://reactnative.dev/docs/gesture-responder-system)

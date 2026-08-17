@@ -11,30 +11,42 @@ Product UI's failure mode isn't flatness, it's strangeness without purpose: over
 ## Typography
 
 - **One family is often right.** Product UIs don't need display/body pairing. A well-tuned sans carries headings, buttons, labels, body, data.
-- **Fixed rem scale, not fluid.** Clamp-sized headings don't serve product UI. Users view at consistent DPI, and a fluid h1 that shrinks in a sidebar looks worse, not better.
+- **Token scale, not CSS fluidity.** React Native has no `rem` or `clamp()`;
+  keep semantic roles stable and let font scale and window size drive the
+  native layout decision.
 - **Tighter scale ratio.** 1.125–1.2 between steps is typical. More type elements here than on brand surfaces; exaggerated contrast creates noise.
-- **Line length still applies for prose** (65–75ch). Data and compact UI can run denser; tables at 120ch+ are fine.
+- **Reading measure still applies.** Constrain prose on larger windows and test
+  localization and font scale rather than encoding a web `ch` rule.
 
 ## Color
 
 Product defaults to Restrained. A single surface can earn Committed (a dashboard where one category color carries a report, an onboarding flow with a drenched welcome screen), but Restrained is the floor.
 
-- State-rich semantic vocabulary: hover, focus, active, disabled, selected, loading, error, warning, success, info. Standardize these.
+- State-rich semantic vocabulary: pressed, disabled, selected, busy, expanded,
+  loading, error, warning, success, offline, and permission. Mirror it in
+  `accessibilityState` where the platform supports it.
 - Accent color used for primary actions, current selection, and state indicators only, not decoration.
 - A second neutral layer for sidebars, toolbars, and panels (slightly cooler or warmer than the content surface).
 
 ## Layout
 
-- Responsive behavior is structural (collapse sidebar, responsive table, breakpoint-driven columns), not fluid typography.
+- Responsive behavior is structural. Use `useWindowDimensions()` and window or
+  size-class thresholds to change navigation, columns, and density; do not use
+  device-model checks.
 
 ## Components
 
-Every interactive component has: default, hover, focus, active, disabled, loading, error. Don't ship with half of these.
+Every interactive component has: default, pressed, disabled, busy, loading,
+error, success, and a native accessibility name, role, and state. Add hover or
+hardware-keyboard focus only when the target supports it.
 
 - Skeleton states for loading, not spinners in the middle of content.
 - Empty states that teach the interface, not "nothing here."
 - Consistent affordances across the surface. Same button shape. Same form-control vocabulary. Same icon style.
-- Overlays escape their container. An absolutely positioned dropdown inside an `overflow: hidden` or `overflow: auto` ancestor gets clipped; reach for `<dialog>`, the popover API, `position: fixed`, or a portal.
+- Overlays need an intentional layer and inset model. An absolutely positioned
+  sheet or menu inside a clipped scroll container can become unreachable;
+  prefer the project's native sheet, modal, or portal primitive and test safe
+  areas, z-order, hit testing, and screen-reader isolation.
 
 ## Motion
 

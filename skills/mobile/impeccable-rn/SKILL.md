@@ -1,7 +1,7 @@
 ---
 name: impeccable-rn
-description: Use when the user wants to design, redesign, shape, critique, polish, clarify, distill, harden, optimize, animate, colorize, typeset, layout, extract, or otherwise improve a React Native or Expo frontend interface. Covers mobile app UI, screens, components, forms, settings, onboarding, empty states, navigation, and bottom sheets. Handles UX review, visual hierarchy, information architecture, cognitive load, accessibility (VoiceOver/TalkBack), performance (FlashList, expo-image), responsive behavior (tablet/mobile), theming, anti-patterns, typography (expo-font), fonts, spacing, layout (Flexbox), alignment, color, motion (Reanimated), micro-interactions, UX copy, error states, edge cases, i18n (expo-localization), safe areas, platform-specific code, and reusable design systems or tokens. Also for bland designs that need to become bolder or more delightful, loud designs that should become quieter, or ambitious visual effects with Reanimated/Skia. Not for web-only or backend-only tasks.
-version: 1.0.0-rn
+description: Use when the user wants to design, redesign, shape, critique, polish, clarify, distill, harden, optimize, animate, colorize, typeset, layout, extract, or otherwise improve a React Native or Expo frontend interface. Covers mobile app UI, screens, components, forms, settings, onboarding, empty states, navigation, and bottom sheets. Handles UX review, visual hierarchy, information architecture, cognitive load, accessibility (VoiceOver/TalkBack), performance (FlatList/VirtualizedList, expo-image), responsive behavior (tablet/mobile), theming, anti-patterns, typography (expo-font), fonts, spacing, layout (Flexbox), alignment, color, motion (Reanimated), micro-interactions, UX copy, error states, edge cases, i18n (expo-localization), safe areas, platform-specific code, and reusable design systems or tokens. Also for bland designs that need to become bolder or more delightful, loud designs that should become quieter, or ambitious visual effects with Reanimated/Skia. Not for web-only or backend-only tasks.
+version: 1.1.0-rn
 user-invocable: true
 argument-hint: "[craft|shape · critique|audit|polish · adapt|doctor] [target]"
 license: Apache 2.0
@@ -51,14 +51,15 @@ Produce ready-to-ship, production-grade code. Take no shortcuts unless asked. Ev
 - `flex: 1` is the standard way to fill available space. Combine with `gap` for consistent spacing.
 - Cards: use consistent `borderRadius` (card: 16, button: 12, input: 10, chip: 999). Build a semantic z-index scale if using `position: 'absolute'`.
 - No `overflow: 'hidden'` on containers with `position: 'absolute'` children — they clip.
-- For lists, use `FlashList` (v2, no `estimatedItemSize` needed). Never `ScrollView.map()` for more than ~5 items.
-- **RN ≥0.85**: `StyleSheet.absoluteFillObject` removed — use `StyleSheet.absoluteFill` instead.
+- For long or dynamic lists, use `FlatList`, `SectionList`, or `VirtualizedList`; `ScrollView` renders all children at once. Use `FlashList` only when the project already has it or profiling justifies it.
+- Keep list rows light, use stable keys, and provide `getItemLayout` for fixed-size rows. Tune `initialNumToRender`, `maxToRenderPerBatch`, `updateCellsBatchingPeriod`, and `windowSize` against blank areas, memory, and press responsiveness instead of cargo-culting values.
+- Current RN docs expose `StyleSheet.absoluteFill` for absolute overlays. Use it in new code; do not introduce the legacy `absoluteFillObject` pattern.
 
 #### Motion (Reanimated 4)
 
 - Use `useAnimatedStyle` + `withSpring` / `withTiming` on `Animated.View`. Never animate layout properties directly.
 - Easing: exponential (ease-out-quart/quint/expo). No bounce, no elastic.
-- Reduced motion: check `AccessibilityInfo.isReduceMotionEnabled()` and skip heavy animations.
+- Reduced motion: check `AccessibilityInfo.isReduceMotionEnabled()` and listen for `reduceMotionChanged` when the screen remains mounted; skip heavy animations without hiding meaningful state feedback.
 - Layout animations: `EntryExitTransition.entering().exiting()` for mount/unmount.
 - Touch feedback: scale transform on Pressable using `useAnimatedStyle` + `withSpring`.
 - Motion conveys state, not decoration. 150–250ms for most transitions. Users are in flow; don't make them wait.
@@ -67,6 +68,7 @@ Produce ready-to-ship, production-grade code. Take no shortcuts unless asked. Ev
 
 - Every screen uses `useSafeAreaInsets()` for top/bottom padding.
 - Tab bars account for bottom inset (home indicator).
+- Use `useWindowDimensions()` for responsive layout. It updates on window-size and font-scale changes; do not freeze `Dimensions.get()` at module load for layout decisions.
 - Use `Platform.OS` / `Platform.select` for platform-specific code.
 - `KeyboardAvoidingView` for forms: `behavior={Platform.OS === 'ios' ? 'padding' : 'height'}`.
 - **New Architecture is the only config since RN 0.82** — `newArchEnabled` is ignored/always-on; assume Fabric + TurboModules. Migrate anything that assumes the legacy architecture.
@@ -74,6 +76,15 @@ Produce ready-to-ship, production-grade code. Take no shortcuts unless asked. Ev
 - **RN ≥0.84 requires Node ≥22.11.**
 
 #### Interaction
+
+##### Accessibility contract
+
+- Every custom control has a native `accessibilityRole`, an explicit label when its visible content is not enough, and synchronized `accessibilityState` / `accessibilityValue`.
+- Use `accessibilityHint` only for non-obvious outcomes; do not repeat the label.
+- Use `accessibilityActions` + `onAccessibilityAction` for important custom actions such as delete, expand, collapse, increment, and decrement.
+- Announce dynamic loading, error, success, and permission changes with `accessibilityLiveRegion="polite"` on Android or `AccessibilityInfo.announceForAccessibility()` when appropriate.
+- For overlays, keep the accessible tree inside the active modal or sheet: `accessibilityViewIsModal` on iOS and `importantForAccessibility="no-hide-descendants"` on obscured Android siblings when required.
+- Test VoiceOver and TalkBack with large text, reduced motion, dark mode, and failure states. Read [reference/interaction-design.md](reference/interaction-design.md) for the full native interaction contract.
 
 #### Expo SDK 56
 
