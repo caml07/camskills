@@ -43,7 +43,7 @@ function detectorSection(raw) {
   return raw && raw.detector && typeof raw.detector === 'object' && !Array.isArray(raw.detector) ? raw.detector : null;
 }
 
-const DETECTOR_CONFIG_KEYS = new Set(['ignoreRules', 'ignoreFiles', 'ignoreValues', 'designSystem', 'advisoryRules']);
+const DETECTOR_CONFIG_KEYS = new Set(['ignoreRules', 'ignoreFiles', 'ignoreValues', 'designSystem']);
 
 const DEFAULT_DETECTION_CONFIG = Object.freeze({
   ignoreRules: [],
@@ -71,11 +71,6 @@ function cloneRawDetectionConfig() {
 
 function applyDetectionConfigSource(config, raw) {
   if (!raw || typeof raw !== 'object') return config;
-  // Advisory rules are opt-in for the design hook; the CLI carries the setting
-  // so config round-trips (e.g. `impeccable hooks ignore-value`) preserve it.
-  if (raw.advisoryRules === 'include' || raw.advisoryRules === 'exclude') {
-    config.advisoryRules = raw.advisoryRules;
-  }
   if (raw.designSystem && typeof raw.designSystem === 'object' && !Array.isArray(raw.designSystem)) {
     config.designSystem = {
       ...config.designSystem,
@@ -156,9 +151,6 @@ function normalizeDetectionConfigForWrite(config) {
     out.ignoreFiles = uniqueStrings(config.ignoreFiles.filter(v => typeof v === 'string' && v.trim()).map(v => v.trim()));
   }
   out.ignoreValues = normalizeIgnoreValueEntries(config?.ignoreValues || []);
-  if (config?.advisoryRules === 'include' || config?.advisoryRules === 'exclude') {
-    out.advisoryRules = config.advisoryRules;
-  }
   if (config?.designSystem && typeof config.designSystem === 'object' && !Array.isArray(config.designSystem)) {
     out.designSystem = {
       enabled: config.designSystem.enabled === false ? false : true,
@@ -206,10 +198,10 @@ function parseIgnoreColor(value) {
   if (rgb) {
     const parts = splitColorArgs(rgb[1]);
     if (parts.length < 3 || parts.length > 4) return null;
-    const r = parseColorChannel(parts[0], COLOR_CHANNEL_FORMATS.rgb);
-    const g = parseColorChannel(parts[1], COLOR_CHANNEL_FORMATS.rgb);
-    const b = parseColorChannel(parts[2], COLOR_CHANNEL_FORMATS.rgb);
-    const a = parts[3] === undefined ? 1 : parseColorChannel(parts[3], COLOR_CHANNEL_FORMATS.alpha);
+    const r = parseRgbChannel(parts[0]);
+    const g = parseRgbChannel(parts[1]);
+    const b = parseRgbChannel(parts[2]);
+    const a = parts[3] === undefined ? 1 : parseAlphaChannel(parts[3]);
     if ([r, g, b, a].some((v) => v === null)) return null;
     return { r, g, b, a };
   }
@@ -218,10 +210,10 @@ function parseIgnoreColor(value) {
   if (hsl) {
     const parts = splitColorArgs(hsl[1]);
     if (parts.length < 3 || parts.length > 4) return null;
-    const h = parseColorChannel(parts[0], COLOR_CHANNEL_FORMATS.hue);
-    const s = parseColorChannel(parts[1], COLOR_CHANNEL_FORMATS.percent);
-    const l = parseColorChannel(parts[2], COLOR_CHANNEL_FORMATS.percent);
-    const a = parts[3] === undefined ? 1 : parseColorChannel(parts[3], COLOR_CHANNEL_FORMATS.alpha);
+    const h = parseHueChannel(parts[0]);
+    const s = parsePercentChannel(parts[1]);
+    const l = parsePercentChannel(parts[2]);
+    const a = parts[3] === undefined ? 1 : parseAlphaChannel(parts[3]);
     if ([h, s, l, a].some((v) => v === null)) return null;
     return hslToRgb(h, s, l, a);
   }
@@ -230,13 +222,18 @@ function parseIgnoreColor(value) {
 }
 
 function parseHexIgnoreColor(hex) {
-  const expanded = hex.length <= 4
-    ? [...hex].map((digit) => digit.repeat(2)).join('')
-    : hex;
-  const [r, g, b, alpha = 255] = expanded
-    .match(/../g)
-    .map((channel) => Number.parseInt(channel, 16));
-  return { r, g, b, a: alpha / 255 };
+  if (hex.length === 3 || hex.length === 4) {
+    const r = parseInt(hex[0] + hex[0], 16);
+    const g = parseInt(hex[1] + hex[1], 16);
+    const b = parseInt(hex[2] + hex[2], 16);
+    const a = hex.length === 4 ? parseInt(hex[3] + hex[3], 16) / 255 : 1;
+    return { r, g, b, a };
+  }
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  const a = hex.length === 8 ? parseInt(hex.slice(6, 8), 16) / 255 : 1;
+  return { r, g, b, a };
 }
 
 function splitColorArgs(body) {
@@ -254,34 +251,47 @@ function splitColorArgs(body) {
   return text.replace(/\s*\/\s*/g, ' / ').split(/\s+/).filter((part) => part && part !== '/');
 }
 
-const CSS_NUMBER_RE = /^(-?\d*\.?\d+)(%|deg|rad|turn|grad)?$/;
-const identity = (value) => value;
-const COLOR_CHANNEL_FORMATS = {
-  rgb: { units: { '': identity, '%': (value) => value * 2.55 }, min: 0, max: 255, round: true },
-  alpha: { units: { '': identity, '%': (value) => value / 100 }, min: 0, max: 1 },
-  hue: {
-    units: {
-      '': identity,
-      deg: identity,
-      rad: (value) => value * (180 / Math.PI),
-      turn: (value) => value * 360,
-      grad: (value) => value * 0.9,
-    },
-  },
-  percent: { units: { '%': (value) => value / 100 }, min: 0, max: 1 },
-};
-
-function parseColorChannel(raw, { units, min = -Infinity, max = Infinity, round = false }) {
+function parseRgbChannel(raw) {
   const text = String(raw || '').trim();
-  const match = text.match(CSS_NUMBER_RE);
+  const match = text.match(/^(-?\d*\.?\d+)(%)?$/);
   if (!match) return null;
-  const convert = units[match[2] || ''];
-  if (!convert) return null;
-  const number = Number.parseFloat(match[1]);
-  if (!Number.isFinite(number)) return null;
-  const value = convert(number);
-  if (value < min || value > max) return null;
-  return round ? Math.round(value) : value;
+  const value = Number.parseFloat(match[1]);
+  if (!Number.isFinite(value)) return null;
+  const scaled = match[2] ? value * 2.55 : value;
+  if (scaled < 0 || scaled > 255) return null;
+  return Math.round(scaled);
+}
+
+function parseAlphaChannel(raw) {
+  const text = String(raw || '').trim();
+  const match = text.match(/^(-?\d*\.?\d+)(%)?$/);
+  if (!match) return null;
+  const value = Number.parseFloat(match[1]);
+  if (!Number.isFinite(value)) return null;
+  const alpha = match[2] ? value / 100 : value;
+  return alpha >= 0 && alpha <= 1 ? alpha : null;
+}
+
+function parseHueChannel(raw) {
+  const text = String(raw || '').trim();
+  const match = text.match(/^(-?\d*\.?\d+)(deg|rad|turn|grad)?$/);
+  if (!match) return null;
+  const value = Number.parseFloat(match[1]);
+  if (!Number.isFinite(value)) return null;
+  const unit = match[2] || 'deg';
+  if (unit === 'turn') return value * 360;
+  if (unit === 'rad') return value * (180 / Math.PI);
+  if (unit === 'grad') return value * 0.9;
+  return value;
+}
+
+function parsePercentChannel(raw) {
+  const text = String(raw || '').trim();
+  const match = text.match(/^(-?\d*\.?\d+)%$/);
+  if (!match) return null;
+  const value = Number.parseFloat(match[1]);
+  if (!Number.isFinite(value)) return null;
+  return value >= 0 && value <= 100 ? value / 100 : null;
 }
 
 function hslToRgb(hue, saturation, lightness, alpha) {
@@ -336,15 +346,11 @@ export function normalizeIgnoreValueEntries(entries) {
       ...(Array.isArray(entry.files) ? entry.files.filter(v => typeof v === 'string' && v.trim()).map(v => v.trim()) : []),
     ]);
     if (files.length > 0) normalized.files = files;
-    // Key order is rule, value, files, createdAt, reason and must stay that way:
-    // normalizing runs on every write, so emitting a different order than the one
-    // already on disk rewrites every untouched entry and churns the diff. Keep in
-    // step with normalizeIgnoreValueEntries in skill/scripts/hook-lib.mjs.
-    if (typeof entry.createdAt === 'string' && entry.createdAt.trim()) {
-      normalized.createdAt = entry.createdAt.trim();
-    }
     if (typeof entry.reason === 'string' && entry.reason.trim()) {
       normalized.reason = entry.reason.trim();
+    }
+    if (typeof entry.createdAt === 'string' && entry.createdAt.trim()) {
+      normalized.createdAt = entry.createdAt.trim();
     }
     out.push(normalized);
   }
@@ -363,9 +369,7 @@ function mergeIgnoreValues(existing, incoming) {
 }
 
 function ignoreValueFilesKey(files) {
-  // Sort before joining: a scope is a set, so an entry already on disk in another
-  // order must compare equal rather than dedup as two distinct entries.
-  return Array.isArray(files) && files.length > 0 ? [...files].sort().join('\x1f') : '';
+  return Array.isArray(files) && files.length > 0 ? files.join('\x1f') : '';
 }
 
 // Glob -> RegExp. Supports `**`, `*`, `?`, and `{a,b}` alternation.
@@ -455,13 +459,11 @@ export function filterDetectionFindings(findings, config) {
 function isIgnoredFindingValue(finding, ignoreValues) {
   if (!Array.isArray(ignoreValues) || ignoreValues.length === 0) return false;
   const rule = normalizeIgnoreRule(finding.antipattern);
-  if (!rule) return false;
-  // File-scoped wildcards suppress rules with no extractable value, such as side-tab.
   const value = extractFindingIgnoreValue(finding);
+  if (!rule || !value) return false;
   return ignoreValues.some((entry) => {
-    if (entry.rule !== rule) return false;
     const wildcardValue = entry.value === '*';
-    if (!wildcardValue && (!value || !ignoreValueMatches(rule, entry.value, value))) return false;
+    if (entry.rule !== rule || (!wildcardValue && !ignoreValueMatches(rule, entry.value, value))) return false;
     if (!Array.isArray(entry.files) || entry.files.length === 0) return !wildcardValue;
     return findingMatchesScopedIgnoreFile(finding, entry.files);
   });
@@ -490,7 +492,6 @@ export function extractFindingIgnoreValue(finding) {
     'design-system-font',
     'design-system-color',
     'design-system-radius',
-    'design-system-font-size',
   ]);
   if (!directValueRules.has(rule)) return '';
   return normalizeIgnoreValue(extractFindingIgnoreValueRaw(finding, rule));
@@ -510,9 +511,6 @@ function extractFindingIgnoreValueRaw(finding, rule = normalizeIgnoreRule(findin
 
     const primary = text.match(/Primary font:\s*([^()\n;]+)/i);
     if (primary) return cleanIgnoreValueDisplay(primary[1]);
-
-    const googleLabel = text.match(/Google Fonts:\s*([^()\n;]+)/i);
-    if (googleLabel) return cleanIgnoreValueDisplay(googleLabel[1]);
 
     const family = text.match(/font-family\s*:\s*["']?([^'",;\n]+)/i);
     if (family) return cleanIgnoreValueDisplay(family[1]);
