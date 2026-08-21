@@ -11,12 +11,18 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | Skill | Descripción |
 |-------|-------------|
 | `eas-app-stores` | Deploy de apps Expo a tiendas con EAS (build + submit, eas.json) |
+| `eas-hosting` | Hosting de proyectos Expo con EAS |
+| `eas-observe` | Observabilidad y métricas de EAS |
 | `eas-simulator` | Ejecutar y depurar apps Expo en simuladores iOS/Android con EAS |
+| `eas-update-insights` | Insights de EAS Update |
+| `eas-workflows` | Workflows de EAS |
 | `expo-app-clip` | App Clips iOS integrados con proyectos Expo |
 | `expo-brownfield` | Integrar Expo dentro de una app nativa existente |
 | `expo-data-fetching` | Networking/API en Expo: fetch, React Query, offline, caching |
 | `expo-dev-client` | Dev clients Expo para probar código nativo en dispositivos |
+| `expo-dom` | Integración Expo DOM |
 | `expo-examples` | Encontrar ejemplos oficiales de Expo antes de inventar una implementación |
+| `expo-migrate-module` | Migrar módulos Expo |
 | `expo-module` | Crear módulos nativos Expo y config plugins |
 | `expo-native-ui` | UI nativa Expo: HIG, controles nativos, animaciones, storage |
 | `expo-project-structure` | Estructura y límites recomendados para proyectos Expo |
@@ -75,6 +81,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `notes-vault` | Creación de notas en Obsidian vault |
 | `skill-creator` | Creación de skills (flujo legacy con scripts) |
 | `tanstack-query` | TanStack Query patterns y best practices |
+| `security-audit` | Auditoría de seguridad de aplicaciones, APIs y clientes |
 
 Origen y estado de cada skill (own / third-party / fork / plugin): ver `UPSTREAM.md`.
 

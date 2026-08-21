@@ -5,14 +5,20 @@
 | context7-mcp | Context7 (Upstash) | third-party | `@upstash/context7-mcp` (npm) | `npx ctx7 setup --opencode` |
 | doc-system | psistema/caml07 | own | — | edición directa |
 | eas-app-stores | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-app-stores -g -y` |
+| eas-hosting | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-hosting -g -y` |
+| eas-observe | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-observe -g -y` |
 | eas-simulator | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-simulator -g -y` |
+| eas-update-insights | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-update-insights -g -y` |
+| eas-workflows | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-workflows -g -y` |
 | emil-design-eng | psistema/caml07 (basado en Emil Kowalski) | own | — | edición directa |
 | expo-data-fetching | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-data-fetching -g -y` |
 | expo-dev-client | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-dev-client -g -y` |
+| expo-dom | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-dom -g -y` |
 | expo-app-clip | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-app-clip -g -y` |
 | expo-brownfield | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-brownfield -g -y` |
 | expo-examples | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-examples -g -y` |
 | expo-module | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-module -g -y` |
+| expo-migrate-module | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-migrate-module -g -y` |
 | expo-native-ui | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-native-ui -g -y` |
 | expo-project-structure | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-project-structure -g -y` |
 | expo-router | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-router -g -y` |
@@ -37,6 +43,7 @@
 | tanstack-query | psistema/caml07 | own | — | edición directa |
 | test-first | psistema/caml07 | own | — | edición directa |
 | vercel-react-native-skills | vercel-labs | third-party | `vercel-labs/agent-skills` | `npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-native-skills -g -y` |
+| security-audit | Cloudflare | third-party | `cloudflare/security-audit-skill` | `npx skills update security-audit -g -y` |
 
 **Legend:**
 - `own` — skill original, sin upstream externo
