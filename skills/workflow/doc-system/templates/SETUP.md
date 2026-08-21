@@ -30,7 +30,7 @@ npm install
 ```
 
 ## 3. Configuración
-### 3.1 Variables de entorno (nombres فقط)
+### 3.1 Variables de entorno (nombres únicamente)
 Copiar `.env.example` a `.env` y completar:
 
 | Variable | Descripción | Requerida | Ejemplo (formato) |
