@@ -1,46 +1,32 @@
-# DOC-{NNN}: {ProjectName} — Architecture
+---
+id: DOC-{NNN}
+tipo: ARCHITECTURE
+estado: 📜 legacy — reemplazado por TRD
+idioma: es
+verificado_el: {YYYY-MM-DD}
+relaciones: [DOC-{TRD_ID}]
+evidencia: []
+---
 
-## Stack
+# DOC-{NNN}: {Proyecto} — Architecture (LEGACY)
 
-| Capa | Tecnología |
-|------|-----------|
-| Framework | |
-| Navigation | |
-| State management | |
-| Database | |
-| API client | |
-| Auth | |
-| Icons | |
-| Animations | |
-| Testing | |
+> **Este documento es histórico.** La baseline técnica actual vive en `DOC-XXX-TRD.md`.
+> Mantener solo para referencia de decisiones pasadas. No actualizar.
 
-## Platform
+## Stack (ver TRD)
+Ver `DOC-XXX-TRD.md` sección 1.
 
-- Mobile / Web / Desktop
-- OS versions
-- Device targets
+## Routing (ver TRD)
+Ver `DOC-XXX-TRD.md` sección 2.
 
-## Routing Architecture
+## SQLite Schema (ver TRD + OFFLINE)
+Ver `DOC-XXX-TRD.md` sección 4 y `DOC-XXX-OFFLINE.md` sección 2.
 
-```
-app/
-  _layout.tsx
-  ...
-```
+## Data Flow (ver TRD + OFFLINE)
+Ver `DOC-XXX-TRD.md` sección 7 y `DOC-XXX-OFFLINE.md` sección 3.
 
-## Data Schema
+## Decisiones Clave (ver ADRs)
+Ver `DOC-XXX-ADR-*.md` — un archivo por decisión.
 
-```
--- Main tables
-...
-```
-
-## Data Flow
-
-```
-ASCII diagram or reference to PUML in docs/diagrams/
-```
-
-## Key Decisions
-
-- Links to relevant ADRs
+---
+*Documento legacy — no modificar. Crear TRD + ADRs para cambios arquitectónicos.*

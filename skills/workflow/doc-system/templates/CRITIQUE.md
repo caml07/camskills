@@ -1,32 +1,59 @@
-# DOC-{NNN}: Critique — {Area}
+---
+id: DOC-{NNN}
+tipo: CRITIQUE
+estado: vigente
+idioma: es
+verificado_el: {YYYY-MM-DD}
+relaciones: [DOC-{DESIGN_ID}, DOC-{TRD_ID}]
+evidencia: []
+---
 
-## Heurísticas
+# DOC-{NNN}: Critique — {Área}
 
-| # | Heurística | Score | Problema |
-|---|------------|-------|----------|
-| 1 | Visibility of System Status | /3 | |
-| 2 | User Control and Freedom | /3 | |
-| 3 | Error Prevention | /3 | |
-| 4 | Error Recovery | /3 | |
-| 5 | Consistency and Standards | /3 | |
-| **Total** | | **/15** | |
+> Revisión UX/UI con heurísticas accionables. Sin scores decorativos.
 
-Solo las 5 heurísticas que generan acción. Si no hay issue en una, skip — no llenar por llenar.
+## Heurísticas (solo las que generan acción)
+| # | Heurística | Problema detectado | Acción concreta | Evidencia |
+|---|------------|-------------------|-----------------|-----------|
+| 1 | Visibility of System Status | | | |
+| 2 | User Control and Freedom | | | |
+| 3 | Error Prevention | | | |
+| 4 | Error Recovery | | | |
+| 5 | Consistency and Standards | | | |
 
-## Platform Audit
+> Solo completar las que tengan issue real. Si no hay problema, omitir — no llenar por llenar.
 
-| Check | Pasa? | Si no, qué hacer |
-|-------|-------|-----------------|
-| Touch targets ≥ 44pt | | |
-| Safe areas correctas | | |
-| Virtualized lists (FlashList) | | |
-| Loading states (skeleton) | | |
-| Empty states | | |
-| Error states | | |
-| Dark mode | | |
+## Platform Audit (RN/Expo)
+| Check | Pasa? | Si falla → qué hacer | Evidencia |
+|-------|-------|---------------------|-----------|
+| Touch targets ≥ 44pt | | | |
+| Safe areas correctas (`useSafeAreaInsets`) | | | |
+| Virtualized lists (`FlashList`/`FlatList`) | | | |
+| Loading states (skeleton + shimmer) | | | |
+| Empty states (icon + title + message) | | | |
+| Error states (message + retry) | | | |
+| Dark mode tokens (light/dark palette) | | | |
+| Reduced motion respetado | | | |
+| Accesibilidad (labels, roles, hints) | | | |
 
-## Issues
+## Issues Prioritarios
+- **P1:** (bloquea uso / accesibilidad crítica)
+- **P2:** (degrada UX / inconsistencia)
+- **P3:** (pulido / nice-to-have)
 
-- **P1:** 
-- **P2:** 
-- **P3:**
+## AI Slop Check
+| Señal | Presente? | Qué cambiar |
+|-------|-----------|-------------|
+| Plain spinners | | Skeleton + shimmer |
+| `Alert.alert()` | | Bottom sheet + gesture |
+| Flat uniform cards | | borderRadius + themed shadow |
+| `ScrollView.map()` | | `FlashList` |
+| `<Image>` sin placeholder | | `expo-image` + blurhash |
+| Sin dark mode tokens | | Light/dark en theme file |
+| Spacing aleatorio | | Token system |
+| Default RN typography | | Token scale hierarchy |
+| Sin touch feedback | | Pressable scale (Reanimated) |
+| Estados no cubiertos | | Skeleton → Empty → Error → Success → Offline |
+
+---
+*Crear bajo demanda. Vincular a DESIGN doc para tokens y TRD para plataforma.*

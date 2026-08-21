@@ -1,49 +1,28 @@
-# DOC-{NNN}: {ProjectName} — FR / NFR
-
-**Documento:** FR / NFR
-**Proyecto:** {ProjectName}
-**Stack:** {stack}
-
+---
+id: DOC-{NNN}
+tipo: FR-NFR
+estado: 📜 legacy — reemplazado por FRD (DOC-XXX-FRD.md)
+idioma: es
+verificado_el: {YYYY-MM-DD}
+relaciones: []
+evidencia: []
 ---
 
-## Actores
+# DOC-{NNN}: {ProjectName} — FR / NFR (LEGACY)
 
-| Actor | Descripción |
-|-------|-------------|
-| | |
+> **Legacy.** Reemplazado por **FRD** (`DOC-XXX-FRD.md`) con trazabilidad PRD→FRD→Test.
 
----
+## Actores (ver FRD)
+Ver `DOC-XXX-FRD.md` sección 1.
 
-## FR — Requisitos Funcionales
+## FR / NFR (ver FRD)
+Ver `DOC-XXX-FRD.md` secciones 1 y 2.
 
-| ID | Nombre | Estado | Descripción |
-| -- | ------ | ------ | ----------- |
-| FR-01 | | | |
-| FR-02 | | | |
+## Flujo actual (ver FLOW docs)
+Ver `DOC-XXX-FLOW-*.md`.
 
----
-
-## NFR — Requisitos No Funcionales
-
-| ID | Nombre | Estado | Descripción |
-| -- | ------ | ------ | ----------- |
-| NFR-01 | | | |
-| NFR-02 | | | |
+## Fixes aplicados (ver ADRs / TDDs)
+Ver `DOC-XXX-ADR-*.md` y `DOC-XXX-TDD-*.md`.
 
 ---
-
-## Flujo actual
-
-```
-ASCII flow diagram
-```
-
-1. Paso 1
-2. Paso 2
-...
-
----
-
-## Fixes aplicados
-
-- Issue: fix applied
+*Legacy — no crear nuevos. Usar FRD + FLOW + TDD + ADR.*

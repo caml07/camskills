@@ -1,16 +1,23 @@
-# DOC-{NNN}: Decisiones de Arquitectura — {ProjectName}
+---
+id: DOC-{NNN}
+tipo: DECISIONS
+estado: 📜 legacy — reemplazado por ADRs individuales (DOC-XXX-ADR-*.md)
+idioma: es
+verificado_el: {YYYY-MM-DD}
+relaciones: []
+evidencia: []
+---
 
-> **YAGNI check:** ¿Esta decisión necesita ADR?
-> Si es trivial (cambiar versión de lib, renombrar variable, refactor interno sin impacto
-> en API/UX/data), skip — una línea en el commit message basta. ADR es para decisiones
-> con consecuencias medibles: cambio de stack, schema de DB, patrones de estado, arquitectura.
+# DOC-{NNN}: Decisiones de Arquitectura — {Proyecto} (LEGACY)
 
-## ADR-001: {Título}
+> **Este documento es histórico.** Los ADRs actuales son archivos individuales: `docs/DOC-XXX-ADR-{slug}.md`.
+> No agregar decisiones aquí. Crear nuevo archivo ADR con `/doc:adr "Título"`.
 
-**Contexto:** Por qué se necesita. Alternativas consideradas (máximo 3, en una línea cada una).
+## Registro Histórico (no modificar)
+| ADR | Título | Estado | Fecha | Sustituido por |
+|-----|--------|--------|-------|----------------|
+| ADR-001 | | | | |
+| ADR-002 | | | | |
 
-**Decisión:** Qué se eligió. Una frase. Si no cabe en una frase, reconsiderar si es una decisión o un diseño.
-
-**Impacto:**
-- Archivos tocados, dependencias cambiadas
-- `ponytail: <qué se omitió deliberadamente>, agregar cuando <condición>`
+---
+*Legacy — usar `/doc:adr` para nuevos ADRs (un archivo por decisión).*

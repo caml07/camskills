@@ -1,4 +1,11 @@
 ---
+id: DOC-{NNN}
+tipo: DESIGN
+estado: vigente
+idioma: es
+verificado_el: {YYYY-MM-DD}
+relaciones: [DOC-{TRD_ID}]
+evidencia: []
 name: {ProjectName}
 description: {Brief description}
 colorStrategy: Restrained | Committed | Full Palette | Drenched

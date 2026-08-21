@@ -1,53 +1,57 @@
 ---
 name: doc-system
 description: >-
-  Documentación técnica estructurada con el sistema DOC-NNN-TYPE (propio).
-  Tipos: FR-NFR, ADR, ARCHITECTURE, DESIGN, FLUJO (con PUML), API, RUNBOOK, SETUP,
-  PLAN, AUDIT, CRITIQUE, OFFLINE. Soporta /doc:init, /doc:new, /doc:adr, /doc:diagram,
-  /doc:audit, /doc:status. Detecta el idioma del proyecto (español/inglés).
-  Compatible con notes-vault para persistir decisiones importantes.
-  Activar cuando el usuario pida crear, actualizar, auditar o iniciar documentación
-  técnica del proyecto, o mencione DOC-NNN, ADR, FR-NFR, PUML, diagramas de flujo.
-  (Para definir modelo de dominio, lenguaje ubicuo o pasar una conversación a spec
-  con issue tracker, usa 'domain-modeling' y 'to-spec' de la suite engineering.)
+  Documentación técnica estructurada con el sistema DOC-NNN-TYPE.
+  Flujo canónico: BRD → PRD → FRD → TRD → TDD → ADR.
+  Soporta Mermaid embebido en Markdown, trazabilidad por IDs, sincronización
+  read-only contra código (doc:sync --check), y actualización controlada
+  de evidencia técnica (doc:sync --apply). Español por defecto.
+  Activa cuando el usuario pida crear, auditar, sincronizar o iniciar
+  documentación del proyecto, o mencione DOC-NNN, ADR, BRD, PRD, FRD,
+  TRD, TDD, Mermaid.
 license: MIT
 compatibility: opencode
 ---
+
 # Doc System
 
-Crea y mantiene documentación técnica usando el sistema de tipado `DOC-NNN-TYPE`.
-Cada documento tiene tipo (FR-NFR, ADR, ARCHITECTURE, DESIGN, FLUJO, API, RUNBOOK,
-SETUP, PLAN, AUDIT, CRITIQUE, OFFLINE) y un número secuencial auto-asignado.
+Crea y mantiene documentación técnica con ciclo de vida gobernado:
+**BRD → PRD → FRD → TRD → TDD → ADR**.
 
-## Por qué este sistema
+- **BRD** — Business Requirements Document: problema, objetivos, actores, métricas, alcance, riesgos.
+- **PRD** — Product Requirements Document: comportamientos, journeys, UX, criterios de aceptación, scope por release.
+- **FRD** — Functional Requirements Document: requisitos funcionales/no funcionales, reglas de negocio, casos borde, trazabilidad a PRD.
+- **TRD** — Technical Requirements Document: arquitectura, stack, persistencia, API, seguridad, build, pruebas — baseline técnico.
+- **TDD** — Technical Design Document: diseño técnico de un cambio concreto, archivos reales, migración, rollback, pruebas y aceptación.
+- **ADR** — Architecture Decision Record: decisión técnica significativa con contexto, opciones, consecuencias y evidencia.
 
-La documentación técnica muere cuando:
-- No hay un lugar predecible donde encontrarla → `docs/DOC-NNN-TYPE.md`
-- No hay convención de tipos → cada doc type tiene un template con secciones obligatorias
-- No se actualiza → `/doc:audit` detecta docs desactualizados contra código real
-- No hay diagramas → PUML en `docs/diagrams/` versionable y generable desde texto
+> **Nota:** TDD = *Technical Design Document*, no Test-Driven Development.
 
-Cada tipo resuelve una pregunta distinta del proyecto. Usar el tipo correcto
-hace que la info sea fácil de encontrar y mantener.
+Cada documento vive en `docs/DOC-NNN-TYPE.md` con frontmatter de control. Diagramas en `docs/diagrams/<nombre>.md` con Mermaid nativo (sin dependencias externas).
 
 ---
 
-## Doc Types Catalog
+## Catálogo de Tipos (Canónicos)
 
-| Tipo | Archivo | Para qué | Secciones clave |
-|------|---------|----------|-----------------|
-| **ARCHITECTURE** | `DOC-NNN-ARCHITECTURE.md` | Stack, routing, schema, data flow | Stack table, routing tree, SQL schema, data flow diagram |
-| **FR-NFR** | `DOC-NNN-FR-NFR.md` | Requerimientos funcionales y no funcionales | Actores, FR table, NFR table, flujo actual |
-| **ADR / DECISIONS** | `DOC-NNN-DECISIONS.md` | Architecture Decision Records | Contexto, Decisión, Cambios, Consecuencias, Token flow |
-| **DESIGN** | `DOC-NNN-DESIGN.md` | Design tokens, UI system | YAML frontmatter, colors, typography, spacing, dark mode |
-| **FLUJO** | `DOC-NNN-FLOW.md` + `.puml` | Diagramas de flujo con PUML | Descripción, diagrama PUML, actores, flujo paso a paso |
-| **API** | `DOC-NNN-API.md` | Endpoints, request/response | Endpoints table, request/response schemas, auth, errores |
-| **RUNBOOK** | `DOC-NNN-RUNBOOK.md` | Comandos y operaciones diarias | Dev commands, deploy, DB scripts, troubleshooting |
-| **SETUP** | `DOC-NNN-SETUP.md` | Guía de instalación | Prerequisitos, install, config, dev users |
-| **PLAN** | `DOC-NNN-PLAN.md` | Planes de implementación | Objetivo, fases, TDD steps, flujo nuevo, archivos a tocar |
-| **AUDIT** | `DOC-NNN-AUDIT.md` | Auditorías de código/plataforma | Hallazgos por severidad, checklist, discrepancias, fix plan |
-| **CRITIQUE** | `DOC-NNN-CRITIQUE.md` | Revisiones de UI/UX | Design health score, heuristics, RN audit, priority issues |
-| **OFFLINE** | `DOC-NNN-OFFLINE.md` | Arquitectura offline | Schema, sync lifecycle, conflict resolution, queue |
+| Tipo | Archivo | Propósito | Secciones obligatorias |
+|------|---------|-----------|------------------------|
+| **BRD** | `DOC-NNN-BRD.md` | Requisitos de negocio | Problema, Objetivos, Actores, Métricas, Alcance/No-alcance, Riesgos, Supuestos, Aprobador |
+| **PRD** | `DOC-NNN-PRD.md` | Requisitos de producto | Journeys, Comportamientos, Criterios de aceptación, Dependencias, Enlaces BRD, Prioridades, Scope por release |
+| **FRD** | `DOC-NNN-FRD.md` | Requisitos funcionales | FR/NFR con IDs, Reglas, Casos borde, Estado (planificado/implementado/verificado), Trazabilidad PRD→FRD→Test |
+| **TRD** | `DOC-NNN-TRD.md` | Requisitos técnicos | Stack, Arquitectura, Persistencia, API, Seguridad, Offline, Build, Testing, Evidencia de implementación |
+| **TDD** | `DOC-NNN-TDD-<nombre>.md` | Diseño técnico de cambio | FRD/TRD afectados, Archivos reales, Diseño, Migración/Rollback, Offline/Errores, Pruebas, Aceptación |
+| **ADR** | `DOC-NNN-ADR-<título>.md` (uno por decisión) | Registro de decisiones | Contexto, Opciones, Decisión, Consecuencias, Enlaces TDD/TRD, Estado (activo/sustituido/histórico) |
+
+## Tipos de Referencia (Operativos)
+
+| Tipo | Archivo | Propósito |
+|------|---------|-----------|
+| **SETUP** | `DOC-NNN-SETUP.md` | Instalación, prerequisitos, variables (solo nombres), verificación |
+| **RUNBOOK** | `DOC-NNN-RUNBOOK.md` | Comandos diarios, deploy, DB scripts, troubleshooting — solo scripts comprobados en `package.json` |
+| **API** | `DOC-NNN-API.md` | Referencia de comandos/endpoints: operación, transporte, auth, request/response, errores, ejemplos |
+| **OFFLINE** | `DOC-NNN-OFFLINE.md` | Arquitectura offline: schema real, estados de cola, política de reintentos, evidencia de código |
+| **DESIGN** | `DOC-NNN-DESIGN.md` | Design system: tokens, colores, tipografía, spacing, motion, dark mode, componentes |
+| **FLOW** | `DOC-NNN-FLOW-<nombre>.md` + `.md` diagram | Flujo atómico con Mermaid: descripción, actores, diagrama, pasos, casos borde |
 
 ---
 
@@ -55,280 +59,289 @@ hace que la info sea fácil de encontrar y mantener.
 
 ### Naming
 ```
-docs/DOC-NNN-TYPE.md
-docs/diagrams/<diagram-name>.puml
+docs/DOC-NNN-TYPE.md                    # canónicos y referencias
+docs/DOC-NNN-ADR-<slug>.md              # ADRs (uno por archivo)
+docs/DOC-NNN-TDD-<slug>.md              # TDDs (uno por cambio)
+docs/DOC-NNN-FLOW-<nombre>.md           # flujos con Mermaid
+docs/diagrams/<diagram-name>.md         # diagramas Mermaid embebidos
 ```
-- `NNN` = número secuencial de 3 dígitos (001, 002...). Lo lee de `DOC-000-INDEX.md`.
-  Si no existe INDEX, busca el DOC-NNN más alto con glob y suma 1.
-- `TYPE` = tipo en MAYUSCULAS (ARCHITECTURE, FR-NFR, DECISIONS, DESIGN, FLOW, API,
-  RUNBOOK, SETUP, PLAN, AUDIT, CRITIQUE, OFFLINE)
-- El INDEX siempre es `docs/DOC-000-INDEX.md`
+- `NNN` = secuencial de 3 dígitos. Fuente: `docs/DOC-000-INDEX.md`; si no existe, glob al `DOC-*` más alto + 1.
+- `TYPE` en MAYÚSCULAS: `BRD`, `PRD`, `FRD`, `TRD`, `TDD`, `ADR`, `SETUP`, `RUNBOOK`, `API`, `OFFLINE`, `DESIGN`, `FLOW`.
+- El INDEX siempre es `docs/DOC-000-INDEX.md`.
 
-### Status indicators
+### Frontmatter obligatorio (todos los DOC-NNN)
+```yaml
+---
+id: DOC-016
+tipo: BRD
+estado: borrador | aprobado | vigente | reemplazado
+idioma: es
+verificado_el: 2026-08-21
+relaciones: [DOC-017, DOC-018]    # trazabilidad forward/backward
+evidencia: []                     # rutas de código/commits/pruebas que validan secciones
+---
+```
+
+### Estados normalizados
 | Símbolo | Significado |
 |---------|-------------|
-| ✅ | Hecho / Completado |
+| ✅ | Vigente / Completado y verificado |
 | ⚠️ | Parcial / En progreso |
 | ❌ | Pendiente / No iniciado |
-| 🔄 | En revisión |
+| 🔄 | En revisión / Discrepancia detectada |
+| 📜 | Histórico / Reemplazado / Legacy |
 
-### Idioma (bilingüe)
-- Detectar el idioma del proyecto: leer `README.md`, comentarios en código fuente,
-  `AGENTS.md`, `package.json` `description`, etc. Si la mayoría está en español,
-  los templates y docs se generan en español. Si está en inglés, en inglés.
-- Si hay mezcla o no se puede determinar, usar español por defecto.
-- Si el usuario pasa `--english` o `--español`, respetar el flag.
+### Idioma
+- **Español por defecto**. Solo genera en inglés si el usuario pasa `--english` explícito.
+- No detectar automáticamente: decide el usuario o el default.
 
 ---
 
 ## Comandos
 
 ### `/doc:init`
+Inicializa la estructura documental canónica en un proyecto.
 
-Escanea el proyecto y genera la estructura base de documentación.
+**Pasos:**
+1. Leer `package.json`, `app.json`, `tsconfig.json`, rutas en `app/`, `src/`.
+2. Detectar: framework (Expo/Next.js/etc.), persistencia (SQLite/Postgres/etc.), auth, API, testing, native config.
+3. Crear `docs/` y `docs/diagrams/`.
+4. Crear `docs/DOC-000-INDEX.md` vacío.
+5. Generar **en orden** y **en español**:
+   - `DOC-001-BRD.md` (template con supuestos marcados)
+   - `DOC-002-PRD.md` (vinculado a BRD)
+   - `DOC-003-FRD.md` (vinculado a PRD)
+   - `DOC-004-TRD.md` (baseline técnico real: leer código, no inventar)
+6. Crear referencias operativas según stack detectado:
+   - `SETUP`, `RUNBOOK`, `API` (si hay endpoints/comandos), `OFFLINE` (si hay SQLite/cola), `DESIGN` (si hay tokens).
+7. NO crear ADR, FLOW, TDD, AUDIT, CRITIQUE — solo bajo demanda.
+8. Actualizar INDEX con todo lo generado.
+9. Reportar resumen: qué se creó, qué supuestos requieren aprobación humana.
 
-**Paso a paso:**
-1. Detectar stack del proyecto: leer `package.json`, `composer.json`,
-   `Cargo.toml`, `pyproject.toml`, `Gemfile`, `go.mod`, `.csproj`, etc.
-2. Detectar lenguaje principal y framework.
-3. Determinar idioma del proyecto.
-4. Crear `docs/` y `docs/diagrams/` si no existen.
-5. Crear `docs/DOC-000-INDEX.md` con la tabla de contenidos vacía.
-6. Generar docs prioritarios según stack detectado:
-   - **Siempre**: ARCHITECTURE (DOC-001), SETUP (DOC-002), RUNBOOK (DOC-003),
-     FR-NFR (DOC-004)
-   - **Si hay API endpoints** (express, fastapi, next.js API routes, etc.): API doc
-   - **Si hay DB** (SQLite, PostgreSQL, prisma schema, migrations): OFFLINE o
-     schema doc según corresponda
-   - **Si hay diseño visible** (tailwind, style files, tokens): DESIGN doc
-   - **Si hay tests**: subsección en RUNBOOK o PLAN
-7. Dejar ADR, FLUJO, PLAN, AUDIT, CRITIQUE para creación bajo demanda.
-8. Actualizar INDEX con los docs generados.
-9. Mostrar resumen al usuario: qué docs se crearon, qué falta hacer.
+### `/doc:new TYPE [--english] [--title "Título"] [--links "DOC-001,DOC-002"]`
+Crea un documento canónico o de referencia.
 
-### `/doc:new TYPE [--english] [--title "Título"]`
-
-Crea un nuevo documento del tipo especificado.
-
-**Paso a paso:**
-1. Leer INDEX para encontrar el próximo número disponible. Si no existe INDEX,
-   buscar el DOC-NNN más alto con glob.
-2. Copiar template correspondiente de `templates/TYPE.md`.
-3. Rellenar el template según el contexto del proyecto:
-   - Leer `package.json`, `tsconfig`, `app.json` u otros config files del proyecto
-   - Leer código fuente relevante según el tipo de doc
-   - Preguntar al usuario info faltante si es necesario
-4. Guardar como `docs/DOC-NNN-TYPE.md`.
-5. Si el tipo es FLUJO, crear también `docs/diagrams/<diagram-name>.puml`.
-6. Actualizar INDEX con la nueva entrada.
+**Pasos:**
+1. Validar `TYPE` ∈ {BRD, PRD, FRD, TRD, TDD, ADR, SETUP, RUNBOOK, API, OFFLINE, DESIGN, FLOW}.
+2. Leer INDEX → próximo número. Si TYPE ∈ {TDD, ADR, FLOW}, el slug va en el nombre: `DOC-015-TDD-carrito-enviar.md`.
+3. Cargar template `templates/TYPE.md`.
+4. Rellenar con evidencia real:
+   - Leer código fuente según tipo (rutas, stores, servicios, DB, config).
+   - Para BRD/PRD: marcar secciones sin fuente como `⚠️ SUPUESTO — requiere aprobación`.
+   - Para FRD/TRD/TDD: cada afirmación técnica debe tener `evidencia: ["src/...:L1-L10"]`.
+5. Guardar en `docs/`.
+6. Si `FLOW`: crear también `docs/diagrams/<nombre>.md` con Mermaid.
+7. Actualizar INDEX y `relaciones` en documentos vinculados (`--links` o inferidos por tipo).
 
 ### `/doc:adr "Título de la decisión"`
+Crea **un ADR por archivo** (no append a un mega-doc).
 
-Appenda un Architecture Decision Record al documento DECISIONS.
+**Pasos:**
+1. Próximo número desde INDEX (ej. `DOC-021-ADR-012-cambio-auth.md`).
+2. YAGNI check: ¿decidió arquitectura o fue trivial? Trivial = línea en commit.
+3. Template ADR con: Contexto, Opciones (máx 3), Decisión (una frase), Consecuencias, Enlaces a TDD/TRD, Estado `activo`.
+4. Guardar archivo individual.
+5. Actualizar INDEX y `relaciones` del TDD/TRD relacionado.
+6. Opcional: crear nota en `notes-vault` con wiki-link `[[docs/DOC-021-ADR-012-cambio-auth.md]]`.
 
-**Paso a paso:**
-1. Buscar `docs/DOC-NNN-DECISIONS.md` existente. Si no existe, crearlo
-   con `/doc:new DECISIONS --title "Decisiones de Arquitectura"`.
-2. Identificar el próximo ADR number (ADR-001, ADR-002...).
-3. Antes de crear, aplicar YAGNI check: ¿esto necesita ADR? Si es trivial
-   (cambiar versión, renombrar, refactor sin impacto), una línea en el commit basta.
-4. Agregar sección con estructura:
-   ```
-   ## ADR-NNN: Título
+### `/doc:diagram <nombre> [--type sequence|c4context|c4container|c4component|state|er|flow]`
+Crea diagrama Mermaid en `docs/diagrams/<nombre>.md`.
 
-   **Contexto:** Por qué se necesita. Alternativas (máx 3, una línea c/u).
+**Pasos:**
+1. Tipo por defecto: `flow` (flowchart). `--type` permite: `sequence`, `c4context`, `c4container`, `c4component`, `state`, `er`, `flow`.
+2. Generar archivo `.md` con fence ````mermaid` y sintaxis GitHub-compatible.
+3. Incluir título, actores/sistemas, relaciones claras.
+4. Si pertenece a un `FLOW` doc, agregar referencia cruzada.
+5. Recordar: validar render en GitHub PR (GitHub usa mermaid-cli interno, versión variable).
 
-   **Decisión:** Qué se eligió. Una frase. Si no cabe, reconsiderar.
+### `/doc:sync --check`
+**Solo lectura.** Compara documentación vigente contra código real.
 
-   **Impacto:**
-   - Archivos tocados, dependencias cambiadas
-   - ponytail: <qué se omitió>, agregar cuando <condición>
-   ```
-4. Si la decisión es importante para el conocimiento persistente, crear una nota
-   en el vault de Obsidian vía `notes-vault` con un resumen + wiki-link al ADR.
-5. Actualizar INDEX.
+**Salida estructurada (tabla):**
+```
+documento | sección | evidencia_esperada | evidencia_real | discrepancia | impacto | acción_recomendada
+```
 
-### `/doc:diagram <nombre>`
+**Qué verifica:**
+- Canónicos (BRD/PRD/FRD/TRD): que cada requisito técnico tenga `evidencia` válida (archivo existe, línea coincide).
+- TRD: stack, versiones, rutas, schema DB, auth, API, build, tests contra `package.json`, `app.json`, `src/`, `app/`.
+- OFFLINE: schema SQLite, estados de cola, reintentos contra `database.ts`, `sync.ts`, `cartStore.ts`.
+- API: comandos/endpoints, auth, timeouts contra `api.ts`, `config.ts`.
+- DESIGN: tokens, colores, tipografía contra `tokens.ts`, `Colors.ts`, `useColors.ts`.
+- Referencias (SETUP/RUNBOOK): comandos en `package.json`, variables en `.env.example`.
+- ADR: estados coherentes, enlaces a TDD/TRD válidos.
+- INDEX: numeración, estados, relaciones bidireccionales.
 
-Crea un diagrama PUML en `docs/diagrams/`.
+**Nunca modifica archivos.** Solo reporta.
 
-**Paso a paso:**
-1. Preguntar al usuario qué tipo de diagrama necesita:
-   - **Sequence**: flujo de interacción entre actores/sistemas (login, payment...)
-   - **C4 Context**: sistema y sus relaciones con externos
-   - **C4 Container**: componentes internos del sistema
-   - **C4 Component**: detalle de un container
-   - **Activity**: flujo de decisiones y branching
-   - **Use Case**: actores y casos de uso
-2. Generar el archivo `.puml` en `docs/diagrams/<nombre>.puml`.
-3. Usar `@startuml` / `@enduml`, incluir librerías C4 si corresponde:
-   ```
-   @startuml
-   !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
-   ```
-4. Poner título descriptivo, actores/sistemas relevantes, relaciones claras.
-5. Si el diagrama pertenece a un FLUJO doc existente, agregar referencia
-   en el doc correspondiente.
-6. Informar al usuario que puede renderizar el `.puml` con PlantUML
-   (VSCode extension, plantuml.com, o CLI).
+### `/doc:sync --apply`
+Actualiza **solo** bloques marcados como evidencia técnica e INDEX.
+
+**Precondición:** `/doc:sync --check` limpio (sin discrepancias no intencionales).
+**Lo que toca:**
+- Bloques `evidencia:` en FRD/TRD/TDD/ADR/OFFLINE/API/DESIGN.
+- Tabla de `DOC-000-INDEX.md`.
+- Diagramas Mermaid si el código cambió la estructura (solo si el diff es trivial: renombre de archivo, adición de export).
+**Lo que NO toca nunca:**
+- BRD, PRD, FRD (requisitos de negocio/producto — autoridad humana).
+- ADR (decisiones — inmutables salvo nuevo ADR que los sustituya).
+- Código, `.env`, `KEYSTORE`, secretos, archivos ignorados.
+- Documentos marcados `📜 Histórico` en INDEX.
 
 ### `/doc:audit`
-
-Recorre `docs/` y verifica el estado de cada documento contra el código real.
-
-**Paso a paso:**
-1. Leer todos los `docs/DOC-*.md`.
-2. Por cada doc:
-   - **ARCHITECTURE**: verificar que stack table coincida con `package.json` /
-     config files. Routing aún vigente? Schema SQL existe?
-   - **FR-NFR**: features implementadas coinciden con estado reportado?
-     Buscar en código si los FR marcados como ✅ realmente existen.
-   - **RUNBOOK**: comandos aún funcionan? Flags correctos?
-   - **API**: endpoints aún existen en el código?
-   - **SETUP**: pasos aún válidos?
-3. Marcar en INDEX los docs desactualizados: cambiar status a 🔄 y agregar
-   nota de qué revisar.
-4. Reportar al usuario: "X de Y docs actualizados. Z requieren revisión: ..."
+Alias de `/doc:sync --check`. Mantiene compatibilidad.
 
 ### `/doc:status`
-
-Muestra la tabla de `docs/DOC-000-INDEX.md` con el estado actual.
-
-Si no existe INDEX, crearlo escaneando todos los `docs/DOC-*.md`.
+Muestra `DOC-000-INDEX.md` con estado actual. Si no existe INDEX, lo construye escaneando `docs/DOC-*.md`.
 
 ---
 
-## Template structure por tipo
+## Templates (contenido mínimo)
 
-Cada template está en `templates/<TYPE>.md`. Usarlos como base, no como
-camisa de fuerza — adaptar secciones según el proyecto.
+Cada template en `templates/<TYPE>.md` incluye frontmatter y secciones obligatorias.
 
-### ARCHITECTURE
-- `# DOC-NNN: <Project> — Architecture`
-- Stack table (Capa | Tecnología)
-- Routing architecture (ASCII tree de directorios)
-- SQL/Data schema (si aplica)
-- Data flow diagram (ASCII o referencia a PUML)
-- Platform notes
+### BRD
+- Problema, Objetivos medibles, Actores (primarios/secundarios), Métricas de éxito, Alcance / No-alcance, Riesgos de negocio/datos, Supuestos (marcados `⚠️`), Aprobador y fecha.
 
-### FR-NFR
-- `# DOC-NNN: <Project> — FR / NFR`
-- Header con proyecto, stack, fechas
-- Actores table
-- FR table (ID, Nombre, Estado, Descripción)
-- NFR table (ID, Nombre, Estado, Descripción)
-- Flujo actual (ASCII) — paso a paso
-- Fixes aplicados (si ya hay)
-- PUML reference si existe diagrama asociado
+### PRD
+- Journeys por actor, Comportamientos por feature, Criterios de aceptación (Given/When/Then), Dependencias técnicas, Enlaces a BRD (IDs), Prioridades (MoSCoW), Scope por release.
 
-### ADR (DECISIONS)
-- `# DOC-NNN: Decisiones de Arquitectura`
-- Cada ADR como sección `## ADR-NNN: Título`
-- Schema: Contexto → Decisión → Cambios → Consecuencias → Token flow
+### FRD
+- Tabla FR (ID, Nombre, Descripción, Regla/Caso borde, Estado, PRD-ID, Test-ID).
+- Tabla NFR (ID, Nombre, Descripción, Métrica, Estado, PRD-ID).
+- Trazabilidad: cada FR → PRD → Test.
 
-### DESIGN
-- YAML frontmatter con tokens completos: colorStrategy, colors light+dark, typography scale
-  (display a footnote con fontFamily/fontSize/fontWeight/lineHeight), borderRadii semánticos
-  (card:16, button:12, input:10, chip:999), shadowElevation, motion (duration, easing, spring),
-  spacing scale (xs→xxl)
-- `# DOC-NNN: <Project> — Design System`
-- Color strategy selection (Restrained / Committed / Full Palette / Drenched) con anti-AI-slop check
-- WCAG contrast table (4.5:1 body, 3:1 large text)
-- Typography: expo-font loading, Platform.select font families, line length cap 65-75 chars
-- Spacing: token system + preferir `gap` sobre margins
-- Motion: Reanimated 4 patterns (useAnimatedStyle + withSpring, 150-250ms, reduced motion)
-- Interaction: touch targets ≥44pt, Pressable scale animation, Gesture Handler, KeyboardAvoidingView
-- AI Slop signals table (spinner→skeleton, Alert→bottom sheet, ScrollView→FlashList, etc.)
-- Component examples: Button, Card, Input, Chip, Bottom Sheet con radios y patrones específicos
-- Dark mode: light↔dark token mapping
+### TRD
+- Stack table (capa | tecnología | versión | evidencia).
+- Arquitectura: routing, providers, límites feature/shared.
+- Persistencia: SQLite schema vN, migraciones, KV stores.
+- API: transporte, comandos, auth, timeouts, errores.
+- Seguridad: tokens, biometría, SSL, secrets handling.
+- Offline: cola, sync, reintentos, idempotencia.
+- Build: dev build, prebuild, plugins nativos, SSL Android.
+- Testing: framework, setup, coverage gaps conocidos.
 
-### FLUJO
-- `# DOC-NNN: <Project> — <Nombre del Flujo>`
-- Descripción del flujo
-- Actores / Sistemas participantes
-- Diagrama PUML: referencia a `docs/diagrams/<name>.puml`
-- Flujo paso a paso numerado
-- Casos borde (errores, timeouts, offline)
+### TDD
+- FRD-IDs y TRD-IDs afectados.
+- Archivos a tocar (crear/modificar/eliminar) con responsabilidad.
+- Diseño: interfaces, data shapes, flujos de error, offline.
+- Migración DB (si aplica): up/down, idempotencia, datos legacy.
+- Rollback plan.
+- Pruebas: unitarias, integración, e2e, aceptación manual.
+- Criterios de done verificables.
+
+### ADR
+- Contexto (por qué), Opciones (máx 3, una línea c/u), Decisión (una frase), Consecuencias (positivas/negativas/riesgos), Enlaces TDD/TRD, Estado (`activo`/`sustituido`/`histórico`/`desconocido`), Próximo ADR number.
+
+### FLOW + Diagrama Mermaid
+- Descripción, Actores/Sistemas.
+- Diagrama Mermaid embebido en `docs/diagrams/<nombre>.md`:
+  ````markdown
+  # Diagrama: <nombre>
+  ```mermaid
+  flowchart LR
+      A[Actor] --> B[Sistema]
+  ```
+  ````
+- Pasos numerados, Casos borde.
 
 ### API
-- `# DOC-NNN: <Project> — API Reference`
-- Base URL, auth method
-- Tabla de endpoints (Método, Path, Descripción, Auth)
-- Por endpoint: Request schema, Response schema, Errores, Ejemplo
-
-### RUNBOOK
-- `# DOC-NNN: Runbook`
-- Dev commands grupados por tarea
-- Deploy / build steps
-- DB scripts
-- Troubleshooting section
-
-### SETUP
-- `# DOC-NNN: Setup Guide`
-- Prerequisitos (lenguaje, herramientas, versiones)
-- Instalación paso a paso
-- Configuración
-- Dev users / test data
-- Verificación (cómo saber que funciona)
-
-### PLAN
-- `# DOC-NNN: Plan — <Nombre>`
-- Objetivo, branch
-- Flujo nuevo (ASCII)
-- Fases de implementación con TDD (RED → GREEN → REFACTOR)
-- Archivos a modificar/crear por fase
-- Riesgos y mitigaciones
-
-### AUDIT
-- `# DOC-NNN: Audit — <Área>`
-- Findings table (file, problema, root cause, qué cortar, reemplazar con)
-- Regla ponytail: un guard en función compartida > guard en cada caller
-- Actions: prioridad + qué hacer + archivo(s)
-- Sin severidades, sin checklist especulativo, sin discrepancias — solo findings que llevan a acción
-
-### CRITIQUE
-- `# DOC-NNN: Critique — <Área>`
-- 5 heurísticas clave (Visibility of System Status, User Control, Error Prevention,
-  Error Recovery, Consistency) — solo las que generan acción
-- Platform audit checklist con acción por cada fail
-- Issues (P1/P2/P3) — qué cambiar, no scores
-- Sin AI Slop verdict, sin personas especulativas
+- Base URL / transporte / auth.
+- Tabla: Operación | Comando/Path | Descripción | Auth | Request | Response | Errores | Ejemplo.
+- Soporta REST y command-based (POST único con `action`).
 
 ### OFFLINE
-- `# DOC-NNN: Arquitectura Offline`
-- Stack de componentes offline
-- SQLite schema completo
-- Sync lifecycle
-- Conflict resolution strategy
-- Queue management
+- Stack offline (SQLite, KV, NetInfo, Queue).
+- Schema completo con versión actual.
+- Sync lifecycle (inicial, foreground, timer, reconexión).
+- Estados reales de cola (sin inventar `DEAD_LETTER` si no existe).
+- Política de reintentos con evidencia de código.
+- Conflict resolution strategy.
+
+### DESIGN
+- YAML frontmatter: colorStrategy, colors (light/dark), typography scale, borderRadii, shadowElevation, motion, spacing.
+- Color strategy (Restrained/Committed/Full Palette/Drenched).
+- WCAG contrast table.
+- Typography: expo-font, Platform.select, line-length cap.
+- Motion: Reanimated patterns, reduced motion.
+- Component examples con tokens semánticos.
+
+### SETUP / RUNBOOK
+- Solo pasos comprobados. Variables: nombres, nunca valores. Scripts: solo los de `package.json`.
+
+---
+
+## Perfil Expo (activación automática)
+
+Si `/doc:init` detecta **Expo** (`package.json` tiene `expo`, `expo-router`, `expo-sqlite`):
+
+1. **TRD incluye obligatoriamente:**
+   - `app.json` completo: plugins, ios/android config, bundle IDs, permissions.
+   - Rutas `app/` con grupos, layouts, guards.
+   - `expo-sqlite` schema + migraciones (`PRAGMA user_version`).
+   - Persistencia: MMKV, SecureStore, `expo-sqlite/kv-store`.
+   - Auth: flujo real (HVP, mock, biométrico), token storage.
+   - API: `interfaceRequest` vs `request`, comandos HVP, static token.
+   - Offline: `pedidos_queue`, `pedidos_history`, `syncStore`, `flushQueue`.
+   - Build: `expo prebuild --clean`, `expo run:android`, SSL plugin, certificado.
+   - Tests: Vitest setup, mocks RN, known failures.
+
+2. **Diagramas base generados:**
+   - Contexto (C4 Context): app ↔ HVP ↔ SQLite ↔ Device.
+   - Navegación/Providers: root → auth guard → phone/tablet shells.
+   - Módulos: features (auth, stations, patients, cart, layout) + shared.
+   - Auth/Session: MMKV ↔ SecureStore ↔ Biometric.
+   - Sync censo/dietas: HVP → api.ts → sync.ts → SQLite → queries.
+   - Pedido online/offline: cart → queue/history → carrito_enviar.
+   - Estado cola: máquina de estados real (no inventada).
+   - SQLite ER: tablas, relaciones lógicas, JSON columns.
+   - API HVP: comandos, auth, timeouts.
+   - Responsive: phone (tabs) vs tablet (sidebar).
+   - Build nativo: prebuild, plugins, gradle/xcode, SSL.
+   - Tests: Vitest, mocks, baseline.
+
+3. **Catálogo de codebase** (`docs/reference/CODEBASE-CATALOG.md`):
+   - Rutas (`app/**`) con pantalla, guard, providers.
+   - Features con componentes, hooks, stores, contextos.
+   - Shared: átomos, moléculas, organismos, hooks, servicios, tipos, utils.
+   - Cómo añadir: ruta, feature, componente, hook, servicio, consulta SQL, mutación, migración, comando HVP.
 
 ---
 
 ## Integración con otras skills
 
 ### notes-vault
-Cuando crees un ADR o una decisión importante, crear también una nota atómica
-en Obsidian vault usando `notes-vault`. La nota debe tener:
-- Título que refleje la decisión
-- Wiki-link al ADR: `[[docs/DOC-NNN-DECISIONS.md#ADR-NNN]]`
-- Tags: `tipo/adr`, `proyecto/<nombre-proyecto>`
-- Resumen de 2-3 líneas con contexto y decisión
+Al crear ADR o decisión clave: nota atómica en Obsidian con título, wiki-link al ADR, tags `tipo/adr`, `proyecto/<nombre>`, resumen 2-3 líneas.
 
 ### ponytail
-Cuando generes un PLAN, aplicar ponytail mode para asegurar que el plan
-no incluya trabajo innecesario. Preguntar: "Esto es lo mínimo que funciona?"
+Al generar TDD o PLAN: aplicar principio "lo mínimo que funciona". Marcar simplificaciones con `ponytail: <qué se omitió>, agregar cuando <condición>`.
 
 ---
 
-## Edge cases
+## Edge Cases
 
-- **Proyecto sin docs/**: `/doc:init` lo crea junto con INDEX
-- **INDEX no existe**: escanear con glob `docs/DOC-*.md` para determinar next number
-- **Número saltado**: si existe DOC-001, DOC-002, DOC-005, el próximo es DOC-006.
-  No rellenar saltos — respetar la secuencia natural.
-- **Tipo no existe en templates**: preguntar al usuario qué secciones quiere
-  y generar un doc custom, luego considerar agregar el template.
-- **Proyecto vacío**: `/doc:init` genera solo ARCHITECTURE básico con el stack
-  detectado (ej: solo package.json). El resto se crea bajo demanda.
-- **Diagrama PUML muy complejo**: dividir en múltiples diagramas en vez de
-  uno gigante. Un diagrama = un flujo atómico.
+- **Sin docs/**: `/doc:init` crea todo.
+- **INDEX inexistente**: glob `docs/DOC-*.md` → max NNN + 1.
+- **Número saltado** (001, 002, 005): siguiente es 006. No rellenar.
+- **Tipo sin template**: preguntar secciones, generar custom, evaluar añadir template.
+- **Proyecto vacío**: solo BRD con stack detectado.
+- **Diagrama complejo**: dividir en múltiples `FLOW` + diagrams atómicos.
+- **Documentos legacy (pre-canónicos)**: mover a sección "Histórico" en INDEX, marcar `📜`, no renumerar, no borrar. Enlazar desde canon si aportan evidencia.
+
+---
+
+## Validación de la skill
+
+Un proyecto Expo nuevo con `/doc:init` debe producir:
+1. `DOC-001-BRD.md` a `DOC-004-TRD.md` en español, indexados, con trazabilidad.
+2. `SETUP`, `RUNBOOK`, `API`, `OFFLINE`, `DESIGN` según stack.
+3. Diagramas Mermaid en `docs/diagrams/` (contexto, nav, módulos, auth, sync, pedido, cola, ER, API, responsive, build, tests).
+4. `CODEBASE-CATALOG.md` con rutas, features, shared y guías de extensión.
+
+En este repo (HVP Dietas), `/doc:sync --check` debe detectar al menos:
+- `DOC-009-OFFLINE.md` vs `database.ts` (schema v9, cola sin DEAD_LETTER).
+- `DOC-002-API.md` vs `api.ts` (REST mock vs comandos HVP).
+- `DOC-008-FRD.md` vs código real (auth MMKV, no AsyncStorage; cola sin DEAD_LETTER).
+- ADRs en `DOC-007` con IDs inconsistentes vs registro canónico nuevo.
+
+`--check` no modifica archivos. `--apply` solo tras check limpio y confirmación.
