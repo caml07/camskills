@@ -30,7 +30,7 @@
 | find-skills | vercel-labs | third-party | `vercel-labs/skills` | `npx skills use https://github.com/vercel-labs/skills --skill find-skills` |
 | fix-debug | psistema/caml07 | own | — | edición directa |
 | impeccable | pbakaus | third-party | `pbakaus/impeccable` | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` |
-| impeccable-rn | Fork de impeccable por psistema/caml07 | fork | `pbakaus/impeccable` (upstream) | `./scripts/sync-upstream.sh --check` |
+| impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `f88b2837a7d7c3182e46307bbbb091a1ed547571` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
 | junior-to-senior | juliusbrussee | third-party | `juliusbrussee/skills` | `npx skills use https://github.com/juliusbrussee/skills --skill junior-to-senior` |
 | mattpocock-engineering/* | mattpocock | third-party | `mattpocock/skills` (`skills/engineering/`) | clonar repo y recopiar las 18 carpetas (ask-matt, codebase-design, code-review, diagnosing-bugs, domain-modeling, grill-with-docs, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, to-spec, to-tickets, triage, wayfinder, wizard) |
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |

@@ -33,7 +33,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `expo-upgrade` | Guía de upgrades de SDK Expo y fixes de dependencias |
 | `expo-web-to-native` | Migrar superficies web a patrones nativos Expo |
 | `mobile-app-ui-design` | Diseño de UI móvil |
-| `impeccable-rn` | Diseño frontend React Native / Expo (fork + doctor/audit + accesibilidad nativa) |
+| `impeccable-rn` | Diseño React Native / Expo nativo (fork curado; cambio, craft y audit) |
 | `test-first` | TDD con Vitest + testing-library/react-native |
 | `vercel-react-native-skills` | Best practices de perf RN/Expo (FlashList, animaciones, native modules) |
 
@@ -72,7 +72,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | Skill | Descripción |
 |-------|-------------|
 | `context7-mcp` | MCP de Context7 para docs actuales de librerías |
-| `doc-system` | Documentación técnica estructurada DOC-NNN-TYPE |
+| `doc-system` | Documentación técnica humana: requirements, reference, change, ADR y runbook |
 | `find-skills` | Descubrimiento e instalación de skills desde la CLI |
 | `fix-debug` | Debug asistido con Context7 |
 | `junior-to-senior` | Senior review adversarial de planes y arquitectura |

@@ -2,64 +2,25 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SKILLS="$ROOT/skills"
+RN="$ROOT/skills/mobile/impeccable-rn"
 
-check_upstream() {
-  local skill="$1"
-  local upstream="$2"
-  local fetch_cmd="$3"
-
-  echo "=== $skill ==="
-  if [ -n "$upstream" ]; then
-    echo "  upstream: $upstream"
-  fi
-  if [ -n "$fetch_cmd" ]; then
-    echo "  fetch:    $fetch_cmd"
-  fi
-  echo ""
-}
-
-check_each() {
-  echo "# Upstream Check — $(date)"
-  echo ""
-
-  check_upstream "impeccable" \
-    "ecosistema opencode (npx/skill registry)" \
-    "npx skills add https://github.com/<upstream>/impeccable --check"
-
-  check_upstream "impeccable-rn" \
-    "fork de impeccable (no hay upstream independiente)" \
-    "revisar cambios en impeccable primero"
-
-  check_upstream "mobile-app-ui-design" \
-    "ceorkm/mobile-app-ui-design" \
-    "npx skills add https://github.com/ceorkm/mobile-app-ui-design --skill mobile-app-ui-design"
-
-  check_upstream "ponytail" \
-    "@dietrichgebert/ponytail (npm)" \
-    "npm view @dietrichgebert/ponytail version"
-
-  check_upstream "context7-mcp" \
-    "Context7 MCP ecosistema" \
-    "verificar versión del MCP server"
-
-  echo "# End"
-}
-
-case "${1:-help}" in
-  --check|-c|check)
-    check_each
+case "${1:-check}" in
+  check|--check|-c)
+    echo "# Curated upstream check"
+    echo "upstream: pbakaus/impeccable"
+    echo "base: f88b2837a7d7c3182e46307bbbb091a1ed547571"
+    echo "mode: manual intake; no automatic merge"
+    echo "license: inspect upstream license before importing files"
+    echo "active files:"
+    git -C "$ROOT" ls-files "skills/mobile/impeccable-rn/SKILL.md" "skills/mobile/impeccable-rn/FORK.md" "skills/mobile/impeccable-rn/reference/*.md"
+    echo "excluded: browser, HTML/CSS, CSP, live, detector, hooks, comps"
     ;;
-  --update|-u|update)
-    echo "Update mode — fetch from upstreams"
-    echo "impeccable:     npx skills add <url> --force"
-    echo "ponytail:       npm update @dietrichgebert/ponytail"
-    echo ""
-    echo "Run '--check' first to see what changed."
+  update|--update|-u)
+    echo "No automatic update is performed for the curated RN fork."
+    echo "Review the upstream diff, import RN-relevant changes manually, update FORK.md, then run --check."
     ;;
   *)
     echo "Usage: $0 [--check|--update]"
-    echo "  --check   report upstream status of third-party skills"
-    echo "  --update  pull latest from upstream sources"
+    exit 2
     ;;
 esac
