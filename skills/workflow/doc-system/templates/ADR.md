@@ -1,54 +1,20 @@
----
-id: DOC-{NNN}
-tipo: ADR
-estado: activo
-idioma: es
-verificado_el: {YYYY-MM-DD}
-relaciones: [DOC-{TDD_ID}, DOC-{TRD_ID}]
-evidencia: []
----
+# ADR: {Título}
 
-# DOC-{NNN}: ADR-{NNN} — {Título de la Decisión}
+## Estado
 
-> Un ADR por archivo. Inmutable salvo nuevo ADR que lo sustituya.
+`propuesto` | `aceptado` | `sustituido` | `rechazado`
 
-## 1. Contexto
-Por qué se necesita esta decisión. Qué problema resuelve. Qué restricciones existen.
+## Contexto
 
-## 2. Opciones Consideradas (máx. 3)
-| Opción | Descripción | Pros | Contras |
-|--------|-------------|------|---------|
-| A | | | |
-| B | | | |
-| C | | | |
+## Alternativas
 
-## 3. Decisión
-**{Opción elegida}** — Una frase que resume la decisión.
+| Opción | Ventajas | Costes |
+|---|---|---|
 
-## 4. Consecuencias
-### 4.1 Positivas
-- 
+## Decisión
 
-### 4.2 Negativas / Riesgos
-- 
+## Consecuencias
 
-### 4.3 Mitigaciones
-- 
+## Sustituye o es sustituido por
 
-## 5. Impacto Técnico
-| Área | Archivos/Componentes afectados | Cambio |
-|------|-------------------------------|--------|
-
-## 6. Enlaces
-- **TDD relacionado:** `DOC-XXX-TDD-...`
-- **TRD secciones:** 3, 4.1, 7.1
-- **ADR previo (si sustituye):** `DOC-YYY-ADR-...`
-
-## 7. Estado
-`activo` | `sustituido` | `histórico` | `desconocido`
-
-- **Próximo ADR number:** ADR-{NNN+1}
-- **Sustituido por (si aplica):** `DOC-XXX-ADR-...`
-
----
-*Decisiones triviales (versión, renombrar, refactor sin impacto) no requieren ADR — basta una línea en el commit.*
+## Fuentes
