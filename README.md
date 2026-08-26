@@ -16,15 +16,18 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `eas-simulator` | Ejecutar y depurar apps Expo en simuladores iOS/Android con EAS |
 | `eas-update-insights` | Insights de EAS Update |
 | `eas-workflows` | Workflows de EAS |
+| `expo-animation` | Animaciones y gestos en Expo (Reanimated, haptics, transiciones) |
 | `expo-app-clip` | App Clips iOS integrados con proyectos Expo |
 | `expo-brownfield` | Integrar Expo dentro de una app nativa existente |
 | `expo-data-fetching` | Networking/API en Expo: fetch, React Query, offline, caching |
+| `expo-design-system` | Design system en Expo: tokens, temas y componentes consistentes |
 | `expo-dev-client` | Dev clients Expo para probar código nativo en dispositivos |
 | `expo-dom` | Integración Expo DOM |
 | `expo-examples` | Encontrar ejemplos oficiales de Expo antes de inventar una implementación |
 | `expo-migrate-module` | Migrar módulos Expo |
 | `expo-module` | Crear módulos nativos Expo y config plugins |
 | `expo-native-ui` | UI nativa Expo: HIG, controles nativos, animaciones, storage |
+| `expo-overview` | Punto de entrada y router de skills Expo: detecta el objetivo y deriva al skill correcto |
 | `expo-project-structure` | Estructura y límites recomendados para proyectos Expo |
 | `expo-router` | Navegación y routing en Expo Router |
 | `expo-skill-feedback` | Enviar feedback accionable sobre skills Expo |
@@ -42,7 +45,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | Skill | Descripción |
 |-------|-------------|
 | `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
-| `impeccable` | Diseño frontend web (fork de pbakaus/impeccable) |
+| `impeccable` | Diseño frontend web (fork de pbakaus/impeccable; adapta rutas `.opencode` y tool `question`) |
 
 ### `engineering/` — Workflow general (mattpocock/skills, stack-agnostic)
 
@@ -55,6 +58,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `domain-modeling` | Construir/afinar el modelo de dominio y lenguaje ubicuo (CONTEXT.md + ADRs) |
 | `grill-with-docs` | Sesión que afila terminología del dominio y actualiza CONTEXT.md/ADRs |
 | `implement` | Construir desde spec/tickets con `/tdd` y cierre con `/code-review` |
+| `junior-to-senior` | Senior review adversarial de planes y arquitecturas agent-written |
 | `improve-codebase-architecture` | Escanear la codebase por oportunidades de profundización + reporte HTML |
 | `prototype` | Prototipo descartable para responder preguntas de diseño |
 | `research` | Investigar contra fuentes primarias y capturar como Markdown citado |
@@ -75,7 +79,6 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `doc-system` | Documentación técnica humana: requirements, reference, change, ADR y runbook |
 | `find-skills` | Descubrimiento e instalación de skills desde la CLI |
 | `fix-debug` | Debug asistido con Context7 |
-| `junior-to-senior` | Senior review adversarial de planes y arquitectura |
 | `no-commit-secrets` | Previene commits de secrets a git |
 | `no-use-effect` | Prohíbe useEffect directo en React |
 | `notes-vault` | Creación de notas en Obsidian vault |

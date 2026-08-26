@@ -11,7 +11,9 @@
 | eas-update-insights | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-update-insights -g -y` |
 | eas-workflows | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-workflows -g -y` |
 | emil-design-eng | psistema/caml07 (basado en Emil Kowalski) | own | — | edición directa |
+| expo-animation | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-animation -g -y` |
 | expo-data-fetching | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-data-fetching -g -y` |
+| expo-design-system | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-design-system -g -y` |
 | expo-dev-client | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-dev-client -g -y` |
 | expo-dom | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-dom -g -y` |
 | expo-app-clip | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-app-clip -g -y` |
@@ -20,6 +22,7 @@
 | expo-module | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-module -g -y` |
 | expo-migrate-module | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-migrate-module -g -y` |
 | expo-native-ui | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-native-ui -g -y` |
+| expo-overview | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-overview -g -y` |
 | expo-project-structure | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-project-structure -g -y` |
 | expo-router | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-router -g -y` |
 | expo-skill-feedback | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-skill-feedback -g -y` |
@@ -29,7 +32,7 @@
 | expo-web-to-native | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-web-to-native -g -y` |
 | find-skills | vercel-labs | third-party | `vercel-labs/skills` | `npx skills use https://github.com/vercel-labs/skills --skill find-skills` |
 | fix-debug | psistema/caml07 | own | — | edición directa |
-| impeccable | pbakaus | third-party | `pbakaus/impeccable` | `npx skills add https://github.com/pbakaus/impeccable --skill impeccable` |
+| impeccable | pbakaus/impeccable (fork con adaptaciones opencode) | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Copiar upstream + re-aplicar: rutas `.claude/`→`.opencode/` y `AskUserQuestion`→`` `question` `` |
 | impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `f88b2837a7d7c3182e46307bbbb091a1ed547571` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
 | junior-to-senior | juliusbrussee | third-party | `juliusbrussee/skills` | `npx skills use https://github.com/juliusbrussee/skills --skill junior-to-senior` |
 | mattpocock-engineering/* | mattpocock | third-party | `mattpocock/skills` (`skills/engineering/`) | clonar repo y recopiar las 18 carpetas (ask-matt, codebase-design, code-review, diagnosing-bugs, domain-modeling, grill-with-docs, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, to-spec, to-tickets, triage, wayfinder, wizard) |
