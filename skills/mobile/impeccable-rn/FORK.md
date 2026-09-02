@@ -4,9 +4,10 @@
 
 - Upstream: `pbakaus/impeccable`
 - Tipo: fork curado, no espejo funcional
-- Base upstream revisada: `f88b2837a7d7c3182e46307bbbb091a1ed547571`
-- Fecha de revisión: 2026-08-21
+- Base upstream revisada: `c0f495212236129c2e92aaf7714a3a9914569d13`
+- Fecha de revisión: 2026-09-02
 - Licencia declarada por el fork: Apache-2.0; conservar notices del upstream si se redistribuyen archivos derivados.
+- Resultado de revisión: `v4.1.3` no aporta cambios RN/nativos importables.
 
 ## Qué se importa
 
@@ -26,7 +27,7 @@
 2. Comparar el diff contra esta lista de exclusiones.
 3. Importar manualmente solo cambios RN/nativos.
 4. Actualizar este archivo con nuevo SHA y fecha.
-5. Validar que la skill solo contenga `SKILL.md`, `FORK.md` y `reference/*.md` permitidos.
+5. Validar que la skill solo contenga `SKILL.md`, `FORK.md`, `NOTICE.md` y `reference/*.md` permitidos.
 
 El historial Git conserva el material eliminado; no se archiva dentro de la
 skill activa para no volver a cargarlo accidentalmente.

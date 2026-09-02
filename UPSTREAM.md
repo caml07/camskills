@@ -30,11 +30,11 @@
 | expo-ui | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-ui -g -y` |
 | expo-upgrade | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-upgrade -g -y` |
 | expo-web-to-native | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-web-to-native -g -y` |
-| find-skills | vercel-labs | third-party | `vercel-labs/skills` | `npx skills use https://github.com/vercel-labs/skills --skill find-skills` |
+| find-skills | vercel-labs (skills.sh) | third-party | `vercel-labs/skills` | `npx skills add vercel-labs/skills --skill find-skills --agent opencode --copy -y` |
 | fix-debug | psistema/caml07 | own | — | edición directa |
 | impeccable | pbakaus/impeccable (fork con adaptaciones opencode) | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Copiar upstream + re-aplicar: rutas `.claude/`→`.opencode/` y `AskUserQuestion`→`` `question` `` |
-| impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `f88b2837a7d7c3182e46307bbbb091a1ed547571` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
-| junior-to-senior | juliusbrussee | third-party | `juliusbrussee/skills` | `npx skills use https://github.com/juliusbrussee/skills --skill junior-to-senior` |
+| impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `c0f495212236129c2e92aaf7714a3a9914569d13` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
+| junior-to-senior | juliusbrussee (skills.sh) | third-party | `juliusbrussee/skills` | `npx skills add juliusbrussee/skills --skill junior-to-senior --agent opencode --copy -y` |
 | mattpocock-engineering/* | mattpocock | third-party | `mattpocock/skills` (`skills/engineering/`) | clonar repo y recopiar las 18 carpetas (ask-matt, codebase-design, code-review, diagnosing-bugs, domain-modeling, grill-with-docs, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, to-spec, to-tickets, triage, wayfinder, wizard) |
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
 | no-commit-secrets | psistema/caml07 | own | — | edición directa |

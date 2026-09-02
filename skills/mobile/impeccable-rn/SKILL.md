@@ -1,5 +1,6 @@
 ---
 name: impeccable-rn
+description: >-
   Mejora interfaces React Native y Expo con criterio nativo, usando el sistema
   visual existente y evidencia de código o dispositivo. Úsala para cambiar una
   pantalla, crear un flujo nuevo o auditar accesibilidad, rendimiento,
