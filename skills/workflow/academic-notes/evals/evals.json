@@ -1,0 +1,17 @@
+{
+  "skill_name": "academic-notes",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "/note Web II mr felix covered the Node event loop and non-blocking I/O. We installed Node.js. Add the official docs link. done",
+      "expected_output": "Creates a completed, linked session note that preserves the raw capture, labels external documentation, and asks senior-level retrieval questions.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/note-week-summary Web II 1",
+      "expected_output": "Creates a course-local Week 01 summary from completed notes only, with source links and collapsed answers to retrieval questions.",
+      "files": []
+    }
+  ]
+}

@@ -75,6 +75,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 
 | Skill | Descripción |
 |-------|-------------|
+| `academic-notes` | Organizar y enlazar apuntes de cursos universitarios con Day 00, resúmenes semanales y perfiles mutables por curso |
 | `context7-mcp` | MCP de Context7 para docs actuales de librerías |
 | `doc-system` | Documentación técnica humana: requirements, reference, change, ADR y runbook |
 | `find-skills` | Descubrimiento e instalación de skills desde la CLI |

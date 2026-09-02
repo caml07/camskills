@@ -40,6 +40,7 @@
 | no-commit-secrets | psistema/caml07 | own | — | edición directa |
 | no-use-effect | psistema/caml07 | own | — | edición directa |
 | notification | psistema/caml07 | own | — | edición directa |
+| academic-notes | psistema/caml07 | own | — | edición directa |
 | notes-vault | psistema/caml07 | own | — | edición directa |
 | ponytail | @dietrichgebert | plugin | npm | `npm update @dietrichgebert/ponytail` |
 | skill-creator | psistema/caml07 | own | — | edición directa |
