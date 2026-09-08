@@ -158,6 +158,9 @@ to the user's style:
   an inference into something the professor said.
 - `Examples, Commands, and Diagrams` preserves exact commands and may link an
   attached photo or scan when the profile calls for handwritten work.
+- When the course's note-taking profile specifies PlantUML, use `plantuml` code
+  blocks for diagrams instead of Mermaid; only use this when the target vault has
+  a PlantUML renderer/plugin available.
 - `Tasks and Deadlines` contains only announced or sourced dates. Leave unknown
   dates unknown.
 - `AI Context and Sources` labels all externally researched explanation and links
