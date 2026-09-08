@@ -9,6 +9,7 @@ Semester/
   Course A/
     Course.md
     Day 00 - Syllabus.md
+    Week 00 Summary.md
     Week 01 Summary.md
     2026-09-01 - Week 01 - Day 01 - Course A.md
   Concepts/
@@ -18,7 +19,10 @@ Semester/
 ## `_Semester.md`
 
 Use frontmatter with `type: semester`, `term`, and an ISO `starts` date. It may
-contain a course table, but course-specific rules belong in `Course.md`.
+contain a course table and an explicit `## Calendar / Calendario` table. The
+calendar is required when Week 00, breaks, delayed starts, or other exceptions
+make a simple seven-day calculation ambiguous. Course-specific rules belong in
+`Course.md`.
 
 ## `Course.md`
 
@@ -46,20 +50,20 @@ titles.
 type: session
 course: Course name
 date: YYYY-MM-DD
-week: 1
+week: 0
 day: 1
 status: draft # or complete
 
 # Weekly summary
 type: weekly-summary
 course: Course name
-week: 1
+week: 0
 
 # Non-instructional course event
 type: course-event
 course: Course name
 date: YYYY-MM-DD
-week: 1
+week: 0
 event: office-hours
 status: draft
 

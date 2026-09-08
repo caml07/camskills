@@ -42,13 +42,16 @@ the body. Do not invent extra keys when an existing field covers the need.
 | `weekly-summary` | `type`, `course`, `week` |
 | `concept` | `type`, `concept`, `courses`; `tags` is optional |
 
-- Store `week` and `day` as integers (`week: 1`, not `week: 01`). Zero-pad them
-  only in filenames, titles, and links (`Week 01`, `Day 03`).
+- Store `week` and `day` as integers (`week: 0`, `week: 1`, not `week: 01`).
+  `week: 0` is valid for an orientation or pre-instruction academic week. Zero-pad
+  them only in filenames, titles, and links (`Week 00`, `Week 01`, `Day 03`).
 - A session `status` is either `draft` or `complete`. Other note types do not
   carry `status` except `course-event`.
 - `courses` on a concept is a YAML list of plain canonical course names. Keep
   navigation links in the body rather than embedding wiki-links in frontmatter.
-- Use `Day 00` only for syllabus material. Normal lecture days begin at `Day 01`.
+- `Week 00` and `Day 00` are independent: Week 00 may contain real instructional
+  sessions or course events, while Day 00 is reserved for syllabus material.
+  Normal lecture days begin at `Day 01`.
 
 ### Canonical Names
 
@@ -67,15 +70,33 @@ Replace `/` with `-`, replace `:` with ` -`, remove `\\ * ? " < > |`, and
 collapse repeated spaces. Keep the display name unchanged in frontmatter and the
 H1. Concept filenames must be globally unambiguous and filesystem-safe.
 
-`day` is the chronological ordinal of an actual course meeting since the semester
-start, not the number of notes captured. Use the meeting schedule plus known
-holidays, cancellations, makeup classes, and earlier sessions. An explicit day
-provided by the user is accepted when it does not conflict with another session;
-ask before renumbering or overwriting when it does. Count lectures, labs, reviews,
-and makeup classes that deliver course instruction. Do not count holidays,
-cancelled meetings, or office hours unless the user says they replaced a class.
-If the available course records cannot establish the ordinal safely, ask one
-short question instead of guessing.
+`day` is the chronological ordinal of an actual course meeting since the first
+instructional meeting, not the number of notes captured. Use the meeting schedule
+plus known holidays, cancellations, makeup classes, and earlier sessions. An
+explicit day provided by the user is accepted when it does not conflict with
+another session; ask before renumbering or overwriting when it does. Count
+lectures, labs, reviews, and makeup classes that deliver course instruction. Do
+not count holidays, cancelled meetings, or office hours unless the user says they
+replaced a class. If the available course records cannot establish the ordinal
+safely, ask one short question instead of guessing.
+
+`_Semester.md` is the source of truth for week boundaries. Its `starts` date may
+begin at Week 00, but do not infer that every seven-day block is a teaching week.
+When the calendar includes an orientation week, delayed start, break, or other
+exception, record the boundaries explicitly in `## Calendar / Calendario`, for
+example:
+
+```markdown
+## Calendar / Calendario
+
+| Week | Starts | Ends | Meaning |
+| ---: | --- | --- | --- |
+| 0 | 2026-08-31 | 2026-09-04 | Orientation / syllabus |
+| 1 | 2026-09-07 | 2026-09-11 | First teaching week |
+```
+
+If a date cannot be assigned to a declared week, ask instead of silently shifting
+the week number.
 
 When adding a newly discovered historical or makeup session, recompute every
 later session day for that course and update filenames and links in one migration.
@@ -87,7 +108,8 @@ If cancellations or prior meetings are uncertain, ask before renumbering.
 
 1. Resolve the course name against `Course.md`, its aliases, and its folder.
 2. Resolve the date. Use today only when no date is supplied. Use `_Semester.md`
-   to calculate `Week NN`; never calculate a week from a guessed term start.
+   and its `## Calendar / Calendario` table, when present, to calculate `Week NN`;
+   never calculate a week from a guessed term start.
 3. Resolve the chronological course day, then name the session
    `YYYY-MM-DD - Week NN - Day NN - Filesystem-safe Course Name.md` in that
    course's folder.
@@ -224,7 +246,8 @@ coaches understanding rather than reviewing a software plan.
    calculated from `_Semester.md`.
 2. Read only completed session notes whose `course` and `week` match. Do not turn
    an unfinished draft into syllabus truth.
-3. Create or refresh `Week NN Summary.md` in the course folder:
+3. Create or refresh `Week NN Summary.md` in the course folder. `Week 00 Summary.md`
+   is valid when the semester calendar assigns material to Week 00:
 
 ```markdown
 ---
@@ -297,8 +320,8 @@ When the user asks to standardize or fix note typing:
    validation.
 6. Convert challenge answers to collapsed Obsidian callouts.
 7. Verify there are no old type names, unpadded filename week/day tokens, stale
-   links, duplicate fixed headings, or completed sessions missing required
-   sections.
+   links, duplicate course/date or course/day identities, duplicate fixed headings,
+   or completed sessions missing required sections.
 
 Before a bulk migration, record a hash of each raw-section body; compare those
 hashes afterward so heading normalization cannot silently alter the capture.

@@ -104,7 +104,7 @@ def validate(path):
     required_headings = OTHER_HEADINGS.get(note_type, [])
     if note_type == "session":
         name_match = re.fullmatch(r"(\d{4}-\d{2}-\d{2}) - Week (\d{2}) - Day (\d{2}) - (.+)\.md", path.name)
-        valid_week = bool(re.fullmatch(r"[1-9]\d*", data.get("week", "")))
+        valid_week = bool(re.fullmatch(r"(?:0|[1-9]\d*)", data.get("week", "")))
         valid_day = bool(re.fullmatch(r"[1-9]\d*", data.get("day", "")))
         if not name_match:
             errors.append("non-canonical session filename")
@@ -113,13 +113,13 @@ def validate(path):
         ):
             errors.append("session filename does not match frontmatter")
         if not valid_week or not valid_day:
-            errors.append("week/day must be positive unpadded integers")
+            errors.append("week must be a nonnegative unpadded integer and day must be a positive unpadded integer")
         if data.get("status") not in {"draft", "complete"}:
             errors.append("status must be draft or complete")
         required_headings = SESSION_HEADINGS if data.get("status") == "complete" else [SESSION_HEADINGS[-1]]
     elif note_type == "course-event":
         name_match = re.fullmatch(r"(\d{4}-\d{2}-\d{2}) - Week (\d{2}) - Office Hours - (.+)\.md", path.name)
-        valid_week = bool(re.fullmatch(r"[1-9]\d*", data.get("week", "")))
+        valid_week = bool(re.fullmatch(r"(?:0|[1-9]\d*)", data.get("week", "")))
         if not name_match:
             errors.append("non-canonical course-event filename")
         elif valid_week and (name_match.group(1), int(name_match.group(2)), name_match.group(3)) != (
@@ -131,15 +131,15 @@ def validate(path):
         if data.get("status") not in {"draft", "complete"}:
             errors.append("status must be draft or complete")
         if not valid_week:
-            errors.append("week must be a positive unpadded integer")
+            errors.append("week must be a nonnegative unpadded integer")
         required_headings = SESSION_HEADINGS if data.get("status") == "complete" else [SESSION_HEADINGS[-1]]
     elif note_type == "weekly-summary":
         name_match = re.fullmatch(r"Week (\d{2}) Summary\.md", path.name)
         if not name_match:
             errors.append("non-canonical weekly-summary filename")
-        valid_week = bool(re.fullmatch(r"[1-9]\d*", data.get("week", "")))
+        valid_week = bool(re.fullmatch(r"(?:0|[1-9]\d*)", data.get("week", "")))
         if not valid_week:
-            errors.append("week must be a positive unpadded integer")
+            errors.append("week must be a nonnegative unpadded integer")
         elif name_match and int(name_match.group(1)) != int(data["week"]):
             errors.append("weekly-summary filename does not match frontmatter")
         required_headings = SUMMARY_HEADINGS
@@ -177,8 +177,23 @@ def validate(path):
 root = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 failures = []
 notes = [note for note in sorted(root.rglob("*.md")) if "RESOURCES" not in note.parts]
+session_dates = {}
+session_days = {}
 for note in notes:
-    for error in validate(note):
+    note_errors = validate(note)
+    data = frontmatter(note.read_text(encoding="utf-8"))
+    if data.get("type") == "session":
+        date_key = (data.get("course"), data.get("date"))
+        day_key = (data.get("course"), data.get("day"))
+        if date_key in session_dates:
+            note_errors.append(f"duplicate course/date; already used by {session_dates[date_key].name}")
+        else:
+            session_dates[date_key] = note
+        if day_key in session_days:
+            note_errors.append(f"duplicate course/day; already used by {session_days[day_key].name}")
+        else:
+            session_days[day_key] = note
+    for error in note_errors:
         failures.append(f"{note.relative_to(root)}: {error}")
 
 if failures:

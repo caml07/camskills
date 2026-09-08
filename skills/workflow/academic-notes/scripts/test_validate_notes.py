@@ -52,7 +52,20 @@ status: complete
     )
     assert run(root).returncode == 0
 
-    note.write_text(note.read_text(encoding="utf-8").replace("week: 1", "week: 01"), encoding="utf-8")
+    note.rename(root / "2026-09-04 - Week 00 - Day 03 - Web II.md")
+    note = root / "2026-09-04 - Week 00 - Day 03 - Web II.md"
+    note.write_text(note.read_text(encoding="utf-8").replace("week: 1", "week: 0"), encoding="utf-8")
+    assert run(root).returncode == 0
+
+    duplicate = root / "2026-09-05 - Week 00 - Day 03 - Web II.md"
+    duplicate.write_text(note.read_text(encoding="utf-8"), encoding="utf-8")
     result = run(root)
     assert result.returncode == 1
-    assert "week/day must be positive unpadded integers" in result.stdout
+    assert "duplicate course/date" in result.stdout
+    assert "duplicate course/day" in result.stdout
+    duplicate.unlink()
+
+    note.write_text(note.read_text(encoding="utf-8").replace("week: 0", "week: 00"), encoding="utf-8")
+    result = run(root)
+    assert result.returncode == 1
+    assert "week must be a nonnegative unpadded integer" in result.stdout
