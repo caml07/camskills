@@ -1,11 +1,12 @@
 ---
 name: academic-notes
 description: >-
-  Create and maintain linked Obsidian notes for university courses. Use when the
-  user says /note, /note-week-summary, Day 00, syllabus, lecture notes, raw class
-  notes, course quirks, or wants to organize notes by academic week and session.
-  Preserves raw notes until the user says done, builds durable concept links, and
-  produces retrieval-practice review without inventing course facts.
+  Create, standardize, and maintain linked Obsidian notes for university courses.
+  Use when the user says /note, /note-week-summary, Day 00, syllabus, lecture
+  notes, raw class notes, course quirks, or asks to normalize filenames,
+  frontmatter types, headings, weeks, or class days. Preserves raw notes until the
+  user says done, builds durable concept links, and produces retrieval-practice
+  review without inventing course facts.
 license: MIT
 compatibility: opencode with an Obsidian MCP that can read and edit the target vault
 ---
@@ -25,6 +26,61 @@ skill is for course notes only; use `notes-vault` for general permanent knowledg
 
 <!-- ponytail: Course.md is both the mutable profile and course map; split it only when a course becomes hard to scan. -->
 
+## Canonical Note Schema
+
+Use English frontmatter keys so metadata remains queryable. Use bilingual fixed
+headings (`English / Español`) while preserving the user's natural language in
+the body. Do not invent extra keys when an existing field covers the need.
+
+| `type` | Required frontmatter |
+| --- | --- |
+| `semester` | `type`, `term`, `starts` |
+| `course` | `type`, `course`, `code`, `meetings`, `ai_policy`; `section` is optional |
+| `syllabus` | `type`, `course` |
+| `session` | `type`, `course`, `date`, `week`, `day`, `status` |
+| `course-event` | `type`, `course`, `date`, `week`, `event`, `status` |
+| `weekly-summary` | `type`, `course`, `week` |
+| `concept` | `type`, `concept`, `courses`; `tags` is optional |
+
+- Store `week` and `day` as integers (`week: 1`, not `week: 01`). Zero-pad them
+  only in filenames, titles, and links (`Week 01`, `Day 03`).
+- A session `status` is either `draft` or `complete`. Other note types do not
+  carry `status` except `course-event`.
+- `courses` on a concept is a YAML list of plain canonical course names. Keep
+  navigation links in the body rather than embedding wiki-links in frontmatter.
+- Use `Day 00` only for syllabus material. Normal lecture days begin at `Day 01`.
+
+### Canonical Names
+
+```text
+_Semester.md
+Course.md
+Day 00 - Syllabus.md
+YYYY-MM-DD - Week NN - Day NN - Filesystem-safe Course Name.md
+YYYY-MM-DD - Week NN - Office Hours - Filesystem-safe Course Name.md
+Week NN Summary.md
+Concept name.md
+```
+
+Derive the session's filename course name from the canonical `course` value.
+Replace `/` with `-`, replace `:` with ` -`, remove `\\ * ? " < > |`, and
+collapse repeated spaces. Keep the display name unchanged in frontmatter and the
+H1. Concept filenames must be globally unambiguous and filesystem-safe.
+
+`day` is the chronological ordinal of an actual course meeting since the semester
+start, not the number of notes captured. Use the meeting schedule plus known
+holidays, cancellations, makeup classes, and earlier sessions. An explicit day
+provided by the user is accepted when it does not conflict with another session;
+ask before renumbering or overwriting when it does. Count lectures, labs, reviews,
+and makeup classes that deliver course instruction. Do not count holidays,
+cancelled meetings, or office hours unless the user says they replaced a class.
+If the available course records cannot establish the ordinal safely, ask one
+short question instead of guessing.
+
+When adding a newly discovered historical or makeup session, recompute every
+later session day for that course and update filenames and links in one migration.
+If cancellations or prior meetings are uncertain, ask before renumbering.
+
 ## Command Workflows
 
 ### `/note <course> [date] <raw notes>`
@@ -32,35 +88,52 @@ skill is for course notes only; use `notes-vault` for general permanent knowledg
 1. Resolve the course name against `Course.md`, its aliases, and its folder.
 2. Resolve the date. Use today only when no date is supplied. Use `_Semester.md`
    to calculate `Week NN`; never calculate a week from a guessed term start.
-3. Name the session `YYYY-MM-DD - Week NN - Course.md` in that course's folder.
-4. If a draft exists for that course and date, append the new material under
-   `## Raw notes`. Otherwise create this minimum draft:
+3. Resolve the chronological course day, then name the session
+   `YYYY-MM-DD - Week NN - Day NN - Filesystem-safe Course Name.md` in that
+   course's folder.
+4. If any session exists for that course and date, append the new material under
+   `## Raw Notes / Notas crudas`. Keep a draft open; if the session is complete,
+   refresh its structured sections after appending. Otherwise create this minimum
+   draft:
 
 ```markdown
 ---
 type: session
 course: Course name
 date: YYYY-MM-DD
-week: NN
+week: 1
+day: 1
 status: draft
 ---
 
-# Course name - Week NN
+# Course name - Week NN / Semana NN - Day NN / Día NN
 
-[[FALL26/Course Folder/Course]] · [[FALL26/Course Folder/Week NN Summary]]
+[[Semester/Course Folder/Course]] · [[Semester/Course Folder/Week NN Summary]]
 
-## Raw notes
+## Raw Notes / Notas crudas
 ```
 
 5. Reply briefly that the draft remains open. Do not organize, expand, research,
    or create concepts until the user writes `done`.
 6. `done` closes the active draft in the conversation. If the active draft is not
    known, require `/note <course> done [date]` rather than risking the wrong file.
-7. Later raw material for a completed session is appended to `## Raw notes`, then
-   the structured sections are refreshed. Never replace or paraphrase raw notes.
+7. Later raw material for a completed session is appended to
+   `## Raw Notes / Notas crudas`, then the structured sections are refreshed.
+   Never create a second session for the same course and date. Never replace or
+   paraphrase raw notes.
 
-An off-schedule date is allowed: it may be a lab, review, makeup, or office hour.
-Record it without pretending it was a normal lecture.
+The raw capture excludes command syntax (`/note`), resolved selectors (course,
+date, week, day), the terminal control word `done`, and explicit instructions to
+the assistant such as “research this” or “add the official link.” Preserve quoted
+or clearly attributed classroom wording even when it resembles an instruction.
+
+An off-schedule instructional meeting may be a lab, review, or makeup; record it
+as a session and count it in the chronological Day sequence. Office hours do not
+change that sequence. Record them as `type: course-event` with
+`event: office-hours`, omit `day`, and name them
+`YYYY-MM-DD - Week NN - Office Hours - Filesystem-safe Course Name.md`. Use the
+same draft/complete content sections, but exclude them from weekly synthesis
+unless the user explicitly asks to include supplementary material.
 
 ### Closing a Session
 
@@ -68,15 +141,15 @@ When the user says `done`, set `status: complete` and write, in Spanglish natura
 to the user's style:
 
 ```markdown
-## Captured From Class
-## Detailed Notes
-## Examples, Commands, and Diagrams
-## Decisions, Trade-offs, and Failure Modes
-## Tasks and Deadlines
-## Questions and Gaps
-## Senior Challenge
-## AI Context and Sources
-## Raw notes
+## Captured From Class / Capturado en clase
+## Detailed Notes / Notas detalladas
+## Examples, Commands, and Diagrams / Ejemplos, comandos y diagramas
+## Decisions, Trade-offs, and Failure Modes / Decisiones, trade-offs y modos de fallo
+## Tasks and Deadlines / Tareas y fechas límite
+## Questions and Gaps / Preguntas y vacíos
+## Senior Challenge / Reto senior
+## AI Context and Sources / Contexto y fuentes de IA
+## Raw Notes / Notas crudas
 ```
 
 - `Captured From Class` contains only claims supported by the user's raw notes,
@@ -97,7 +170,7 @@ Every completed session always links to its `Course.md` and current week summary
 Add concept links only when the session explains, applies, contrasts, or questions
 the concept.
 
-Create at most three new concept notes per session in `FALL26/Concepts/` when all
+Create at most three new concept notes per session in `<semester>/Concepts/` when all
 of these hold:
 
 1. The concept is durable beyond this one lecture.
@@ -113,8 +186,8 @@ one-off assignments, or every named library. Leave weaker candidates under
 Use vault-root paths in wiki-links to avoid collisions, for example:
 
 ```markdown
-[[FALL26/Theory/Course|Theory of Computation]]
-[[FALL26/Concepts/Finite automaton]]
+[[Semester/Theory/Course|Theory of Computation]]
+[[Semester/Concepts/Finite automaton]]
 ```
 
 Use aliases only for genuine alternate names. Let backlinks provide reverse
@@ -129,8 +202,15 @@ End each completed session with two or three questions that make the student:
 3. Justify a decision against an alternative, predict a failure, or give a
    counterexample.
 
-Put model answers in collapsed Obsidian callouts. The question remains visible;
-the answer is available only after an honest retrieval attempt.
+Put each model answer directly beneath its question in a collapsed Obsidian
+callout. Do not use HTML `<details>` or put all answers into one block.
+
+```markdown
+1. Question text
+
+> [!faq]- Model answer / Respuesta modelo
+> Answer text
+```
 
 This borrows the evidence and trade-off discipline of `junior-to-senior`, but it
 coaches understanding rather than reviewing a software plan.
@@ -147,34 +227,46 @@ coaches understanding rather than reviewing a software plan.
 ---
 type: weekly-summary
 course: Course name
-week: NN
+week: 1
 ---
 
-# Week NN Summary - Course name
+# Week NN Summary / Resumen de semana NN - Course name
 
-## Sessions
-## Detailed Synthesis
-## Connections and Durable Concepts
-## Exam Preparation
-## Questions
-## Answers
-## Open Gaps
+## Sessions / Sesiones
+## Detailed Synthesis / Síntesis detallada
+## Connections and Durable Concepts / Conexiones y conceptos duraderos
+## Exam Preparation / Preparación para examen
+## Questions / Preguntas
+## Answers / Respuestas
+## Open Gaps / Vacíos abiertos
 ```
 
 4. Link each source session under `## Sessions`.
-5. In `## Exam Preparation`, write retrieval questions that require explanation,
-   application, comparison, proof, design rationale, or failure analysis. Put each
-   answer in a collapsed callout under `## Answers`.
+5. In `## Exam Preparation / Preparación para examen`, write numbered retrieval
+   questions that require explanation, application, comparison, proof, design
+   rationale, or failure analysis. Put matching numbered collapsed callouts under
+   `## Answers / Respuestas`.
 6. Summarize raw notes only through their completed session's structured content;
    do not repeat the raw capture in the weekly summary.
 
 ## Day 00 and Course Mutation
 
-`Day 00 - Syllabus.md` preserves course source material. It links to the original
-PDF and a cleaned operational syllabus; it is not a normal session note.
+`Day 00 - Syllabus.md` uses `type: syllabus`, preserves course source material,
+and links to the original PDF and a cleaned operational syllabus. It is not a
+session, has no `week`, `day`, or `status`, and does not affect the lecture-day
+counter. Use these fixed headings:
+
+```markdown
+# Day 00 - Syllabus / Programa
+## Captured From Class / Capturado en clase
+## Operational Notes / Notas operativas
+## Verify With Instructor / Verificar con instructor
+```
 
 When the user asks to change a course's quirks, update only `## Note-Taking
-Profile` in its `Course.md`. When adding a course:
+Profile / Perfil de notas` in its `Course.md`. Course notes use
+`## Course Map / Mapa del curso` and `## Open Questions / Preguntas abiertas`.
+When adding a course:
 
 1. Add one row to `_Semester.md`.
 2. Create `Course.md` with course identity, meetings, AI policy, and mutable
@@ -182,7 +274,37 @@ Profile` in its `Course.md`. When adding a course:
 3. Create `Day 00 - Syllabus.md` only when a syllabus or its source link exists.
 
 Do not rewrite a source PDF or raw conversion. Keep ambiguities in an explicit
-`## Open Questions` section until the instructor resolves them.
+`## Open Questions / Preguntas abiertas` section until the instructor resolves
+them.
+
+## Normalizing Existing Notes
+
+When the user asks to standardize or fix note typing:
+
+1. Inventory every Markdown note in the requested semester and classify it by
+   role before editing.
+2. Normalize frontmatter to the canonical schema. If an unknown key carries real
+   user data, ask how to map it into a canonical field or body section; never
+   silently delete it or leave a noncanonical key behind.
+3. Rename session files to the canonical pattern and update every wiki-link that
+   targets an old name.
+4. Normalize fixed headings and their order without rewriting source content.
+5. Preserve every raw section byte-for-byte except its heading. Never migrate a
+   source PDF or raw conversion. Exclude `RESOURCES/` directories from structural
+   validation.
+6. Convert challenge answers to collapsed Obsidian callouts.
+7. Verify there are no old type names, unpadded filename week/day tokens, stale
+   links, duplicate fixed headings, or completed sessions missing required
+   sections.
+
+Before a bulk migration, record a hash of each raw-section body; compare those
+hashes afterward so heading normalization cannot silently alter the capture.
+
+Run the bundled structural check after creating or normalizing notes:
+
+```bash
+python scripts/validate_notes.py /path/to/semester
+```
 
 ## Academic Integrity
 

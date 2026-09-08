@@ -3,14 +3,20 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "/note Web II mr felix covered the Node event loop and non-blocking I/O. We installed Node.js. Add the official docs link. done",
-      "expected_output": "Creates a completed, linked session note that preserves the raw capture, labels external documentation, and asks senior-level retrieval questions.",
+      "prompt": "/note Web II 2026-09-04 Day 03 mr felix covered the Node event loop and non-blocking I/O. We installed Node.js. Add the official docs link. done",
+      "expected_output": "Creates a completed session named YYYY-MM-DD - Week NN - Day NN - Course.md with canonical integer frontmatter, bilingual fixed headings, preserved raw capture, labeled external documentation, and collapsed retrieval answers.",
       "files": []
     },
     {
       "id": 2,
       "prompt": "/note-week-summary Web II 1",
-      "expected_output": "Creates a course-local Week 01 summary from completed notes only, with source links and collapsed answers to retrieval questions.",
+      "expected_output": "Creates a course-local Week 01 summary from completed notes only, using canonical integer frontmatter, bilingual fixed headings, source links, and numbered collapsed answers.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Standardize all Fall 2026 course notes: filenames, frontmatter types, bilingual headings, and links. Preserve every raw note exactly.",
+      "expected_output": "Inventories the semester and either migrates each note to the canonical schema or asks when historical day ordinals cannot be established safely. Updates stale wiki-links, preserves raw note bodies, and verifies no legacy types or names remain.",
       "files": []
     }
   ]

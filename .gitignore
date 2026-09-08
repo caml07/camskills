@@ -5,3 +5,4 @@ bun.lock
 .env
 *.local.*
 opencode.jsonc
+__pycache__/

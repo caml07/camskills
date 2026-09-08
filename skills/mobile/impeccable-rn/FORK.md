@@ -5,9 +5,12 @@
 - Upstream: `pbakaus/impeccable`
 - Tipo: fork curado, no espejo funcional
 - Base upstream revisada: `c0f495212236129c2e92aaf7714a3a9914569d13`
-- Fecha de revisión: 2026-09-02
+- Último upstream revisado: `2bc2879276c1f321a53c4ca99d3371e411329b52`
+- Fecha de revisión: 2026-09-07
 - Licencia declarada por el fork: Apache-2.0; conservar notices del upstream si se redistribuyen archivos derivados.
-- Resultado de revisión: `v4.1.3` no aporta cambios RN/nativos importables.
+- Resultado de revisión: los 69 commits desde `v4.1.3` no aportan cambios
+  importables dentro de este fork. El único delta nativo cambia una referencia
+  a `detect.mjs` por `impeccable detect`, que sigue siendo tooling excluido.
 
 ## Qué se importa
 

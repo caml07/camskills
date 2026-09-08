@@ -10,7 +10,7 @@ Semester/
     Course.md
     Day 00 - Syllabus.md
     Week 01 Summary.md
-    2026-09-01 - Week 01 - Course A.md
+    2026-09-01 - Week 01 - Day 01 - Course A.md
   Concepts/
     Durable concept.md
 ```
@@ -32,11 +32,50 @@ meetings: Monday and Wednesday, 10:00 AM-11:00 AM
 ai_policy: approval-and-disclosure # or unspecified
 ```
 
-Keep mutable instructions in `## Note-Taking Profile`, source-derived unknowns
-in `## Open Questions`, and stable navigation links near the title.
+Keep mutable instructions in `## Note-Taking Profile / Perfil de notas`,
+source-derived unknowns in `## Open Questions / Preguntas abiertas`, and stable
+navigation links near the title.
+
+## Canonical Frontmatter
+
+Store `week` and `day` as integers. Zero-padding belongs only in filenames and
+titles.
+
+```yaml
+# Session
+type: session
+course: Course name
+date: YYYY-MM-DD
+week: 1
+day: 1
+status: draft # or complete
+
+# Weekly summary
+type: weekly-summary
+course: Course name
+week: 1
+
+# Non-instructional course event
+type: course-event
+course: Course name
+date: YYYY-MM-DD
+week: 1
+event: office-hours
+status: draft
+
+# Concept
+type: concept
+concept: Durable concept name
+courses:
+  - Course name
+```
+
+Fixed headings are bilingual (`English / Español`). See `SKILL.md` for the exact
+session, summary, syllabus, and course templates.
 
 ## Source Provenance
 
 - `Day 00 - Syllabus.md` links the original PDF and cleaned syllabus.
-- Session notes distinguish `Captured From Class` from `AI Context and Sources`.
-- Never overwrite `Raw notes` or source files.
+- Session notes distinguish `Captured From Class / Capturado en clase` from
+  `AI Context and Sources / Contexto y fuentes de IA`.
+- Never overwrite `Raw Notes / Notas crudas` or source files.

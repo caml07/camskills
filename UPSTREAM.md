@@ -54,3 +54,19 @@
 - `third-party` — skill obtenido de una fuente externa
 - `fork` — fork/modificación propia de un skill de terceros
 - `plugin` — plugin npm, no un skill
+
+## Last Upstream Audit
+
+Reviewed 2026-09-07:
+
+- `vercel-react-native-skills`, `find-skills`, `junior-to-senior`,
+  `mattpocock-engineering/*`, `mobile-app-ui-design`, and `security-audit`
+  match their current upstream source trees exactly.
+- `expo/skills` at `d0075ffa09928f1edb3e7ac4f5af07586d4b344d` now exposes a
+  monolithic `expo-skill-eval` skill rather than the vendored per-skill paths.
+  It also adds `eas-update`. Neither is imported automatically.
+- `impeccable` at `2bc2879276c1f321a53c4ca99d3371e411329b52` is 69 commits past
+  the v4.1.3 base. Its OpenCode fork needs a dedicated sync that reapplies the
+  local provider and tool adaptations; `impeccable-rn` was reviewed separately.
+- `@upstash/context7-mcp` latest is `4.0.5`, but it is not installed locally;
+  this repository owns only its OpenCode workflow instructions.
