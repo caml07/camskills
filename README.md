@@ -80,6 +80,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `doc-system` | Documentación técnica humana: requirements, reference, change, ADR y runbook |
 | `find-skills` | Descubrimiento e instalación de skills desde la CLI |
 | `fix-debug` | Debug asistido con Context7 |
+| `humanizer` | Reescritura de prosa que elimina patrones típicos de texto generado por IA |
 | `no-commit-secrets` | Previene commits de secrets a git |
 | `no-use-effect` | Prohíbe useEffect directo en React |
 | `notes-vault` | Creación de notas en Obsidian vault |

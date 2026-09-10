@@ -32,6 +32,7 @@
 | expo-web-to-native | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-web-to-native -g -y` |
 | find-skills | vercel-labs (skills.sh) | third-party | `vercel-labs/skills` | `npx skills add vercel-labs/skills --skill find-skills --agent opencode --copy -y` |
 | fix-debug | psistema/caml07 | own | — | edición directa |
+| humanizer | blader | third-party | `blader/humanizer` | `npx skills add blader/humanizer --skill humanizer --agent opencode --copy -y` |
 | impeccable | pbakaus/impeccable (fork con adaptaciones opencode) | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Copiar upstream + re-aplicar: rutas `.claude/`→`.opencode/` y `AskUserQuestion`→`` `question` `` |
 | impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `c0f495212236129c2e92aaf7714a3a9914569d13` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
 | junior-to-senior | juliusbrussee (skills.sh) | third-party | `juliusbrussee/skills` | `npx skills add juliusbrussee/skills --skill junior-to-senior --agent opencode --copy -y` |
