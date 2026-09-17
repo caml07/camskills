@@ -90,7 +90,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 
 Origen y estado de cada skill (own / third-party / fork / plugin): ver `UPSTREAM.md`.
 
-## MCPs
+## OpenCode MCPs
 
 La plantilla opcional y la configuración segura de Context7, Obsidian y
 Composio están en [`MCP.md`](MCP.md) y
@@ -123,6 +123,23 @@ ln -s ~/camskills/skills/*/* ~/.config/opencode/skills/
 ```
 
 Nota: si ya tenés `context7-mcp` instalado en otra ruta, no lo actives.
+
+## Codex
+
+La colección compatible con Codex vive en [`codex/.agents/skills`](codex/.agents/skills).
+Las skills portables son symlinks a la fuente OpenCode; solo las que dependen de
+herramientas del host tienen un overlay específico para Codex.
+
+```bash
+git clone git@github.com:caml07/camskills.git ~/camskills
+mkdir -p ~/.agents/skills
+ln -s ~/camskills/codex/.agents/skills/* ~/.agents/skills/
+```
+
+En Codex, ejecuta `/skills` para comprobar el descubrimiento y usa
+`$nombre-skill` para invocar una explícitamente. La configuración opcional de
+Context7 está en [`codex/config.example.toml`](codex/config.example.toml); no
+copies configuraciones OpenCode JSONC ni credenciales.
 
 ## Plugins
 

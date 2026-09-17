@@ -8,6 +8,7 @@
 | eas-hosting | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-hosting -g -y` |
 | eas-observe | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-observe -g -y` |
 | eas-simulator | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-simulator -g -y` |
+| eas-update | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-update -g -y` |
 | eas-update-insights | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-update-insights -g -y` |
 | eas-workflows | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-workflows -g -y` |
 | emil-design-eng | psistema/caml07 (basado en Emil Kowalski) | own | — | edición directa |
@@ -20,21 +21,21 @@
 | expo-brownfield | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-brownfield -g -y` |
 | expo-examples | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-examples -g -y` |
 | expo-module | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-module -g -y` |
-| expo-migrate-module | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-migrate-module -g -y` |
+| expo-migrate-module | expo (retirada upstream) | third-party (legacy) | `expo/skills` | mantener; ya no existe upstream |
 | expo-native-ui | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-native-ui -g -y` |
 | expo-overview | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-overview -g -y` |
 | expo-project-structure | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-project-structure -g -y` |
 | expo-router | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-router -g -y` |
 | expo-skill-feedback | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-skill-feedback -g -y` |
-| expo-tailwind-setup | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-tailwind-setup -g -y` |
+| expo-tailwind-setup | expo (retirada upstream) | third-party (legacy) | `expo/skills` | mantener; ya no existe upstream |
 | expo-ui | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-ui -g -y` |
 | expo-upgrade | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-upgrade -g -y` |
 | expo-web-to-native | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill expo-web-to-native -g -y` |
 | find-skills | vercel-labs (skills.sh) | third-party | `vercel-labs/skills` | `npx skills add vercel-labs/skills --skill find-skills --agent opencode --copy -y` |
 | fix-debug | psistema/caml07 | own | — | edición directa |
 | humanizer | blader | third-party | `blader/humanizer` | `npx skills add blader/humanizer --skill humanizer --agent opencode --copy -y` |
-| impeccable | pbakaus/impeccable (fork con adaptaciones opencode) | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Copiar upstream + re-aplicar: rutas `.claude/`→`.opencode/` y `AskUserQuestion`→`` `question` `` |
-| impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `c0f495212236129c2e92aaf7714a3a9914569d13` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
+| impeccable | pbakaus/impeccable (fork con adaptaciones opencode) | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Copiar upstream + re-aplicar: `AskUserQuestion`→`` `question` `` / pregunta estructurada y `agents/openai.yaml` |
+| impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `f2c7051853848826aac2f4646581d62a732155ad` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
 | junior-to-senior | juliusbrussee (skills.sh) | third-party | `juliusbrussee/skills` | `npx skills add juliusbrussee/skills --skill junior-to-senior --agent opencode --copy -y` |
 | mattpocock-engineering/* | mattpocock | third-party | `mattpocock/skills` (`skills/engineering/`) | clonar repo y recopiar las 18 carpetas (ask-matt, codebase-design, code-review, diagnosing-bugs, domain-modeling, grill-with-docs, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, to-spec, to-tickets, triage, wayfinder, wizard) |
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
@@ -43,6 +44,7 @@
 | notification | psistema/caml07 | own | — | edición directa |
 | academic-notes | psistema/caml07 | own | — | edición directa |
 | notes-vault | psistema/caml07 | own | — | edición directa |
+| opencode-skill-creator | antongulin | plugin | npm `opencode-skill-creator` | `git -C ~/.config/opencode/skills/opencode-skill-creator pull` / `npm update` |
 | ponytail | @dietrichgebert | plugin | npm | `npm update @dietrichgebert/ponytail` |
 | skill-creator | psistema/caml07 | own | — | edición directa |
 | tanstack-query | psistema/caml07 | own | — | edición directa |
@@ -53,21 +55,37 @@
 **Legend:**
 - `own` — skill original, sin upstream externo
 - `third-party` — skill obtenido de una fuente externa
+- `third-party (legacy)` — depende de una fuente externa que ya no publica la skill; se conserva localmente
 - `fork` — fork/modificación propia de un skill de terceros
 - `plugin` — plugin npm, no un skill
 
 ## Last Upstream Audit
 
-Reviewed 2026-09-07:
+Reviewed 2026-09-16:
 
-- `vercel-react-native-skills`, `find-skills`, `junior-to-senior`,
-  `mattpocock-engineering/*`, `mobile-app-ui-design`, and `security-audit`
-  match their current upstream source trees exactly.
-- `expo/skills` at `d0075ffa09928f1edb3e7ac4f5af07586d4b344d` now exposes a
-  monolithic `expo-skill-eval` skill rather than the vendored per-skill paths.
-  It also adds `eas-update`. Neither is imported automatically.
-- `impeccable` at `2bc2879276c1f321a53c4ca99d3371e411329b52` is 69 commits past
-  the v4.1.3 base. Its OpenCode fork needs a dedicated sync that reapplies the
-  local provider and tool adaptations; `impeccable-rn` was reviewed separately.
-- `@upstash/context7-mcp` latest is `4.0.5`, but it is not installed locally;
-  this repository owns only its OpenCode workflow instructions.
+- `expo/skills` at `39708666ce7014def1f8e34f3d8c93e8d3f588bb`:
+  - 12 skills changed and were re-synced: eas-app-stores, eas-simulator,
+    expo-animation, expo-brownfield, expo-data-fetching, expo-design-system,
+    expo-native-ui, expo-overview, expo-router, expo-upgrade, expo-web-to-native,
+    and the new `eas-update`.
+  - `expo-migrate-module` and `expo-tailwind-setup` were removed upstream and are
+    kept as legacy.
+- `security-audit` at `c1c8a8c1471069fb0e188eeaff69b8e8db6564a8` was fully
+  re-synced (the local tree had drifted; upstream now ships more coverage files
+  and validation scripts).
+- `impeccable` at `f2c7051853848826aac2f4646581d62a732155ad` (v4.3.1) was
+  re-synced as a fork. The sync drops the bundled playbook resources that moved
+  upstream (interaction-design.md, codex.md, brand.md, product.md, and the old
+  `scripts/*` standalone bin), and reapplies the OpenCode adaptations:
+  `AskUserQuestion` → `question`-style structured prompt, `<skill-base-dir>`,
+  `agents/openai.yaml`, and the `agents/*.toml` sub-agent files (which upstream
+  now ships as `.md` outside the skill dir).
+- `impeccable-rn` re-reviewed against the same upstream commit; only the
+  touch-gesture audit criterion was imported. See `FORK.md`.
+- `file:///`-relative symlinks on a source tree now expose all Codex-portable
+  skills under `codex/.agents/skills`; `context7-mcp`, `fix-debug`, and
+  `expo-skill-feedback` carry a Codex overlay, and `skill-creator` is excluded
+  because Codex ships its own.
+- `@upstash/context7-mcp` latest is `4.1.1`; `opencode-skill-creator` latest is
+  `0.2.25`; `@dietrichgebert/ponytail` latest is `4.10.0`. This repository
+  vendors only workflows/instructions, not installed plugin versions.

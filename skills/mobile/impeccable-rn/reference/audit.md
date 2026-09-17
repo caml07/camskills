@@ -22,6 +22,12 @@ No ejecutar browser tooling ni evaluar HTML/CSS.
 4. Separar defecto confirmado de evidencia faltante.
 5. Reportar únicamente problemas que cambien una decisión.
 
+Al revisar sliders, superficies de arrastre o tiras de controles desplazables,
+probar el gesto táctil cuando exista un device o emulator. Confirmar que no
+bloquee el scroll, que la interacción no dependa de handlers de mouse y que un
+cancel o interrupción no deje el control atrapado. Indicar la plataforma y la
+evidencia usada; un layout renderizado no prueba el gesto.
+
 ## Salida
 
 ```markdown

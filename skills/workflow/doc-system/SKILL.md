@@ -1,5 +1,6 @@
 ---
 name: doc-system
+description: >-
   Ayuda a crear y mantener documentación técnica humana en Markdown.
   Usa Requirements para BRD/PRD/FRD, Reference para TRD/arquitectura/API,
   Change para TDD/planes, ADR para decisiones y Runbook para operación.
@@ -7,7 +8,7 @@ name: doc-system
   Español por defecto. Activa cuando el usuario pida documentar, revisar,
   actualizar o diseñar la documentación de un proyecto.
 license: MIT
-compatibility: opencode
+compatibility: Requires a working directory and source or command evidence.
 ---
 
 # Documentación humana

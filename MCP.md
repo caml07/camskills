@@ -43,3 +43,17 @@ este archivo solo declara el transporte MCP.
 
 Referencias: [OpenCode MCP servers](https://opencode.ai/docs/mcp-servers/) y
 [OpenCode config variables](https://opencode.ai/docs/config/#env-vars).
+
+## Codex
+
+Codex usa `~/.codex/config.toml`, no el bloque JSONC de OpenCode. La plantilla
+sin credenciales para Context7 está en [`codex/config.example.toml`](codex/config.example.toml).
+También se puede instalar con:
+
+```bash
+codex mcp add context7 -- npx -y @upstash/context7-mcp
+```
+
+Obsidian y Composio requieren rutas, tokens u OAuth propios de la máquina:
+configúralos localmente, no en este repositorio. Referencia:
+https://developers.openai.com/codex/extend/mcp.

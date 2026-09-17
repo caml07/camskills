@@ -1,0 +1,8 @@
+# Optional Context7 server for the context7-mcp and fix-debug skills.
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+enabled = true
+
+# Configure machine-specific MCP servers and credentials in ~/.codex/config.toml,
+# never in this repository.
