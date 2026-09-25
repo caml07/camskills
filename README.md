@@ -56,6 +56,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `code-review` | Review de diff en 2 ejes (standards + spec) con sub-agents en paralelo |
 | `diagnosing-bugs` | Loop de diagnóstico: reproduce → minimiza → hipótesis → instrument → fix |
 | `domain-modeling` | Construir/afinar el modelo de dominio y lenguaje ubicuo (CONTEXT.md + ADRs) |
+| `grilling` | Entrevista iterativa que recorre el árbol de decisiones hasta eliminar supuestos abiertos |
 | `grill-with-docs` | Sesión que afila terminología del dominio y actualiza CONTEXT.md/ADRs |
 | `implement` | Construir desde spec/tickets con `/tdd` y cierre con `/code-review` |
 | `junior-to-senior` | Senior review adversarial de planes y arquitecturas agent-written |

@@ -37,7 +37,7 @@
 | impeccable | pbakaus/impeccable (fork con adaptaciones opencode) | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Copiar upstream + re-aplicar: `AskUserQuestion`→`` `question` `` / pregunta estructurada y `agents/openai.yaml` |
 | impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `f2c7051853848826aac2f4646581d62a732155ad` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
 | junior-to-senior | juliusbrussee (skills.sh) | third-party | `juliusbrussee/skills` | `npx skills add juliusbrussee/skills --skill junior-to-senior --agent opencode --copy -y` |
-| mattpocock-engineering/* | mattpocock | third-party | `mattpocock/skills` (`skills/engineering/`) | clonar repo y recopiar las 18 carpetas (ask-matt, codebase-design, code-review, diagnosing-bugs, domain-modeling, grill-with-docs, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, to-spec, to-tickets, triage, wayfinder, wizard) |
+| mattpocock-engineering/* | mattpocock | third-party | `mattpocock/skills` (`skills/engineering/` + `skills/productivity/grilling/`) | clonar repo y recopiar las 19 carpetas (ask-matt, codebase-design, code-review, diagnosing-bugs, domain-modeling, grilling, grill-with-docs, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, to-spec, to-tickets, triage, wayfinder, wizard) |
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
 | no-commit-secrets | psistema/caml07 | own | — | edición directa |
 | no-use-effect | psistema/caml07 | own | — | edición directa |
@@ -89,3 +89,11 @@ Reviewed 2026-09-16:
 - `@upstash/context7-mcp` latest is `4.1.1`; `opencode-skill-creator` latest is
   `0.2.25`; `@dietrichgebert/ponytail` latest is `4.10.0`. This repository
   vendors only workflows/instructions, not installed plugin versions.
+
+Additional sync 2026-09-24:
+
+- Added the missing `grilling` primitive from `mattpocock/skills`
+  (`skills/productivity/grilling/`) at upstream commit
+  `c55ee46073ed923f86ce59a5eb3b6d895095d1b7`. This resolves the dependency
+  used by `grill-with-docs`, `triage`, `wayfinder`, and
+  `improve-codebase-architecture`.
