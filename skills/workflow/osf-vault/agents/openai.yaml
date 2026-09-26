@@ -1,0 +1,3 @@
+interface:
+  display_name: "OSF Vault"
+  short_description: "Domain-aware notes and research for the OSF Obsidian vault"

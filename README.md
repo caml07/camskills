@@ -85,6 +85,7 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `no-commit-secrets` | Previene commits de secrets a git |
 | `no-use-effect` | Prohíbe useEffect directo en React |
 | `notes-vault` | Creación de notas en Obsidian vault |
+| `osf-vault` | Notas, lectura y research agentico para el vault de Obsidian Soundfields; preserva Episode/Entity/Lore distinctions y commits locales seguros |
 | `skill-creator` | Creación de skills (flujo legacy con scripts) |
 | `tanstack-query` | TanStack Query patterns y best practices |
 | `security-audit` | Auditoría de seguridad de aplicaciones, APIs y clientes |

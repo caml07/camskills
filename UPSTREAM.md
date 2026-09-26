@@ -44,6 +44,7 @@
 | notification | psistema/caml07 | own | — | edición directa |
 | academic-notes | psistema/caml07 | own | — | edición directa |
 | notes-vault | psistema/caml07 | own | — | edición directa |
+| osf-vault | psistema/caml07 | own | — | edición directa |
 | opencode-skill-creator | antongulin | plugin | npm `opencode-skill-creator` | `git -C ~/.config/opencode/skills/opencode-skill-creator pull` / `npm update` |
 | ponytail | @dietrichgebert | plugin | npm | `npm update @dietrichgebert/ponytail` |
 | skill-creator | psistema/caml07 | own | — | edición directa |

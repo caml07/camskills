@@ -1,0 +1,45 @@
+{
+  "skill_name": "osf-vault",
+  "evals": [
+    {
+      "id": 1,
+      "name": "capture-agentic-opinion",
+      "prompt": "Estoy leyendo 114 y esta es mi opinión: siento que lo de Terminal OSF-053 hace que el monolito se sienta parte de una red más grande. Toma nota de eso.",
+      "expected_output": "Captures the user's opinion as human-owned research, links the relevant Episode/Entity notes when they exist, updates active reading state, and does not present the opinion as canon.",
+      "assertions": [
+        {
+          "name": "preserves-personal-interpretation",
+          "description": "The note preserves the user's interpretation and does not upgrade it to confirmed canon."
+        },
+        {
+          "name": "distinguishes-episode-and-entity",
+          "description": "Episode references and Entity references are not collapsed into one concept."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "update-reading-properties",
+      "prompt": "Ya terminé 090. Ponelo como favorito y le doy 9/10.",
+      "expected_output": "Updates the Episode human-owned properties to complete, favorite true, rating 9, and refreshes last_read without touching generated source content.",
+      "assertions": [
+        {
+          "name": "updates-only-human-owned-state",
+          "description": "Only the intended human-owned Episode state is modified."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "reject-lore-match",
+      "prompt": "Ese match que sugeriste no cuadra. No es el mismo Monolith. Guardá que lo rechazo para que no vuelva a salir.",
+      "expected_output": "Persists a rejected relationship decision using the implemented knowledge schema, or records the decision as a personal research note if that schema does not exist yet.",
+      "assertions": [
+        {
+          "name": "does-not-invent-schema",
+          "description": "The skill does not fabricate a knowledge-layer storage format when the project has not implemented one."
+        }
+      ]
+    }
+  ]
+}
