@@ -98,3 +98,26 @@ Additional sync 2026-09-24:
   `c55ee46073ed923f86ce59a5eb3b6d895095d1b7`. This resolves the dependency
   used by `grill-with-docs`, `triage`, `wayfinder`, and
   `improve-codebase-architecture`.
+
+Additional sync 2026-09-26:
+
+- Audited tracked third-party skills against current upstream heads.
+- `pbakaus/impeccable` at `9d715cc` (v4.4.0) was re-synced into the curated
+  OpenCode/Codex-compatible fork, preserving `<skill-base-dir>`, structured-question
+  wording, and local `agents/` adapters. New upstream component-review and region-map
+  references are included.
+- `expo/skills` at `efa52f0` changed `eas-simulator`; the three changed files were
+  re-synced. `expo-skill-feedback` still differs only by the intentional portable
+  skill-root adaptation. All other tracked Expo skills match upstream; removed
+  `expo-migrate-module` and `expo-tailwind-setup` remain local legacy copies.
+- `impeccable-rn` was reviewed through `9d715cc`; no RN-relevant changes were
+  imported because the 4.4.0 delta is comp/browser tooling.
+- `mattpocock/skills` (`c55ee46`), `vercel-labs/agent-skills` (`063bee9`),
+  `vercel-labs/skills` (`7407f38`), `blader/humanizer` (`9862685`),
+  `juliusbrussee/skills` (`8470b26`), `cloudflare/security-audit-skill`
+  (`c1c8a8c`), and `ceorkm/mobile-app-ui-design` (`4c67a0e`) match the vendored
+  skill content currently tracked here.
+- `opencode-skill-creator` checkout is current; published versions checked remain
+  `opencode-skill-creator` 0.2.25, `@dietrichgebert/ponytail` 4.10.0, and
+  `@upstash/context7-mcp` 4.1.1. Context7 is configured as a remote MCP, so no
+  local npm package update was required.

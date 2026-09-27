@@ -5,12 +5,12 @@
 - Upstream: `pbakaus/impeccable`
 - Tipo: fork curado, no espejo funcional
 - Base upstream revisada: `c0f495212236129c2e92aaf7714a3a9914569d13`
-- Último upstream revisado: `f2c7051853848826aac2f4646581d62a732155ad`
-- Fecha de revisión: 2026-09-16
+- Último upstream revisado: `9d715cc`
+- Fecha de revisión: 2026-09-26
 - Licencia declarada por el fork: Apache-2.0; conservar notices del upstream si se redistribuyen archivos derivados.
-- Resultado de revisión: se importó el criterio de auditar gestos táctiles con
-  evidencia de interacción real. Los demás cambios desde la revisión anterior
-  siguen siendo específicos de browser, tooling web o el launcher upstream.
+- Resultado de revisión: no se importaron cambios nuevos. El delta de Impeccable 4.4.0
+  se concentra en component review, region maps, gates de comps y tooling del launcher;
+  sigue siendo específico de browser/comp-led workflows y queda fuera de este fork RN.
 
 ## Qué se importa
 
