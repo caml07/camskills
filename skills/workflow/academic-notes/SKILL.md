@@ -275,6 +275,81 @@ week: 1
 6. Summarize raw notes only through their completed session's structured content;
    do not repeat the raw capture in the weekly summary.
 
+### Retrospective lecture reconstruction: missing class notes
+
+When the student missed note-taking for a real meeting, distinguish source-
+grounded reconstruction from an authentic transcript. Read the syllabus,
+Course.md, published slide decks, lesson plans, already completed sessions and
+Week NN Summary before synthesizing. Check the actual scope with the student
+when the syllabus runs ahead of the classroom.
+
+1. Create a detailed topic-based reconstruction under
+   RESOURCES/STUDY_MATERIALS/RECONSTRUCTED_LECTURES/
+   Week_NN_Reconstructed_Class_Notes.md. This is a study resource, NOT a
+   session; do not assign a fictional Day NN, claim a fabricated lecture date
+   or fill the canonical Raw Notes section with model-generated content.
+2. Label every reconstruction visibly: AI-created retrospective study material,
+   not the professor's literal words. Keep a list of real primary sources,
+   completed session links and important chronology conflicts.
+3. Include objectives, concepts, extended worked explanations, at least one
+   genuinely worked case with assumptions and solution, failure modes, a
+   junior-to-senior challenge, model answer and open evidence gaps. In courses
+   with local slide decks, link exact assets rather than vaguely citing
+   Blackboard. Make examples original instead of copying exam prompts.
+4. Link reconstructed lessons FROM Course.md and Week NN Summary without
+   deleting or replacing original lecture notes. Preserve the raw capture and
+   keep reconstructed material separate for search/filtering.
+5. A dated session can be completed retroactively ONLY when a reliable,
+   attributable primary source identifies its content and the chronological
+   Day number can be established. Otherwise keep date-specific gaps unresolved
+   rather than assigning arbitrary topics to attendance dates.
+6. Later, if classmates' notes, recordings, or instructor feedback arrive,
+   revise the source status and explain discrepancies; do not silently promote
+   AI reconstruction to authentic lecture capture.
+
+### Assessment review: completed pretests, quizzes, tests and case studies
+
+Store study reviews under each course's RESOURCES/STUDY_MATERIALS/ASSESSMENT_REVIEWS
+folder, separately from chronological Day NN lecture notes.
+
+1. Identify the assessment title, date, score, submitted status, source URL and
+   observation date. Read only feedback normally visible for already completed
+   attempts; never start an assessment or bypass Respondus/LockDown Browser,
+   proctoring, availability or feedback restrictions.
+2. Separate confirmed grading evidence from independent study analysis. A
+   numerical grade does NOT identify which question was incorrect. Never claim
+   an answer is Blackboard-confirmed without question-level feedback.
+3. If a pretest is reused as a future graded posttest, avoid producing a
+   verbatim answer key or deriving unreleased correct answers. Instead create
+   original analogous practice questions with explanations, common distractors,
+   reasoning, relevant source concepts and failure modes.
+4. For case-study items visible from prior completed attempts, preserve only
+   concise paraphrases of the situation and learning objectives, then generate
+   a novel scenario with altered constraints. Explicitly distinguish original
+   course material, official feedback and assistant-generated practice.
+5. Use sections: Confirmed From Grading / Confirmado por Blackboard;
+   Independent Study Reconstruction / Reconstruccion de estudio; Case Practice /
+   Casos de practica; Questions and Explained Answers / Preguntas y respuestas
+   razonadas; Remaining Evidence Gaps / Vacios de evidencia; and Sources.
+6. Cross-link relevant weekly summaries, midterm hub and course Exam Prep
+   guides in Notion. Never write inferred answers into Captured From Class
+   or replace session Raw Notes. Do not expose unrelated student attempts.
+
+### Discussion review: evidence and exam-style case practice
+
+1. Archive the student's own original published post and assignment prompt,
+   source/date and grade when available; preserve exact authorship and text.
+   Do not present a classmate's response as the user's own.
+2. Extract main arguments, concepts, design decisions, limits and tradeoffs,
+   then add an explicitly independent analysis with corrections as appropriate.
+   Only label corrections instructor feedback when the instructor actually
+   provided that feedback.
+3. Transform each discussion prompt into a fresh exam-style case study with
+   an explained solution, alternative choices, pitfalls and retrieval questions.
+4. Save under RESOURCES/STUDY_MATERIALS/ASSESSMENT_REVIEWS and link from
+   weekly summaries, Course.md and relevant Notion guides. Discussions are not
+   fictional Day NN sessions.
+
 ## Day 00 and Course Mutation
 
 `Day 00 - Syllabus.md` uses `type: syllabus`, preserves course source material,
