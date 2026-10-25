@@ -3,7 +3,7 @@
 # This hook scans staged files for secrets using the skill's scanner script.
 
 SKILL_DIR="$HOME/.config/opencode/skills/no-commit-secrets"
-SCANNER="$SKILL_DIR/scripts/scan-staged.js"
+SCANNER="$SKILL_DIR/scripts/scan-staged.cjs"
 
 if [ ! -f "$SCANNER" ]; then
   echo "⚠️  Secret scanner not found at $SCANNER"

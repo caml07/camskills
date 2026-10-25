@@ -3,6 +3,10 @@ package.json
 package-lock.json
 bun.lock
 .env
+.env.local
+*.pem
+*.key
+vault/Config/
 *.local.*
 opencode.jsonc
 __pycache__/

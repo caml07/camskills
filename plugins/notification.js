@@ -1,7 +1,10 @@
 import { fileURLToPath } from "url"
 import { dirname, resolve } from "path"
+import { execFile } from "node:child_process"
+import { promisify } from "node:util"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+const run = promisify(execFile)
 
 const EVENTS = {
   "permission.asked": { urgency: "critical", app: "opencode-permission" },
@@ -46,47 +49,48 @@ const render = (type, props) => {
   }
 }
 
-export const NotificationPlugin = async ({ $, client }) => {
-  const last = new Map()
-  const match = new RegExp(FOCUS_MATCH, "i")
+export default {
+  id: "caml.notification",
+  setup(ctx) {
+    const last = new Map()
+    const match = new RegExp(FOCUS_MATCH, "i")
+    const controller = new AbortController()
 
-  const isFocused = async () => {
-    try {
-      const output = await $`niri msg windows`.text()
-      return match.test(parseFocusedTitle(output))
-    } catch {
-      return false // fail-open: si no podemos chequear, notificamos igual
+    const isFocused = async () => {
+      try {
+        const { stdout } = await run("niri", ["msg", "windows"])
+        return match.test(parseFocusedTitle(stdout))
+      } catch {
+        return false // fail-open: si no podemos chequear, notificamos igual
+      }
     }
-  }
 
-  const sessionTitle = async (sessionID) => {
-    if (!sessionID) return null
-    try {
-      const { data } = await client.session.get({ sessionID })
-      return data?.title ?? null
-    } catch {
-      return null // fallback: título genérico
+    const sessionTitle = async (sessionID) => {
+      if (!sessionID) return null
+      try {
+        const session = await ctx.session.get({ sessionID })
+        return session?.title ?? null
+      } catch {
+        return null // fallback: título genérico
+      }
     }
-  }
 
-  const play = async (sound) => {
-    if (!sound || process.platform === "win32") return
-    const file = resolve(SOUNDS_DIR, sound)
-    if (NOTIFY_DEVICE) await $`paplay --device=${NOTIFY_DEVICE} "${file}"`.quiet()
-    else await $`paplay "${file}"`.quiet()
-  }
-
-  const notify = async (title, message, urgency, app) => {
-    if (process.platform === "win32") {
-      const winSound = urgency === "critical" ? "Notification.Looping.Alarm" : "Notification.Default"
-      await $`powershell -NoProfile -File "${resolve(__dirname, "toast.ps1")}" -Title "${title}" -Message "${message}" -Sound "${winSound}"`.quiet()
-    } else {
-      await $`notify-send -u ${urgency} -a ${app} "${title}" "${message}"`.quiet()
+    const play = async (sound) => {
+      if (!sound || process.platform === "win32") return
+      const file = resolve(SOUNDS_DIR, sound)
+      await run("paplay", [...(NOTIFY_DEVICE ? [`--device=${NOTIFY_DEVICE}`] : []), file])
     }
-  }
 
-  return {
-    event: async ({ event }) => {
+    const notify = async (title, message, urgency, app) => {
+      if (process.platform === "win32") {
+        const winSound = urgency === "critical" ? "Notification.Looping.Alarm" : "Notification.Default"
+        await run("powershell", ["-NoProfile", "-File", resolve(__dirname, "toast.ps1"), "-Title", title, "-Message", message, "-Sound", winSound])
+      } else {
+        await run("notify-send", ["-u", urgency, "-a", app, title, message])
+      }
+    }
+
+    const handleEvent = async (event) => {
       const cfg = EVENTS[event.type]
       if (!cfg) return
       const now = Date.now()
@@ -94,12 +98,26 @@ export const NotificationPlugin = async ({ $, client }) => {
       last.set(event.type, now)
       try {
         if (await isFocused()) return
-        const title = (await sessionTitle(event.properties?.sessionID)) ?? null
+        const props = event.data ?? event.properties
+        const title = (await sessionTitle(props?.sessionID)) ?? null
         await play(SOUNDS[event.type])
-        await notify(title ? `OC | ${title}` : "opencode", render(event.type, event.properties), cfg.urgency, cfg.app)
+        await notify(title ? `OC | ${title}` : "opencode", render(event.type, props), cfg.urgency, cfg.app)
       } catch {
         // nunca romper la sesión por una notificación
       }
-    },
+    }
+
+    void (async () => {
+      try {
+        for await (const event of ctx.event.subscribe({ signal: controller.signal })) {
+          if (controller.signal.aborted) break
+          void handleEvent(event)
+        }
+      } catch {
+        // La desconexión del stream no debe afectar a OpenCode.
+      }
+    })()
+
+    return () => controller.abort()
   }
 }

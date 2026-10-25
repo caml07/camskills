@@ -145,7 +145,8 @@ copies configuraciones OpenCode JSONC ni credenciales.
 
 ## Plugins
 
-- `@dietrichgebert/ponytail` — modo lazy (externo, vía `opencode plugin --global`).
+- `@dietrichgebert/ponytail@5.3.2` — modo lazy (externo, configurado en `plugins` de OpenCode V2).
+- `opencode-skill-creator@0.3.6` — plugin V2 instalado desde npm; el checkout de desarrollo vive fuera de `~/.config/opencode/skills/` para evitar skills duplicadas.
 - `plugins/notification.js` (+ `toast.ps1`, `sounds/`) — notificaciones cuando opencode necesita atención, solo si el terminal no está enfocado (vía `niri msg windows`, falla abierto), con título `OC | <sesión>` y sonido por evento (Linux: `paplay`, sonidos en `plugins/sounds/`; Windows: `ms-winsoundevent` según urgencia). Eventos: `permission.asked` (critical), `question.asked` (critical), `session.idle`, `session.error` (critical), `tui.prompt.append`. Config: `OPENCODE_SOUNDS_DIR`, `OPENCODE_SOUND_{PERMISSION,QUESTION,IDLE,ERROR,PROMPT}`, `OPENCODE_NOTIFY_MATCH`, `OPENCODE_NOTIFY_DEVICE`. Copiar/symlink a `~/.config/opencode/plugins/`.
 
 ## Config

@@ -42,7 +42,7 @@ Every time the user mentions or pastes an API key, token, password, or credentia
 
 ### 3. Before Every Commit
 
-- Run `scripts/scan-staged.js` to check all staged files for secret patterns
+- Run `scripts/scan-staged.cjs` to check all staged files for secret patterns
 - If secrets are found: **block the commit**, list the offending files and patterns, and suggest remediation
 
 ### 4. Editing Config Files
@@ -74,7 +74,7 @@ If you see the user about to commit something sensitive, remind them of this.
 
 ## Resources
 
-- `scripts/scan-staged.js` — deterministic CLI scanner for pre-commit use
+- `scripts/scan-staged.cjs` — deterministic CLI scanner for pre-commit use
 - `agents/secret-scanner.md` — subagent instructions for scanning
 - `references/secret-patterns.md` — expanded regex patterns for all secret types
 - `evals/evals.json` — test cases for this skill

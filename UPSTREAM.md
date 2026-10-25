@@ -45,8 +45,8 @@
 | academic-notes | psistema/caml07 | own | — | edición directa |
 | notes-vault | psistema/caml07 | own | — | edición directa |
 | osf-vault | psistema/caml07 | own | — | edición directa |
-| opencode-skill-creator | antongulin | plugin | npm `opencode-skill-creator` | `git -C ~/.config/opencode/skills/opencode-skill-creator pull` / `npm update` |
-| ponytail | @dietrichgebert | plugin | npm | `npm update @dietrichgebert/ponytail` |
+| opencode-skill-creator | antongulin | plugin | npm `opencode-skill-creator` | checkout en `~/Projects/opencode-skill-creator`; actualizar paquete en `plugins` |
+| ponytail | @dietrichgebert | plugin | npm | actualizar paquete en `plugins` |
 | skill-creator | psistema/caml07 | own | — | edición directa |
 | tanstack-query | psistema/caml07 | own | — | edición directa |
 | test-first | psistema/caml07 | own | — | edición directa |
@@ -121,3 +121,13 @@ Additional sync 2026-09-26:
   `opencode-skill-creator` 0.2.25, `@dietrichgebert/ponytail` 4.10.0, and
   `@upstash/context7-mcp` 4.1.1. Context7 is configured as a remote MCP, so no
   local npm package update was required.
+
+Additional sync 2026-10-24:
+
+- OpenCode V2 plugin migration: `notification.js` now has a V2 default export,
+  subscribes to events with cleanup, and runs notification commands without the
+  removed V1 `$` helper. Ponytail 5.3.2 and opencode-skill-creator 0.3.6 load
+  from the global `plugins` array. The creator's upstream checkout was fast-
+  forwarded and moved to `~/Projects/opencode-skill-creator` so its nested
+  bundled skills are not discovered multiple times; its installed workflow
+  skill is now managed by the plugin.

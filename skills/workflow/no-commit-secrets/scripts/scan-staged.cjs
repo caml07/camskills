@@ -3,15 +3,13 @@
  * Scan staged files for secret patterns.
  *
  * Usage:
- *   node scan-staged.js [--path <repo-path>]
+ *   node scan-staged.cjs [--path <repo-path>]
  *
  * Returns exit code 0 if no secrets found, 1 otherwise.
  * Outputs a JSON report of findings.
  */
 
-const { execSync } = require("child_process")
-const fs = require("fs")
-const path = require("path")
+const { execFileSync } = require("child_process")
 
 const SECRET_PATTERNS = [
   // OpenRouter / OpenAI
@@ -40,19 +38,19 @@ const SECRET_PATTERNS = [
 
 function getStagedFiles(repoPath) {
   try {
-    const output = execSync("git diff --cached --name-only", {
+    const output = execFileSync("git", ["diff", "--cached", "--name-only", "--diff-filter=ACMR", "-z"], {
       cwd: repoPath,
-      encoding: "utf-8",
     })
-    return output.split("\n").filter(Boolean)
+    return output.toString("utf8").split("\0").filter(Boolean)
   } catch {
     return []
   }
 }
 
-function scanFile(filePath) {
-  if (!fs.existsSync(filePath)) return []
-  const content = fs.readFileSync(filePath, "utf-8")
+function scanFile(repoPath, file) {
+  const staged = execFileSync("git", ["show", `:${file}`], { cwd: repoPath })
+  if (staged.includes(0)) return []
+  const content = staged.toString("utf8")
   const findings = []
 
   for (const { pattern, name } of SECRET_PATTERNS) {
@@ -90,9 +88,7 @@ function main() {
 
   const allFindings = []
   for (const file of stagedFiles) {
-    const fullPath = path.resolve(repoPath, file)
-    if (!fs.existsSync(fullPath)) continue
-    const findings = scanFile(fullPath)
+    const findings = scanFile(repoPath, file)
     if (findings.length) {
       allFindings.push({ file, findings })
     }
