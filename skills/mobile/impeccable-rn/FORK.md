@@ -5,12 +5,13 @@
 - Upstream: `pbakaus/impeccable`
 - Tipo: fork curado, no espejo funcional
 - Base upstream revisada: `c0f495212236129c2e92aaf7714a3a9914569d13`
-- Último upstream revisado: `9d715cc`
-- Fecha de revisión: 2026-09-26
+- Último upstream revisado: `936867543ac2576920d663cc9803597f6044f3ac` (4.7.1)
+- Fecha de revisión: 2026-10-24
 - Licencia declarada por el fork: Apache-2.0; conservar notices del upstream si se redistribuyen archivos derivados.
-- Resultado de revisión: no se importaron cambios nuevos. El delta de Impeccable 4.4.0
-  se concentra en component review, region maps, gates de comps y tooling del launcher;
-  sigue siendo específico de browser/comp-led workflows y queda fuera de este fork RN.
+- Resultado de revisión: importados criterios nativos de Operate/Read,
+  crítica sin detector web, inspección de estados interactivos, restauración
+  del tema/font scale Android y preservación de escritura árabe/persa cuando
+  el producto la soporte. Permanecen fuera el launcher, comps y los gates web.
 
 ## Qué se importa
 

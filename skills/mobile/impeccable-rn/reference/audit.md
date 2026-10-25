@@ -12,7 +12,7 @@ Revisar solo dimensiones relevantes al target:
 - conformidad iOS/Android;
 - adaptación a tamaño, orientación, teclado y ventanas.
 
-No ejecutar browser tooling ni evaluar HTML/CSS.
+No ejecutar browser tooling ni evaluar HTML/CSS. El detector del upstream lee markup web: no correrlo sobre RN ni interpretar un resultado vacío como pantalla sin problemas. La revisión de diseño con evidencia nativa es el método completo, no una auditoría degradada.
 
 ## Método
 

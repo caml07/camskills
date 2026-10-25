@@ -14,6 +14,8 @@ material. No es un torneo de estilos ni requiere generar comps.
    - estados que realmente existen;
    - navegación y salida.
 
+Para un producto de trabajo (Operate), priorizar la tarea y los controles nativos conocidos; expresar la identidad en tipografía, paleta, densidad y un gesto visual propio, no en navegación disfrazada. Para lectura (Read), preservar orden y ancho legible del contenido; concentrar el carácter visual en encabezados y marco, sin poner ornamento detrás del texto. En una superficie persuasiva, asegurar que el propósito y el siguiente paso se entienden sin explicar el concepto aparte.
+
 ## Implementación
 
 - Reutilizar primitivas existentes antes de crear componentes.
@@ -29,5 +31,6 @@ material. No es un torneo de estilos ni requiere generar comps.
 - Loading, empty, error, success u offline solo cuando el flujo los necesite.
 - Touch, back, teclado, font scale y lector de pantalla si son parte del target.
 - Simulator/emulator/device para diferencias nativas reales.
+- Inspeccionar en una pasada los tamaños y estados que se envían; corregir juntos los problemas observados y confirmar después, sin dar por probado el gesto por una imagen estática.
 
 Si algo no puede verificarse, decirlo. No sustituir evidencia por una puntuación.

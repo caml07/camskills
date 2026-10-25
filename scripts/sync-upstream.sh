@@ -9,6 +9,7 @@ case "${1:-check}" in
     echo "# Curated upstream check"
     echo "upstream: pbakaus/impeccable"
     echo "base: c0f495212236129c2e92aaf7714a3a9914569d13"
+    echo "reviewed: 936867543ac2576920d663cc9803597f6044f3ac"
     echo "mode: manual intake; no automatic merge"
     echo "license: inspect upstream license before importing files"
     echo "active files:"

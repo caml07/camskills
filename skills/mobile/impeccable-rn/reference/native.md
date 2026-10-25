@@ -17,6 +17,7 @@ reglas son criterios de revisión, no una receta para introducir librerías.
 - En overlays, usar `accessibilityViewIsModal` en iOS y `importantForAccessibility="no-hide-descendants"` en hermanos Android cuando corresponda.
 - Anunciar estados dinámicos con `accessibilityLiveRegion="polite"` en Android o `AccessibilityInfo.announceForAccessibility()` cuando sea necesario.
 - No ocultar contenido a usuarios de lector de pantalla.
+- Si el producto soporta árabe o persa, conservar U+200C y las variantes originales de Yeh/Kaf al almacenar texto; normalizar equivalencias solo en búsqueda o validación. Formatear dígitos y fechas con la locale y el calendario del producto, no asumir números occidentales.
 
 ## Interacción y plataformas
 
@@ -79,7 +80,8 @@ Registrar qué se verificó y qué no:
 1. Source y TypeScript.
 2. Tests del proyecto.
 3. Simulator/emulator/device si el cambio depende de plataforma.
-4. VoiceOver/TalkBack, font scale, dark mode, reduced motion y estados de error cuando sean relevantes.
+4. VoiceOver/TalkBack, font scale, dark mode, reduced motion y estados de error cuando sean relevantes. Antes de alterar el tema o font scale del emulador Android, registrar sus valores y restaurarlos al terminar.
+5. En pantallas interactivas, recorrer también estados abiertos, vacíos, errores y texto largo que el usuario puede alcanzar; una captura del estado inicial no basta para detectar recortes o superposiciones.
 
 ## Fuentes oficiales
 

@@ -15,7 +15,7 @@ node "<skill-base-dir>/scripts/telemetry.cjs" --status
 Send feedback only when it is specific and actionable:
 
 ```bash
-npx --yes submit-expo-feedback@latest --category skills --subject "expo-skill-feedback" "<actionable feedback>"
+npx --yes @expo/agent-cli@latest feedback --category skills --subject "expo-skill-feedback" "<actionable feedback>"
 ```
 
 Use the canonical OpenCode skill as the detailed reference when the task needs

@@ -5,7 +5,7 @@ description: >-
   visual existente y evidencia de código o dispositivo. Úsala para cambiar una
   pantalla, crear un flujo nuevo o auditar accesibilidad, rendimiento,
   plataformas y adaptación. No usa browser, HTML, CSS, CSP ni live preview web.
-version: 2.0.0-rn-curated
+version: 2.1.0-rn-curated
 user-invocable: true
 argument-hint: "[craft|audit] [target]"
 license: Apache-2.0
@@ -45,7 +45,7 @@ para cambiar un padding, copy, color tokenizado o estado pequeño.
 
 1. Leer navegación, tokens, componentes reutilizables, dependencias y comandos reales del proyecto.
 2. Confirmar una sola vez cualquier decisión material ausente: tarea principal, plataforma objetivo o estados que el producto debe soportar.
-3. Definir en pocas líneas: tarea, jerarquía, estados, navegación, accesibilidad y adaptación.
+3. Definir en pocas líneas: tarea, modo (operar, leer o persuadir), jerarquía, estados, navegación, accesibilidad y adaptación. En flujos de trabajo, los controles y la navegación siguen las convenciones nativas; en lectura, la columna de contenido queda tranquila y el carácter visual vive en el marco.
 4. Implementar primero con primitivas y dependencias ya presentes.
 5. Verificar loading/empty/error/success/offline solo cuando el flujo los tenga; no rellenar estados irrelevantes.
 6. Probar teléfono y tablet/orientación si el producto los soporta.
@@ -53,7 +53,7 @@ para cambiar un padding, copy, color tokenizado o estado pequeño.
 ## `audit`: solo lectura
 
 1. Leer source y, si existe, evidencia de simulator/emulator/device.
-2. Revisar accesibilidad, rendimiento, tema/estados, conformidad iOS/Android y adaptación.
+2. Revisar accesibilidad, rendimiento, tema/estados, conformidad iOS/Android y adaptación. El detector HTML/CSS de Impeccable no aplica a pantallas nativas: una ejecución sin hallazgos no demuestra que estén bien.
 3. Reportar solo hallazgos verificables: `[P0-P3]`, archivo/línea, impacto, evidencia y acción.
 4. Separar evidencia faltante de defecto confirmado.
 5. No cambiar código ni generar puntuaciones si no ayudan a decidir.
