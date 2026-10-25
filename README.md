@@ -57,20 +57,29 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `diagnosing-bugs` | Loop de diagnóstico: reproduce → minimiza → hipótesis → instrument → fix |
 | `domain-modeling` | Construir/afinar el modelo de dominio y lenguaje ubicuo (GLOSSARY.md + ADRs) |
 | `grilling` | Entrevista iterativa que recorre el árbol de decisiones hasta eliminar supuestos abiertos |
+| `grill-me` | Entrevista intensa para afinar un plan o diseño fuera de un repo |
 | `grill-with-docs` | Sesión que afila terminología del dominio y actualiza GLOSSARY.md/ADRs |
+| `handoff` | Compactar la conversación en un documento portátil para otro agente |
 | `implement` | Construir desde spec/tickets con `/tdd` y cierre con `/code-review` |
+| `implement-spec` | Implementar una spec completa como grafo de tickets en una rama de integración |
 | `junior-to-senior` | Senior review adversarial de planes y arquitecturas agent-written |
 | `improve-codebase-architecture` | Escanear la codebase por oportunidades de profundización + reporte HTML |
+| `pr` | Escribir el cuerpo de un PR con resumen, evidencia y riesgo de merge |
 | `prototype` | Prototipo descartable para responder preguntas de diseño |
 | `research` | Investigar contra fuentes primarias y capturar como Markdown citado |
+| `retro` | Retrospectiva de una sesión para mejorar el entorno y guardrails del agente |
 | `resolving-merge-conflicts` | Resolver conflictos de merge hunk a hunk por intención |
 | `setup-matt-pocock-skills` | Config del repo para la suite (issue tracker, labels, doc layout) |
 | `tdd` | TDD genérico red-green-refactor (para RN usar `test-first`) |
+| `teach` | Enseñar un concepto de forma persistente en un workspace de aprendizaje |
+| `to-questionnaire` | Convertir decisiones bloqueadas en un cuestionario para quien tiene el contexto |
 | `to-spec` | Convertir la conversación en spec y publicarla al issue tracker |
 | `to-tickets` | Romper plan/spec en tickets tracer-bullet con edges de bloqueo |
 | `triage` | Mover issues por máquina de estados de roles |
+| `wait-what` | Reexplicar el último mensaje con contexto y lenguaje sencillo |
 | `wayfinder` | Planear trabajo enorme como mapa de tickets de decisión en el tracker |
 | `wizard` | Generar wizards Bash interactivos para pasos que requieren intervención humana |
+| `writing-for-agents` | Guía para escribir skills, AGENTS.md y documentos consumidos por agentes |
 
 ### `workflow/` — Herramientas propias y de productividad
 

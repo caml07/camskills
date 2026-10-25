@@ -37,7 +37,7 @@
 | impeccable | pbakaus/impeccable (fork con adaptaciones opencode) | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Copiar upstream + re-aplicar: `AskUserQuestion`→`` `question` `` / pregunta estructurada y `agents/openai.yaml` |
 | impeccable-rn | Fork curado RN/Expo por psistema/caml07 | fork | `pbakaus/impeccable` @ `plugin/skills/impeccable` | Intake manual; ver `skills/mobile/impeccable-rn/FORK.md` |
 | junior-to-senior | juliusbrussee (skills.sh) | third-party | `juliusbrussee/skills` | `npx skills add juliusbrussee/skills --skill junior-to-senior --agent opencode --copy -y` |
-| mattpocock-engineering/* | mattpocock | third-party (una legacy) | `mattpocock/skills` (`skills/engineering/` + `skills/productivity/grilling/`) | sincronizar solo las carpetas locales presentes upstream; conservar `resolving-merge-conflicts` (retirada) |
+| mattpocock/* | mattpocock | third-party (una legacy) | `mattpocock/skills` (`skills/engineering/` + `skills/productivity/`, sin `in-progress/`) | sincronizar todas las carpetas estables locales; conservar `resolving-merge-conflicts` (retirada) |
 | mobile-app-ui-design | ceorkm | third-party | `ceorkm/mobile-app-ui-design` | `npx skills add https://github.com/ceorkm/mobile-app-ui-design` |
 | no-commit-secrets | psistema/caml07 | own | — | edición directa |
 | no-use-effect | psistema/caml07 | own | — | edición directa |
@@ -143,7 +143,7 @@ Additional upstream audit 2026-10-24:
 - Synchronized the installed Matt Pocock engineering and grilling skills at
   `5beb35b`, including the `GLOSSARY.md` terminology and template rename.
   Retained `resolving-merge-conflicts`, which upstream removed, as a local
-  legacy copy; did not add newly published skills outside the local selection.
+  legacy copy.
 - Synchronized the OpenCode-adapted `impeccable` fork with `pbakaus/impeccable`
   at `9368675` (4.7.1), keeping local agent adapters, skill-base-dir paths and
   structured-question wording. Reviewed its native-relevant changes into
@@ -155,3 +155,11 @@ Additional upstream audit 2026-10-24:
   upstream content. The local `context7-mcp` workflow still matches the
   configured remote MCP's resolve-then-query flow; npm is at 4.4.4, but no
   local npm package is installed. Original skills have no upstream to import.
+
+Additional Matt Pocock intake 2026-10-24:
+
+- Added all stable, previously unselected Matt Pocock skills at `5beb35b`:
+  `grill-me`, `handoff`, `implement-spec`, `pr`, `retro`, `teach`,
+  `to-questionnaire`, `wait-what`, and `writing-for-agents`. `retro` requires
+  `writing-for-agents`, so both ship together. Excluded the upstream
+  `skills/in-progress/` experiments, including Claude-specific workflows.
