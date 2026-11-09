@@ -3,6 +3,8 @@
 | Skill | Origin | Type | Upstream | Update |
 |-------|--------|------|----------|--------|
 | context7-mcp | Context7 (Upstash) | third-party (local workflow) | `@upstash/context7-mcp` (npm) | MCP remoto: revisar flujo de consulta; sin paquete local que actualizar |
+| cam-route | caml07 | own | — | editar directamente; revisar junto con `ai-native-workflow` y su tabla de rutas |
+| ai-native-workflow | caml07 | own | — | editar directamente; mantener los gates de verificación y revisión proporcional |
 | doc-system | psistema/caml07 | own | — | edición directa |
 | eas-app-stores | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-app-stores -g -y` |
 | eas-hosting | expo | third-party | `expo/skills` | `npx skills add expo/skills --skill eas-hosting -g -y` |
@@ -45,6 +47,7 @@
 | academic-notes | psistema/caml07 | own | — | edición directa |
 | notes-vault | psistema/caml07 | own | — | edición directa |
 | osf-vault | psistema/caml07 | own | — | edición directa |
+| pstack/* | Lauren Tan / Cursor, port de Michael Denyer | third-party (skills-only) | `michael-denyer/pstack-claude` @ `0dcb9cc` (`plugins/pstack/skills`) | Sincronizar manualmente; conservar notices/licencias, no instalar hooks globales, no reemplazar `tdd` ni `teach` |
 | opencode-skill-creator | antongulin | plugin | npm `opencode-skill-creator` | checkout en `~/Projects/opencode-skill-creator`; actualizar paquete en `plugins` |
 | ponytail | @dietrichgebert | plugin | npm | actualizar paquete en `plugins` |
 | skill-creator | psistema/caml07 | own | — | edición directa |
@@ -163,3 +166,37 @@ Additional Matt Pocock intake 2026-10-24:
   `to-questionnaire`, `wait-what`, and `writing-for-agents`. `retro` requires
   `writing-for-agents`, so both ship together. Excluded the upstream
   `skills/in-progress/` experiments, including Claude-specific workflows.
+
+Additional upstream audit 2026-11-09:
+
+- Installed 67 Pstack skills from `michael-denyer/pstack-claude` at
+  `0dcb9cc049764a4a11aaf3aa32ae064832ee8ac9` into `skills/pstack/`.
+  Published 65 skills through Codex and OpenCode symlinks; retained the
+  existing Matt Pocock `tdd` and `teach` aliases. Copied all three licenses,
+  the skills-only notice and source version. No native plugin/hook installed.
+- Re-synced installed Expo skills against `expo/skills` at `a9e5bd3fa00b`,
+  preserving the local OSS/paid description prefixes. Legacy skills absent
+  upstream remain unchanged. Restored current EAS Observe resources.
+- Re-synced eight changed Matt Pocock skills at `4ae2317ddb22`; other
+  installed Matt Pocock skills already matched that upstream.
+- Updated the curated `impeccable` fork from `pbakaus/impeccable` at
+  `f866ce13beb3`. Applied clean three-way merges to `SKILL.md` and
+  `reference/init.md`, preserved local question/path adapters and agent files,
+  and updated the engine launchers and checksum manifest (engine 0.1.20).
+- Reviewed `impeccable-rn` against the same upstream (4.8.1) without
+  importing browser/launcher/comp-specific changes; see its `FORK.md`.
+- Updated `mobile-app-ui-design` against `ceorkm/mobile-app-ui-design`
+  at `0ad61f025fc6`. Other checked third-party skills, including
+  `vercel-react-native-skills`, `find-skills`, `humanizer`,
+  `junior-to-senior`, and `security-audit`, required no content update.
+- A pre-sync copy of the 34 touched skill directories is at
+  `~/.cache/camskills-backups/2026-11-09-before-upstream-sync/`.
+
+Cam Route integration 2026-11-09:
+
+- Added local `cam-route` and `ai-native-workflow` skills to coordinate
+  existing skills by intent and risk. No third-party code is vendored by
+  these two skills. They do not enable native Pstack hooks or auto-merges.
+- Exposed both to Codex and OpenCode through the normal symlink structure.
+- Local Codex/OpenCode `AGENTS.md` pointers activate routing on multi-step
+  development tasks; ordinary questions remain outside the engineering loop.

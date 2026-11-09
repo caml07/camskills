@@ -47,6 +47,23 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
 | `impeccable` | Diseño frontend web (fork de pbakaus/impeccable; adapta rutas `.opencode` y tool `question`) |
 
+### `pstack/` — Workflows rigurosos para agentes
+
+Colección de 67 skills de Pstack (port de `michael-denyer/pstack-claude`) con
+principios de ingeniería, diagnóstico, arquitectura, revisión de código y
+verificación. Incluye `poteto-mode`, `thermo-nuclear-code-quality-review`,
+`thermo-nuclear-review` y `thermos`.
+
+- Codex y OpenCode exponen 65 skills de forma individual.
+- `tdd` y `teach` de Pstack se conservan solo dentro de la colección: no
+  sustituyen las versiones existentes de Matt Pocock.
+- Instalación **skills-only**: no hay hooks de inicio, enrutamiento automático,
+  agentes nativos ni cambios a la configuración de los modelos. Las funciones
+  que requieren subagentes dependen de que el runtime tenga esos recursos.
+- Invoca `$poteto-mode` o `$thermo-nuclear-code-quality-review` en Codex;
+  desde OpenCode selecciona la skill correspondiente.
+- Procedencia, licencias y notas: [`skills/pstack/README.md`](skills/pstack/README.md).
+
 ### `engineering/` — Workflow general (mattpocock/skills, stack-agnostic)
 
 | Skill | Descripción |
@@ -86,6 +103,8 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | Skill | Descripción |
 |-------|-------------|
 | `academic-notes` | Organizar y enlazar apuntes de cursos universitarios con Day 00, resúmenes semanales y perfiles mutables por curso |
+| `cam-route` | Router de intención y riesgo: elige el mínimo set de skills por tarea y deriva el código a un workflow proporcional |
+| `ai-native-workflow` | Pipeline Quick/Standard/Deep para planificar, implementar, verificar, simplificar y revisar cambios de código |
 | `context7-mcp` | MCP de Context7 para docs actuales de librerías |
 | `doc-system` | Documentación técnica humana: requirements, reference, change, ADR y runbook |
 | `find-skills` | Descubrimiento e instalación de skills desde la CLI |
@@ -100,6 +119,26 @@ Los skills se organizan en `skills/` por **categoría** (cada skill es una carpe
 | `security-audit` | Auditoría de seguridad de aplicaciones, APIs y clientes |
 
 Origen y estado de cada skill (own / third-party / fork / plugin): ver `UPSTREAM.md`.
+
+### Enrutamiento por intención
+
+`cam-route` clasifica tareas por resultado, superficie y riesgo. Responde
+directamente a peticiones simples; activa una skill principal para planes,
+UI, documentación, estudio y revisiones; y usa `ai-native-workflow` cuando
+se modifica código. El workflow aplica **Quick**, **Standard** o **Deep**,
+con skills de apoyo solo en la fase donde sean necesarias.
+
+La [tabla de rutas](skills/workflow/cam-route/references/route-map.md) recoge
+los criterios y ejemplos. Pstack, Ponytail y Thermo-Nuclear son herramientas
+optativas de fases específicas, no reglas globales obligatorias. Para
+verificar UI, la skill `verify` se genera **en el proyecto** con
+`create-verification-skill`; no existe un verificador universal.
+
+En esta máquina, Codex usa `~/.codex/AGENTS.md` y OpenCode usa
+`~/.config/opencode/AGENTS.md` como punteros mínimos de activación.
+En otra instalación, esos punteros se deben configurar por separado.
+Invocación manual: `$cam-route` (Codex) o `cam-route` (OpenCode).
+Comprobación estática del catálogo: `node --test scripts/check-cam-route.mjs`.
 
 ## OpenCode MCPs
 
