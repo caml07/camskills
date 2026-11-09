@@ -20,7 +20,7 @@ and `$skill-name` to invoke a skill explicitly.
 surface and risk. For code changes it can use `$ai-native-workflow` with
 Quick, Standard or Deep depth. The host's `~/.codex/AGENTS.md` contains a
 small pointer so this selection can run without an explicit invocation.
-See [the route map](../../skills/workflow/cam-route/references/route-map.md).
+See [the route map](../skills/workflow/cam-route/references/route-map.md).
 
 Validate the routing references and Codex links from the repository root:
 

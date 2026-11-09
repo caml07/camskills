@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# CamSkills entrypoint; uses Python's standard library. No sudo or package installs.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if ! command -v python3 >/dev/null 2>&1; then
+  printf 'CamSkills requires Python 3.9+ for the local installer.\n' >&2
+  exit 127
+fi
+exec python3 "$ROOT/scripts/camskills-setup.py" "$@"

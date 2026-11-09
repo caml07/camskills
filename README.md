@@ -1,202 +1,160 @@
-# camskills
+<div align="center">
 
-Mis skills de [opencode](https://opencode.ai). Para instalar en cualquier máquina.
+# CamSkills
 
-## Skills
+**One collection. Two agents. The right skill for the job.**
 
-Los skills se organizan en `skills/` por **categoría** (cada skill es una carpeta con `SKILL.md`).
+Una colección curada de skills para desarrollo asistido por agentes.
+Rutas inteligentes, workflows verificables y una instalación que respeta tu entorno.
 
-### `mobile/` — React Native / Expo
+[![OpenCode](https://img.shields.io/badge/OpenCode-supported-151B20?style=flat-square)](https://opencode.ai)
+[![Codex](https://img.shields.io/badge/Codex-supported-151B20?style=flat-square)](https://developers.openai.com/codex)
+[![Python](https://img.shields.io/badge/installer-Python_3.9%2B-6FAF8C?style=flat-square)](docs/INSTALL.md)
+[![Agent Skills](https://img.shields.io/badge/format-Agent_Skills-6FAF8C?style=flat-square)](https://agentskills.io)
+[![Validation](https://github.com/caml07/camskills/actions/workflows/validate.yml/badge.svg)](https://github.com/caml07/camskills/actions/workflows/validate.yml)
 
-| Skill | Descripción |
-|-------|-------------|
-| `eas-app-stores` | Deploy de apps Expo a tiendas con EAS (build + submit, eas.json) |
-| `eas-hosting` | Hosting de proyectos Expo con EAS |
-| `eas-observe` | Observabilidad y métricas de EAS |
-| `eas-simulator` | Ejecutar y depurar apps Expo en simuladores iOS/Android con EAS |
-| `eas-update-insights` | Insights de EAS Update |
-| `eas-workflows` | Workflows de EAS |
-| `expo-animation` | Animaciones y gestos en Expo (Reanimated, haptics, transiciones) |
-| `expo-app-clip` | App Clips iOS integrados con proyectos Expo |
-| `expo-brownfield` | Integrar Expo dentro de una app nativa existente |
-| `expo-data-fetching` | Networking/API en Expo: fetch, React Query, offline, caching |
-| `expo-design-system` | Design system en Expo: tokens, temas y componentes consistentes |
-| `expo-dev-client` | Dev clients Expo para probar código nativo en dispositivos |
-| `expo-dom` | Integración Expo DOM |
-| `expo-examples` | Encontrar ejemplos oficiales de Expo antes de inventar una implementación |
-| `expo-migrate-module` | Migrar módulos Expo |
-| `expo-module` | Crear módulos nativos Expo y config plugins |
-| `expo-native-ui` | UI nativa Expo: HIG, controles nativos, animaciones, storage |
-| `expo-overview` | Punto de entrada y router de skills Expo: detecta el objetivo y deriva al skill correcto |
-| `expo-project-structure` | Estructura y límites recomendados para proyectos Expo |
-| `expo-router` | Navegación y routing en Expo Router |
-| `expo-skill-feedback` | Enviar feedback accionable sobre skills Expo |
-| `expo-tailwind-setup` | Configurar Tailwind en proyectos Expo |
-| `expo-ui` | Componentes y patrones de UI para Expo |
-| `expo-upgrade` | Guía de upgrades de SDK Expo y fixes de dependencias |
-| `expo-web-to-native` | Migrar superficies web a patrones nativos Expo |
-| `mobile-app-ui-design` | Diseño de UI móvil |
-| `impeccable-rn` | Diseño React Native / Expo nativo (fork curado; cambio, craft y audit) |
-| `test-first` | TDD con Vitest + testing-library/react-native |
-| `vercel-react-native-skills` | Best practices de perf RN/Expo (FlashList, animaciones, native modules) |
+[**Instalar**](#quick-start) · [**Explorar skills**](docs/CATALOG.md) · [**Cómo funciona**](#workflow) · [**Documentación**](#documentación)
 
-### `design/` — Diseño web/UI
+</div>
 
-| Skill | Descripción |
-|-------|-------------|
-| `emil-design-eng` | Filosofía de diseño de Emil Kowalski |
-| `impeccable` | Diseño frontend web (fork de pbakaus/impeccable; adapta rutas `.opencode` y tool `question`) |
+---
 
-### `pstack/` — Workflows rigurosos para agentes
-
-Colección de 67 skills de Pstack (port de `michael-denyer/pstack-claude`) con
-principios de ingeniería, diagnóstico, arquitectura, revisión de código y
-verificación. Incluye `poteto-mode`, `thermo-nuclear-code-quality-review`,
-`thermo-nuclear-review` y `thermos`.
-
-- Codex y OpenCode exponen 65 skills de forma individual.
-- `tdd` y `teach` de Pstack se conservan solo dentro de la colección: no
-  sustituyen las versiones existentes de Matt Pocock.
-- Instalación **skills-only**: no hay hooks de inicio, enrutamiento automático,
-  agentes nativos ni cambios a la configuración de los modelos. Las funciones
-  que requieren subagentes dependen de que el runtime tenga esos recursos.
-- Invoca `$poteto-mode` o `$thermo-nuclear-code-quality-review` en Codex;
-  desde OpenCode selecciona la skill correspondiente.
-- Procedencia, licencias y notas: [`skills/pstack/README.md`](skills/pstack/README.md).
-
-### `engineering/` — Workflow general (mattpocock/skills, stack-agnostic)
-
-| Skill | Descripción |
-|-------|-------------|
-| `ask-matt` | Router de skills: dice cuál/flow usar según la situación |
-| `codebase-design` | Diseño de módulos profundos: interfaces chicas, seams limpios |
-| `code-review` | Review de diff en 2 ejes (standards + spec) con sub-agents en paralelo |
-| `diagnosing-bugs` | Loop de diagnóstico: reproduce → minimiza → hipótesis → instrument → fix |
-| `domain-modeling` | Construir/afinar el modelo de dominio y lenguaje ubicuo (GLOSSARY.md + ADRs) |
-| `grilling` | Entrevista iterativa que recorre el árbol de decisiones hasta eliminar supuestos abiertos |
-| `grill-me` | Entrevista intensa para afinar un plan o diseño fuera de un repo |
-| `grill-with-docs` | Sesión que afila terminología del dominio y actualiza GLOSSARY.md/ADRs |
-| `handoff` | Compactar la conversación en un documento portátil para otro agente |
-| `implement` | Construir desde spec/tickets con `/tdd` y cierre con `/code-review` |
-| `implement-spec` | Implementar una spec completa como grafo de tickets en una rama de integración |
-| `junior-to-senior` | Senior review adversarial de planes y arquitecturas agent-written |
-| `improve-codebase-architecture` | Escanear la codebase por oportunidades de profundización + reporte HTML |
-| `pr` | Escribir el cuerpo de un PR con resumen, evidencia y riesgo de merge |
-| `prototype` | Prototipo descartable para responder preguntas de diseño |
-| `research` | Investigar contra fuentes primarias y capturar como Markdown citado |
-| `retro` | Retrospectiva de una sesión para mejorar el entorno y guardrails del agente |
-| `resolving-merge-conflicts` | Resolver conflictos de merge hunk a hunk por intención |
-| `setup-matt-pocock-skills` | Config del repo para la suite (issue tracker, labels, doc layout) |
-| `tdd` | TDD genérico red-green-refactor (para RN usar `test-first`) |
-| `teach` | Enseñar un concepto de forma persistente en un workspace de aprendizaje |
-| `to-questionnaire` | Convertir decisiones bloqueadas en un cuestionario para quien tiene el contexto |
-| `to-spec` | Convertir la conversación en spec y publicarla al issue tracker |
-| `to-tickets` | Romper plan/spec en tickets tracer-bullet con edges de bloqueo |
-| `triage` | Mover issues por máquina de estados de roles |
-| `wait-what` | Reexplicar el último mensaje con contexto y lenguaje sencillo |
-| `wayfinder` | Planear trabajo enorme como mapa de tickets de decisión en el tracker |
-| `wizard` | Generar wizards Bash interactivos para pasos que requieren intervención humana |
-| `writing-for-agents` | Guía para escribir skills, AGENTS.md y documentos consumidos por agentes |
-
-### `workflow/` — Herramientas propias y de productividad
-
-| Skill | Descripción |
-|-------|-------------|
-| `academic-notes` | Organizar y enlazar apuntes de cursos universitarios con Day 00, resúmenes semanales y perfiles mutables por curso |
-| `cam-route` | Router de intención y riesgo: elige el mínimo set de skills por tarea y deriva el código a un workflow proporcional |
-| `ai-native-workflow` | Pipeline Quick/Standard/Deep para planificar, implementar, verificar, simplificar y revisar cambios de código |
-| `context7-mcp` | MCP de Context7 para docs actuales de librerías |
-| `doc-system` | Documentación técnica humana: requirements, reference, change, ADR y runbook |
-| `find-skills` | Descubrimiento e instalación de skills desde la CLI |
-| `fix-debug` | Debug asistido con Context7 |
-| `humanizer` | Reescritura de prosa que elimina patrones típicos de texto generado por IA |
-| `no-commit-secrets` | Previene commits de secrets a git |
-| `no-use-effect` | Prohíbe useEffect directo en React |
-| `notes-vault` | Creación de notas en Obsidian vault |
-| `osf-vault` | Notas, lectura y research agentico para el vault de Obsidian Soundfields; preserva Episode/Entity/Lore distinctions y commits locales seguros |
-| `skill-creator` | Creación de skills (flujo legacy con scripts) |
-| `tanstack-query` | TanStack Query patterns y best practices |
-| `security-audit` | Auditoría de seguridad de aplicaciones, APIs y clientes |
-
-Origen y estado de cada skill (own / third-party / fork / plugin): ver `UPSTREAM.md`.
-
-### Enrutamiento por intención
-
-`cam-route` clasifica tareas por resultado, superficie y riesgo. Responde
-directamente a peticiones simples; activa una skill principal para planes,
-UI, documentación, estudio y revisiones; y usa `ai-native-workflow` cuando
-se modifica código. El workflow aplica **Quick**, **Standard** o **Deep**,
-con skills de apoyo solo en la fase donde sean necesarias.
-
-La [tabla de rutas](skills/workflow/cam-route/references/route-map.md) recoge
-los criterios y ejemplos. Pstack, Ponytail y Thermo-Nuclear son herramientas
-optativas de fases específicas, no reglas globales obligatorias. Para
-verificar UI, la skill `verify` se genera **en el proyecto** con
-`create-verification-skill`; no existe un verificador universal.
-
-En esta máquina, Codex usa `~/.codex/AGENTS.md` y OpenCode usa
-`~/.config/opencode/AGENTS.md` como punteros mínimos de activación.
-En otra instalación, esos punteros se deben configurar por separado.
-Invocación manual: `$cam-route` (Codex) o `cam-route` (OpenCode).
-Comprobación estática del catálogo: `node --test scripts/check-cam-route.mjs`.
-
-## OpenCode MCPs
-
-La plantilla opcional y la configuración segura de Context7, Obsidian y
-Composio están en [`MCP.md`](MCP.md) y
-[`opencode.mcp.example.jsonc`](opencode.mcp.example.jsonc). No contienen
-credenciales.
-
-## Instalación
-
-### Instalador CamSkills (recomendado)
-
-Elegís por categoría y activa los skills en `~/.config/opencode/skills/`:
+## Quick start
 
 ```bash
-git clone git@github.com:caml07/camskills.git ~/camskills
-cd ~/camskills && ./install.sh
+git clone https://github.com/caml07/camskills.git
+cd camskills
+./setup
 ```
 
-### Skill individual (vía npx skills)
+Abre el menú interactivo, escoge un perfil y selecciona **Codex**, **OpenCode** o ambos. No necesita sudo ni instala dependencias de terceros. Si tienes [gum](https://github.com/charmbracelet/gum), el menú usa un selector TUI; sin gum sigue funcionando con un menú de texto.
+
+```text
+╭──────────────────────────────────────────────────╮
+│  CAMSKILLS   /   AGENT SKILL MANAGER             │
+╰──────────────────────────────────────────────────╯
+  141 skills / Codex + OpenCode / no sudo
+
+  › Install / Sync
+    Browse catalog
+    Doctor / Status
+    Remove installed skills
+    Help
+    Exit
+```
+
+<details>
+<summary><strong>Prefiero un comando directo</strong></summary>
 
 ```bash
-npx skills add https://github.com/caml07/camskills --skill doc-system
+# Colección esencial para ambos agentes.
+./setup install --profile core --agent both -y
+
+# Diseño web y frontend para Codex.
+./setup install --profile web --agent codex -y
+
+# Expo / React Native para OpenCode.
+./setup install --profile mobile --agent opencode -y
+
+# Ver todos los cambios sin tocar el sistema.
+./setup install --profile all --dry-run
 ```
 
-### Todos a la vez (manual)
+La ejecución sin terminal requiere `-y` para instalar o quitar enlaces.
+
+</details>
+
+## Qué incluye
+
+| Colección | Enfoque |
+|:--|:--|
+| **Essentials** | Routing, TDD, debugging, verificación, reviews y seguridad. |
+| **Web + Design** | Frontend, UI, diseño de interfaces y auditorías visuales. |
+| **Mobile** | Expo, React Native, UI móvil y pruebas de componentes. |
+| **Engineering** | Especificaciones, arquitectura, implementación y code review. |
+| **Pstack** | Verificación avanzada, agentes, principios y revisión Thermo-Nuclear. |
+| **Everything** | Todas las skills del catálogo, sin instalar alias duplicados. |
+
+El catálogo contiene **141 skills únicas** agrupadas en `engineering`, `design`, `mobile`, `workflow` y `pstack`. La distribución original de Pstack incluye 67; sus versiones de `tdd` y `teach` quedan internas y prevalecen las variantes ya curadas.
+
+[**Ver el catálogo completo**](docs/CATALOG.md) · [**Ver procedencia y versiones**](UPSTREAM.md)
+
+## Workflow
+
+CamSkills no necesita activar todos los prompts ni todos los agentes para hacer una tarea. **`cam-route`** lee la intención, la superficie y el riesgo; selecciona una ruta principal y añade herramientas solo cuando tienen sentido.
+
+```text
+                        YOUR REQUEST
+                             │
+                         cam-route
+                             │
+          ┌──────────────────┼──────────────────┐
+          │                  │                  │
+       Explore            Build               Review
+      & document        & debug              & verify
+          │                  │                  │
+     Skill(s) needed   ai-native-workflow   Targeted review
+                             │
+                PLAN → BUILD → VERIFY → REVIEW
+                             │
+                      Evidence + handoff
+```
+
+El pipeline de ingeniería trabaja con tres niveles:
+
+| Modo | Cuándo usarlo | Cierre esperado |
+|:--|:--|:--|
+| **Quick** | Cambio acotado, reversible | Diff y comprobación pertinente. |
+| **Standard** | Feature, bug o cambio funcional | Tests, verificación real cuando aplica, review proporcional. |
+| **Deep** | Seguridad, arquitectura, migraciones | Plan, aislamiento, evidencias y revisiones especializadas. |
+
+Por ejemplo, una mejora visual web usa `impeccable`; una app Expo puede usar `impeccable-rn` y `test-first`; y una revisión de mantenibilidad puede usar `thermo-nuclear-code-quality-review`. No se ejecutan simultáneamente por defecto.
+
+[**Tabla de rutas y casos**](skills/workflow/cam-route/references/route-map.md)
+
+## Instalación y mantenimiento
+
+El instalador usa **enlaces simbólicos**, así que una actualización del checkout actualiza las skills para los agentes que apuntan a él. Mantiene intactos los archivos existentes que no pertenecen a esta instalación.
 
 ```bash
-git clone git@github.com:caml07/camskills.git ~/camskills
-# Linux/macOS: symlinks
-ln -s ~/camskills/skills/*/* ~/.config/opencode/skills/
+./setup list                                # Catálogo
+./setup status                              # Qué está vinculado
+./setup doctor                              # Detectar enlaces rotos o conflictos
+./setup install --profile all --dry-run     # Previsualizar
+./setup remove --profile core --agent both -y
 ```
 
-Nota: si ya tenés `context7-mcp` instalado en otra ruta, no lo actives.
+`--replace` es **opt-in**: antes de sustituir un archivo, enlace o directorio preexistente, lo guarda en una copia de seguridad bajo `~/.local/state/camskills/backups/` (o `$XDG_STATE_HOME/camskills/backups/`). La desinstalación solo elimina enlaces que reconoce como propios; no borra carpetas ajenas.
 
-## Codex
-
-La colección compatible con Codex vive en [`codex/.agents/skills`](codex/.agents/skills).
-Las skills portables son symlinks a la fuente OpenCode; solo las que dependen de
-herramientas del host tienen un overlay específico para Codex.
+Para instalar una skill con la CLI del ecosistema, también puedes utilizar:
 
 ```bash
-git clone git@github.com:caml07/camskills.git ~/camskills
-mkdir -p ~/.agents/skills
-ln -s ~/camskills/codex/.agents/skills/* ~/.agents/skills/
+npx skills add caml07/camskills --skill cam-route
 ```
 
-En Codex, ejecuta `/skills` para comprobar el descubrimiento y usa
-`$nombre-skill` para invocar una explícitamente. La configuración opcional de
-Context7 está en [`codex/config.example.toml`](codex/config.example.toml); no
-copies configuraciones OpenCode JSONC ni credenciales.
+[**Manual de instalación, opciones y recuperación**](docs/INSTALL.md)
 
-## Plugins
+## Documentación
 
-- `@dietrichgebert/ponytail@5.3.2` — modo lazy (externo, configurado en `plugins` de OpenCode V2).
-- `opencode-skill-creator@0.3.6` — plugin V2 instalado desde npm; el checkout de desarrollo vive fuera de `~/.config/opencode/skills/` para evitar skills duplicadas.
-- `plugins/notification.js` (+ `toast.ps1`, `sounds/`) — notificaciones cuando opencode necesita atención, solo si el terminal no está enfocado (vía `niri msg windows`, falla abierto), con título `OC | <sesión>` y sonido por evento (Linux: `paplay`, sonidos en `plugins/sounds/`; Windows: `ms-winsoundevent` según urgencia). Eventos: `permission.asked` (critical), `question.asked` (critical), `session.idle`, `session.error` (critical), `tui.prompt.append`. Config: `OPENCODE_SOUNDS_DIR`, `OPENCODE_SOUND_{PERMISSION,QUESTION,IDLE,ERROR,PROMPT}`, `OPENCODE_NOTIFY_MATCH`, `OPENCODE_NOTIFY_DEVICE`. Copiar/symlink a `~/.config/opencode/plugins/`.
+| Documento | Para qué sirve |
+|:--|:--|
+| [Catálogo](docs/CATALOG.md) | Todas las skills y sus categorías. |
+| [Instalación](docs/INSTALL.md) | Perfiles, comandos, conflictos, backups y diagnóstico. |
+| [Rutas](skills/workflow/cam-route/references/route-map.md) | Cuándo activar cada skill y cuáles no combinar. |
+| [Provenance](UPSTREAM.md) | Skills propias, forks y revisiones upstream. |
+| [MCPs](MCP.md) | Integraciones opcionales para OpenCode. |
+| [Codex](codex/README.md) | Aliases de compatibilidad y uso desde Codex. |
+| [Contribuir](CONTRIBUTING.md) | Convenciones de edición, pruebas y actualización. |
 
-## Config
+### Diseño y límites
 
-Copiar `opencode.jsonc.example` a `opencode.jsonc` y reemplazar `{{VAULT_PATH}}` y `{{CONTEXT7_API_KEY}}`.
+- **Sin alteraciones globales ocultas.** El setup crea enlaces de skills; no cambia tu configuración de modelos, MCPs ni hooks.
+- **Pstack skills-only.** Algunos workflows necesitan subagentes propios del runtime. La instalación de skills no los habilita por sí sola.
+- **Sin auto-commit ni auto-merge.** Cam Route conserva el control de las operaciones externas.
+- **Fuentes trazables.** Las skills de terceros conservan sus notas de licencia, origen y cambios locales.
+
+---
+
+<div align="center">
+  <sub>Curated for Codex & OpenCode · Built around evidence, not prompt overload.</sub>
+</div>
